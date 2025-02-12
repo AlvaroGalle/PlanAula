@@ -6,5 +6,8 @@
 </head>
 <body>
 <p>Hello world</p>
+<ul>
+    <li th:each="asignatura : ${asignaturas}" th:text="${asignatura.id} + ' - ' + ${asignatura.nombre} "></li>
+</ul>
 </body>
 </html>
