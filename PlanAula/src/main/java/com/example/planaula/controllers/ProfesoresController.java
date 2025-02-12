@@ -1,10 +1,14 @@
 package com.example.planaula.controllers;
 
+import com.example.planaula.Dto.ProfesorDTO;
+import com.example.planaula.Dto.TutorDTO;
 import com.example.planaula.services.ProfesoresService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+
+import java.util.List;
 
 @Controller
 @RequestMapping("/profesores")
@@ -18,8 +22,9 @@ public class ProfesoresController {
 
     @GetMapping("")
     public String findAllProfesores(Model model) {
-        model.addAttribute("profesores", profesoresService.findAllProfesores());
-        /*model.addAttribute("tutores", profesoresService.findAllTutores());*/
+        List<ProfesorDTO> profesorDTOList = profesoresService.findAllProfesores();
+        List<TutorDTO> tutorDTOList = profesoresService.findAllTutores();
+        model.addAttribute("docentes", null);
         return "profesores";
     }
 }

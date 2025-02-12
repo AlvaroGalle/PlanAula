@@ -1,6 +1,6 @@
 package com.example.planaula.Dto;
 
-public class TutorDTO {
+public class TutorDTO extends ProfesorDTO{
     private int id;
     private int idCurso;
     private int idTutor2425;
