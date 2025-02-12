@@ -1,0 +1,12 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>PlanAula</title>
+</head>
+<body>
+<ul>
+    <li th:each="profesor : ${profesores}" th:text="${profesor.id} + ' - ' + ${profesor.nombre} "></li>
+</ul>
+</body>
+</html>

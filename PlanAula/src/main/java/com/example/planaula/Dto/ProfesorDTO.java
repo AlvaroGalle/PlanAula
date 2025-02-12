@@ -1,14 +1,14 @@
 package com.example.planaula.Dto;
 
-public class AsignaturaDTO {
+public class ProfesorDTO {
     private int id;
     private String nombre;
 
-    public AsignaturaDTO(int id, String nombre) {
+    public ProfesorDTO(int id, String nombre) {
         this.id = id;
         this.nombre = nombre;
     }
-    public AsignaturaDTO() {}
+    public ProfesorDTO() {}
 
     public int getId() {
         return id;
