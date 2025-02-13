@@ -1,13 +1,35 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>PlanAula</title>
+    <div th:replace="/fragments/head.html"></div>
 </head>
 <body>
-<p>Hello world</p>
-<ul>
-    <li th:each="asignatura : ${asignaturas}" th:text="${asignatura.id} + ' - ' + ${asignatura.nombre} "></li>
-</ul>
+<div class="container mt-3">
+<div class="card shadow-sm">
+    <div class="card-header bg-primary text-white">
+        <h5 class="card-title mb-0">Asignaturas</h5>
+    </div>
+    <div class="card-body bg-light">
+        <table class="table table-hover">
+            <thead>
+            <tr>
+                <th scope="col">#ID</th>
+                <th scope="col">Nombre</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="asignatura : ${asignaturas}" th:id="'tr_' + ${asignatura.id}">
+                <th scope="row" th:text="${asignatura.id}"></th>
+                <td th:text="${asignatura.nombre}"></td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+    <div class="card-footer text-muted bg-white d-flex justify-content-end">
+        <button type="button" class="btn btn-dark" onclick="location.href='/menu'">Volver</button>
+    </div>
+</div>
+</div>
 </body>
+<div th:replace="/fragments/bootstrap.html"></div>
 </html>

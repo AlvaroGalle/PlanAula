@@ -1,16 +1,16 @@
 package com.example.planaula.Dto;
 
-public class TutorDTO extends ProfesorDTO{
+public class TutorDTO{
     private int id;
-    private int idCurso;
-    private int idTutor2425;
-    private int idTutor2324;
+    private String curso;
+    private String tutor2425;
+    private String tutor2324;
 
-    public TutorDTO(int id, int idCurso, int idTutor2425, int idTutor2324) {
+    public TutorDTO(int id, String curso, String tutor2425, String tutor2324) {
         this.id = id;
-        this.idCurso = idCurso;
-        this.idTutor2425 = idTutor2425;
-        this.idTutor2324 = idTutor2324;
+        this.curso = curso;
+        this.tutor2425 = tutor2425;
+        this.tutor2324 = tutor2324;
     }
     public TutorDTO() {}
 
@@ -22,25 +22,27 @@ public class TutorDTO extends ProfesorDTO{
         this.id = id;
     }
 
-    public int getIdCurso() {
-        return idCurso;
+    public String getCurso() {
+        return curso;
     }
 
-    public void setIdCurso(int idCurso) {
-        this.idCurso = idCurso;
+    public void setCurso(String curso) {
+        this.curso = curso;
     }
 
-    public int getIdTutor2425() {
-        return idTutor2425;
+    public String getTutor2425() {
+        return tutor2425;
     }
 
-    public void setIdTutor2425(int idTutor2425) {
-        this.idTutor2425 = idTutor2425;
+    public void setTutor2425(String tutor2425) {
+        this.tutor2425 = tutor2425;
     }
 
-    public int getIdTutor2324() {
-        return idTutor2324;
+    public String getTutor2324() {
+        return tutor2324;
     }
 
-    public void setIdTutor2324(int idTutor2324) {}
+    public void setTutor2324(String tutor2324) {
+        this.tutor2324 = tutor2324;
+    }
 }

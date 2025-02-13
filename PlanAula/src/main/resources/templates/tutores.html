@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <div th:replace="/fragments/head.html"></div>
+</head>
+<body>
+<div class="container mt-3">
+<div class="card shadow-sm">
+    <div class="card-header bg-primary text-white">
+        <h5 class="card-title mb-0">Tutores</h5>
+    </div>
+    <div class="card-body filter-section">
+        <form id="filtrosTutores" method="get"
+              th:action="@{'/profesores/tutores'}">
+        <div class="row">
+            <div class="col-md-4">
+                <label for="cursoFilter" class="form-label">Filtrar por Curso:</label>
+                <select class="form-control" id="cursoFilter" name="curso" onchange="$('#filtrosTutores').submit()">
+                    <option value="0">Todos los cursos</option>
+                    <option th:each=" curso : ${cursos}" th:value="${curso.id}" th:text="${curso.nombre}" th:selected="${cursoFiltro == curso.id}"></option>
+                </select>
+            </div>
+            <div class="col-md-4">
+                <label for="tutorFilter" class="form-label">Filtrar por Profesor:</label>
+                <select class="form-control" id="tutorFilter" name="profesor" onchange="$('#filtrosTutores').submit()">
+                    <option value="0">Todos los profesores</option>
+                    <option th:each=" profesor : ${profesores}" th:value="${profesor.id}" th:text="${profesor.nombre}" th:selected="${profesorFiltro == profesor.id}"></option>
+                </select>
+            </div>
+        </div>
+        </form>
+    </div>
+    <div class="card-body bg-light">
+        <table th:if="${#lists.size(tutores) > 0}" class="table table-hover">
+            <thead>
+            <tr>
+                <th scope="col">#ID</th>
+                <th scope="col">Curso</th>
+                <th scope="col">Tutor 24-25</th>
+                <th scope="col">Tutor 23-24</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="tutor : ${tutores}" th:id="'tr_' + ${tutor.id}">
+                <th scope="row" th:text="${tutor.id}"></th>
+                <td th:text="${tutor.curso}"></td>
+                <td th:text="${tutor.tutor2425}"></td>
+                <td th:text="${tutor.tutor2425}"></td>
+            </tr>
+            </tbody>
+        </table>
+        <div th:unless="${#lists.size(tutores) > 0}" class="alert alert-danger" role="alert">
+            No existen tutores para los filtros ingresados
+        </div>
+    </div>
+    <div class="card-footer text-muted bg-white d-flex justify-content-end">
+        <button type="button" class="btn btn-dark" onclick="location.href='/menu'">Volver</button>
+    </div>
+</div>
+</div>
+</body>
+<div th:replace="/fragments/bootstrap.html"></div>
+</html>
