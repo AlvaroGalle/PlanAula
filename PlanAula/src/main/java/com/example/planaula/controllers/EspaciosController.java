@@ -1,9 +1,6 @@
 package com.example.planaula.controllers;
 
-import com.example.planaula.Dto.AsignaturaDTO;
-import com.example.planaula.Dto.AulaDTO;
-import com.example.planaula.Dto.DiaDTO;
-import com.example.planaula.Dto.HoraDTO;
+import com.example.planaula.Dto.*;
 import com.example.planaula.services.*;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -11,7 +8,10 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import java.lang.reflect.Field;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Controller
 @RequestMapping("/espacios")
@@ -41,8 +41,6 @@ public class EspaciosController {
         model.addAttribute("aulaFiltro", aula);
         model.addAttribute("asignaturaFiltro", asignatura);
 
-        model.addAttribute("espacios", espaciosService.findAllEspaciosByDiaAndHoraAndAulaAndAsignatura(dia,hora,aula,asignatura));
-
         List<DiaDTO> diaDTOList =  diasService.findAllDias();
         model.addAttribute("dias", diaDTOList);
 
@@ -54,6 +52,9 @@ public class EspaciosController {
 
         List<AsignaturaDTO> asignaturaDTOList =  asignaturasService.findAllAsignaturas();
         model.addAttribute("asignaturas", asignaturaDTOList);
+
+        List<EspacioDTO> espacioDTOList = espaciosService.findAllEspaciosByDiaAndHoraAndAulaAndAsignatura(dia,hora,asignatura);
+        model.addAttribute("espacios", espacioDTOList );
         return "espacios";
     }
 }

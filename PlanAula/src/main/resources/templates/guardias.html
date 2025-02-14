@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <div th:replace="/fragments/head.html"></div>
+</head>
+<body>
+<div class="container mt-3">
+    <div class="card shadow-sm">
+        <div class="card-header bg-primary text-white"><h5 class="card-title mb-0">Espacios</h5></div>
+        <div class="card-body filter-section">
+            <form id="filtrosEspacios" method="get" th:action="@{'/guardias'}">
+                <div class="row">
+                    <div class="col-md-3">
+                        <label for="diaFilter" class="form-label">Filtrar por Día:</label>
+                        <select class="form-control" id="diaFilter" name="dia" onchange="$('#filtrosEspacios').submit()">
+                            <option value="0">Todos los días</option>
+                            <option th:each=" dia : ${dias}" th:value="${dia.id}" th:text="${dia.nombre}" th:selected="${diaFiltro == dia.id}"></option>
+                        </select>
+                    </div>
+                    <div class="col-md-3">
+                        <label for="horaFilter" class="form-label">Filtrar por Hora:</label>
+                        <select class="form-control" id="horaFilter" name="hora" onchange="$('#filtrosEspacios').submit()">
+                            <option value="0">Todas las horas</option>
+                            <option th:each=" hora: ${horas}" th:value="${hora.id}" th:text="${hora.nombre}" th:selected="${horaFiltro == hora.id}"></option>
+                        </select>
+                    </div>
+                    <div class="col-md-3">
+                        <label for="aulaFilter" class="form-label">Filtrar por Aula:</label>
+                        <select class="form-control" id="aulaFilter" name="aula" onchange="$('#filtrosEspacios').submit()">
+                            <option value="0">Todas las aulas</option>
+                            <option th:each=" aula : ${aulas}" th:value="${aula.id}" th:text="${aula.nombre}" th:selected="${aulaFiltro == aula.id}"></option>
+                        </select>
+                    </div>
+                    <div class="col-md-3">
+                        <label for="profesorFilter" class="form-label">Filtrar por Profesores:</label>
+                        <select class="form-control" id="profesorFilter" name="profesor" onchange="$('#filtrosEspacios').submit()">
+                            <option value="0">Todos los profesores</option>
+                            <option th:each=" profesor : ${profesores}" th:value="${profesor.id}" th:text="${profesor.nombre}" th:selected="${profesorFiltro == profesor.id}"></option>
+                        </select>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div class="card-body bg-light">
+            <div class="row">
+                <div th:each="guardia : ${guardias}" class="col-md-6 col-lg-3 mb-3">
+                    <div class="card">
+                        <div class="card-header bg-primary text-white">
+                            <h5 class="card-title mb-0">
+                                <strong><span th:text="'#' + ${guardia.id}"></span></strong>
+                                <span th:text="${guardia.dia}"></span>
+                                <span th:text="${guardia.hora}"></span>
+                            </h5>
+                        </div>
+                        <div class="card-body">
+                            <table class="table table-sm">
+                                <thead>
+                                <tr>
+                                    <th>Turno</th>
+                                    <th>Asignatura</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr th:if="${guardia.guardia1 != null}">
+                                    <th>Guardia 1</th>
+                                    <td th:text="${guardia.guardia1}"></td>
+                                </tr>
+                                <tr th:if="${guardia.guardia2 != null}">
+                                    <th>Guardia</th>
+                                    <td th:text="${guardia.guardia2}"></td>
+                                </tr>
+                                <tr th:if="${guardia.guardia3 != null}">
+                                    <th>Guardia 3</th>
+                                    <td th:text="${guardia.guardia3}"></td>
+                                </tr>
+                                <tr th:if="${guardia.libranza1 != null}">
+                                    <th>Libranza 1</th>
+                                    <td th:text="${guardia.libranza1}"></td>
+                                </tr>
+                                <tr th:if="${guardia.libranza1 != null}">
+                                    <th>Libranza 2</th>
+                                    <td th:text="${guardia.libranza1}"></td>
+                                </tr>
+                                <tr th:if="${guardia.libranza1 != null}">
+                                    <th>Libranza 3</th>
+                                    <td th:text="${guardia.libranza1}"></td>
+                                </tr>
+                                <tr th:if="${guardia.recreo1 != null}">
+                                    <th>Recreo 1</th>
+                                    <td th:text="${guardia.recreo1}"></td>
+                                </tr>
+                                <tr th:if="${guardia.recreo2 != null}">
+                                    <th>Recreo 2</th>
+                                    <td th:text="${guardia.recreo2}"></td>
+                                </tr>
+                                <tr th:if="${guardia.recreo3 != null}">
+                                    <th>Recreo 3</th>
+                                    <td th:text="${guardia.recreo3}"></td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <div th:unless="${#lists.size(guardias) > 0}" class="alert alert-danger" role="alert"> No existen
+                    guardias
+                    para los filtros ingresados
+                </div>
+            </div>
+        </div>
+        <div class="card-footer text-muted bg-white d-flex justify-content-end">
+            <button type="button" class="btn btn-dark" onclick="location.href='/menu'">Volver</button>
+        </div>
+    </div>
+</div>
+</body>
+<div th:replace="/fragments/bootstrap.html"></div>
+</html>

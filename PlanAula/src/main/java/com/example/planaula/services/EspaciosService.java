@@ -17,7 +17,7 @@ public class EspaciosService {
     @Autowired
     private EntityManager entityManager;
 
-    public List<EspacioDTO> findAllEspaciosByDiaAndHoraAndAulaAndAsignatura(Integer dia, Integer hora, Integer aula, Integer asignatura) {
+    public List<EspacioDTO> findAllEspaciosByDiaAndHoraAndAulaAndAsignatura(Integer dia, Integer hora, Integer asignatura) {
         String sql = "SELECT e.id, d.campo1, h.campo1, \n" +
                 "       a1.campo1 AS Aula_1A, a2.campo1 AS Aula_1B, \n" +
                 "       a3.campo1 AS Aula_2A, a4.campo1 AS Aula_2B, \n" +
@@ -52,16 +52,6 @@ public class EspaciosService {
                 "WHERE 1=1 \n" +
                 "AND (:dia = 0 OR d.id = :dia) \n" +
                 "AND (:hora = 0 OR h.id = :hora) \n" +
-                "AND (:aula = 0 OR \n" +
-                "     e.`Aula 1A` = :aula OR e.`Aula 1B` = :aula OR \n" +
-                "     e.`Aula 2A` = :aula OR e.`Aula 2B` = :aula OR \n" +
-                "     e.`Aula 3A` = :aula OR e.`Aula 3B` = :aula OR \n" +
-                "     e.`Aula 4A` = :aula OR e.`Aula 4B` = :aula OR \n" +
-                "     e.`Aula 1CC` = :aula OR e.`Aula 1SS` = :aula OR \n" +
-                "     e.`Lab CC` = :aula OR e.`Lab Id` = :aula OR \n" +
-                "     e.`Desdoble A` = :aula OR e.`Desdoble B` = :aula OR \n" +
-                "     e.`Desdoble C` = :aula OR e.`A ENLACE` = :aula OR \n" +
-                "     e.`Bajo Patio` = :aula OR e.`Bajo Espejos` = :aula) \n" +
                 "AND (:asignatura = 0 OR \n" +
                 "     a1.id = :asignatura OR a2.id = :asignatura OR \n" +
                 "     a3.id = :asignatura OR a4.id = :asignatura OR \n" +
@@ -76,7 +66,6 @@ public class EspaciosService {
         List<Object[]> resultados = entityManager.createNativeQuery(sql)
                 .setParameter("dia", dia)
                 .setParameter("hora", hora)
-                .setParameter("aula", aula)
                 .setParameter("asignatura", asignatura)
                 .getResultList();
         if (resultados == null || resultados.isEmpty()) {
