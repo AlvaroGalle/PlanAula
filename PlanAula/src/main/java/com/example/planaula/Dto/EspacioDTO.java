@@ -4,52 +4,49 @@ public class EspacioDTO {
     private int id;
     private String dia;
     private String hora;
-    private String aula1A;
-    private String aula1B;
-    private String aula2A;
-    private String aula2B;
-    private String aula3A;
-    private String aula3B;
-    private String aula4A;
-    private String aula4B;
-    private String aula1CC;
-    private String aula1SS;
-    private String labCC;
-    private String labId;
-    private String desdobleA;
-    private String desdobleB;
-    private String desdobleC;
-    private String aEnlace;
-    private String bajoPatio;
-    private String bajoEspejos;
+    private String aula1a;
+    private String aula1b;
+    private String aula2a;
+    private String aula2b;
+    private String aula3a;
+    private String aula3b;
+    private String aula4a;
+    private String aula4b;
+    private String aula1cc;
+    private String aula1ss;
+    private String labcc;
+    private String labid;
+    private String desdoblea;
+    private String desdobleb;
+    private String desdoblec;
+    private String aenlace;
+    private String bajopatio;
+    private String bajoespejos;
 
     public EspacioDTO() {}
 
-    public EspacioDTO(int id, String dia, String hora, String aula1A, String aula1B, String aula2A, String aula2B,
-                      String aula3A, String aula3B, String aula4A, String aula4B, String aula1CC, String aula1SS,
-                      String labCC, String labId, String desdobleA, String desdobleB, String desdobleC,
-                      String aEnlace, String bajoPatio, String bajoEspejos) {
+    public EspacioDTO(int id, String dia, String hora, String aula1a, String aula1b, String aula2a, String aula2b, String aula3a, String aula3b, String aula4a, String aula4b, String aula1cc, String aula1ss, String labcc, String labid, String desdoblea, String desdobleb, String desdoblec, String aenlace, String bajopatio, String bajoespejos) {
         this.id = id;
         this.dia = dia;
         this.hora = hora;
-        this.aula1A = aula1A;
-        this.aula1B = aula1B;
-        this.aula2A = aula2A;
-        this.aula2B = aula2B;
-        this.aula3A = aula3A;
-        this.aula3B = aula3B;
-        this.aula4A = aula4A;
-        this.aula4B = aula4B;
-        this.aula1CC = aula1CC;
-        this.aula1SS = aula1SS;
-        this.labCC = labCC;
-        this.labId = labId;
-        this.desdobleA = desdobleA;
-        this.desdobleB = desdobleB;
-        this.desdobleC = desdobleC;
-        this.aEnlace = aEnlace;
-        this.bajoPatio = bajoPatio;
-        this.bajoEspejos = bajoEspejos;
+        this.aula1a = aula1a;
+        this.aula1b = aula1b;
+        this.aula2a = aula2a;
+        this.aula2b = aula2b;
+        this.aula3a = aula3a;
+        this.aula3b = aula3b;
+        this.aula4a = aula4a;
+        this.aula4b = aula4b;
+        this.aula1cc = aula1cc;
+        this.aula1ss = aula1ss;
+        this.labcc = labcc;
+        this.labid = labid;
+        this.desdoblea = desdoblea;
+        this.desdobleb = desdobleb;
+        this.desdoblec = desdoblec;
+        this.aenlace = aenlace;
+        this.bajopatio = bajopatio;
+        this.bajoespejos = bajoespejos;
     }
 
     public int getId() {
@@ -76,147 +73,147 @@ public class EspacioDTO {
         this.hora = hora;
     }
 
-    public String getAula1A() {
-        return aula1A;
+    public String getAula1a() {
+        return aula1a;
     }
 
-    public void setAula1A(String aula1A) {
-        this.aula1A = aula1A;
+    public void setAula1a(String aula1a) {
+        this.aula1a = aula1a;
     }
 
-    public String getAula1B() {
-        return aula1B;
+    public String getAula1b() {
+        return aula1b;
     }
 
-    public void setAula1B(String aula1B) {
-        this.aula1B = aula1B;
+    public void setAula1b(String aula1b) {
+        this.aula1b = aula1b;
     }
 
-    public String getAula2A() {
-        return aula2A;
+    public String getAula2a() {
+        return aula2a;
     }
 
-    public void setAula2A(String aula2A) {
-        this.aula2A = aula2A;
+    public void setAula2a(String aula2a) {
+        this.aula2a = aula2a;
     }
 
-    public String getAula2B() {
-        return aula2B;
+    public String getAula2b() {
+        return aula2b;
     }
 
-    public void setAula2B(String aula2B) {
-        this.aula2B = aula2B;
+    public void setAula2b(String aula2b) {
+        this.aula2b = aula2b;
     }
 
-    public String getAula3A() {
-        return aula3A;
+    public String getAula3a() {
+        return aula3a;
     }
 
-    public void setAula3A(String aula3A) {
-        this.aula3A = aula3A;
+    public void setAula3a(String aula3a) {
+        this.aula3a = aula3a;
     }
 
-    public String getAula3B() {
-        return aula3B;
+    public String getAula3b() {
+        return aula3b;
     }
 
-    public void setAula3B(String aula3B) {
-        this.aula3B = aula3B;
+    public void setAula3b(String aula3b) {
+        this.aula3b = aula3b;
     }
 
-    public String getAula4A() {
-        return aula4A;
+    public String getAula4a() {
+        return aula4a;
     }
 
-    public void setAula4A(String aula4A) {
-        this.aula4A = aula4A;
+    public void setAula4a(String aula4a) {
+        this.aula4a = aula4a;
     }
 
-    public String getAula4B() {
-        return aula4B;
+    public String getAula4b() {
+        return aula4b;
     }
 
-    public void setAula4B(String aula4B) {
-        this.aula4B = aula4B;
+    public void setAula4b(String aula4b) {
+        this.aula4b = aula4b;
     }
 
-    public String getAula1CC() {
-        return aula1CC;
+    public String getAula1cc() {
+        return aula1cc;
     }
 
-    public void setAula1CC(String aula1CC) {
-        this.aula1CC = aula1CC;
+    public void setAula1cc(String aula1cc) {
+        this.aula1cc = aula1cc;
     }
 
-    public String getAula1SS() {
-        return aula1SS;
+    public String getAula1ss() {
+        return aula1ss;
     }
 
-    public void setAula1SS(String aula1SS) {
-        this.aula1SS = aula1SS;
+    public void setAula1ss(String aula1ss) {
+        this.aula1ss = aula1ss;
     }
 
-    public String getLabCC() {
-        return labCC;
+    public String getLabcc() {
+        return labcc;
     }
 
-    public void setLabCC(String labCC) {
-        this.labCC = labCC;
+    public void setLabcc(String labcc) {
+        this.labcc = labcc;
     }
 
-    public String getLabId() {
-        return labId;
+    public String getLabid() {
+        return labid;
     }
 
-    public void setLabId(String labId) {
-        this.labId = labId;
+    public void setLabid(String labid) {
+        this.labid = labid;
     }
 
-    public String getDesdobleA() {
-        return desdobleA;
+    public String getBajoespejos() {
+        return bajoespejos;
     }
 
-    public void setDesdobleA(String desdobleA) {
-        this.desdobleA = desdobleA;
+    public void setBajoespejos(String bajoespejos) {
+        this.bajoespejos = bajoespejos;
     }
 
-    public String getDesdobleB() {
-        return desdobleB;
+    public String getBajopatio() {
+        return bajopatio;
     }
 
-    public void setDesdobleB(String desdobleB) {
-        this.desdobleB = desdobleB;
+    public void setBajopatio(String bajopatio) {
+        this.bajopatio = bajopatio;
     }
 
-    public String getDesdobleC() {
-        return desdobleC;
+    public String getAenlace() {
+        return aenlace;
     }
 
-    public void setDesdobleC(String desdobleC) {
-        this.desdobleC = desdobleC;
+    public void setAenlace(String aenlace) {
+        this.aenlace = aenlace;
     }
 
-    public String getAEnlace() {
-        return aEnlace;
+    public String getDesdoblec() {
+        return desdoblec;
     }
 
-    public void setAEnlace(String aEnlace) {
-        this.aEnlace = aEnlace;
+    public void setDesdoblec(String desdoblec) {
+        this.desdoblec = desdoblec;
     }
 
-    public String getBajoPatio() {
-        return bajoPatio;
+    public String getDesdobleb() {
+        return desdobleb;
     }
 
-    public void setBajoPatio(String bajoPatio) {
-        this.bajoPatio = bajoPatio;
+    public void setDesdobleb(String desdobleb) {
+        this.desdobleb = desdobleb;
     }
 
-    public String getBajoEspejos() {
-        return bajoEspejos;
+    public String getDesdoblea() {
+        return desdoblea;
     }
 
-    public void setBajoEspejos(String bajoEspejos) {
-        this.bajoEspejos = bajoEspejos;
+    public void setDesdoblea(String desdoblea) {
+        this.desdoblea = desdoblea;
     }
 }

@@ -7,6 +7,9 @@ import jakarta.persistence.EntityManager;
 import jakarta.persistence.Query;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.Collections;
@@ -35,6 +38,33 @@ public class ProfesoresService {
                         (String) resultado[1]
                 ))
                 .collect(Collectors.toList());
+    }
+
+    public Page<ProfesorDTO> findPageProfesores(Pageable pageable) {
+        try {
+            String countSql = "SELECT COUNT(*) FROM `profes 2425`";
+            Query countQuery = entityManager.createNativeQuery(countSql);
+            long total = ((Number) countQuery.getSingleResult()).longValue();
+
+            String sql = "SELECT * FROM `profes 2425`";
+            Query query = entityManager.createNativeQuery(sql)
+                    .setFirstResult((int) pageable.getOffset())
+                    .setMaxResults(pageable.getPageSize());
+
+            List<Object[]> resultados = query.getResultList();
+
+            List<ProfesorDTO> profesores = resultados.stream()
+                    .map(resultado -> new ProfesorDTO(
+                            ((Number) resultado[0]).intValue(),
+                            (String) resultado[1]
+                    ))
+                    .collect(Collectors.toList());
+
+            return new PageImpl<>(profesores, pageable, total);
+        }catch (Exception e) {
+            System.out.println(e.getMessage());
+            return new PageImpl<>(Collections.emptyList(), pageable, 0);
+        }
     }
 
     public List<TutorDTO> findAllTutores() {
@@ -81,6 +111,47 @@ public class ProfesoresService {
                         (String)resultado[2],
                         (String)resultado[3]))
                 .collect(Collectors.toList());
+    }
+
+    public Page<TutorDTO> findPageTutoresByCursoAndProfesor(int curso, int profesor, Pageable pageable) {
+        try {
+            String countSql = "SELECT COUNT(*) FROM `tutores 2425` t " +
+                    "LEFT JOIN cursos c ON t.curso = c.id " +
+                    "LEFT JOIN `profes 2425` p1 ON t.`tutor 2425` = p1.id " +
+                    "LEFT JOIN `profes 2425` p2 ON t.`tutor 2324` = p2.id " +
+                    "WHERE (:curso = 0 OR c.id = :curso) AND (:profesor = 0 OR p1.id = :profesor OR p2.id = :profesor)";
+            Query countQuery = entityManager.createNativeQuery(countSql)
+                    .setParameter("curso", curso)
+                    .setParameter("profesor", profesor);
+            long total = ((Number) countQuery.getSingleResult()).longValue();
+
+            String sql = "SELECT t.id, c.campo1 AS nombre_curso, p1.campo1 AS nombre_tutor_2425, p2.campo1 AS nombre_tutor_2324 FROM `tutores 2425` t " +
+                    "LEFT JOIN cursos c ON t.curso = c.id " +
+                    "LEFT JOIN `profes 2425` p1 ON t.`tutor 2425` = p1.id " +
+                    "LEFT JOIN `profes 2425` p2 ON t.`tutor 2324` = p2.id " +
+                    "WHERE (:curso = 0 OR c.id = :curso) AND (:profesor = 0 OR p1.id = :profesor OR p2.id = :profesor)";
+
+            Query query = entityManager.createNativeQuery(sql)
+                    .setParameter("curso", curso)
+                    .setParameter("profesor", profesor)
+                    .setFirstResult((int) pageable.getOffset())
+                    .setMaxResults(pageable.getPageSize());
+
+            List<Object[]> resultados = query.getResultList();
+
+            List<TutorDTO> tutores = resultados.stream()
+                    .map(resultado -> new TutorDTO(
+                            (resultado[0] != null ? ((Number) resultado[0]).intValue() : 0),
+                            (String)resultado[1],
+                            (String)resultado[2],
+                            (String)resultado[3]))
+                    .collect(Collectors.toList());
+
+            return new PageImpl<>(tutores, pageable, total);
+        }catch (Exception e) {
+            System.out.println(e.getMessage());
+            return new PageImpl<>(Collections.emptyList(), pageable, 0);
+        }
     }
 }
 

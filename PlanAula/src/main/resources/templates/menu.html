@@ -1,8 +1,71 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <div th:replace="/fragments/head.html"></div>
+    <div th:replace="~{/fragments/head.html}"></div>
 </head>
+<style>
+    body {
+        font-family: sans-serif;
+    }
+
+    .menu-item {
+        border-radius: 5px;
+        text-align: center;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+        color: white;
+        padding: 15px;
+        /* Adjust padding for better spacing */
+        margin-bottom: 10px;
+        /* Space between items */
+        font-weight: bold;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        height: 150px;
+        /* Consistent height */
+    }
+
+    .menu-item:hover {
+        opacity: 0.8;
+    }
+
+    .menu-item i {
+        font-size: 2em;
+        /* Adjust icon size */
+        margin-bottom: 8px;
+        /* Space between icon and text */
+    }
+
+    /* Color Themes (from the image) */
+    .theme-asignaturas {
+        background-color: #a7d156;
+    }
+
+    /* Green */
+    .theme-profesores {
+        background-color: #6ab0d6;
+    }
+
+    /* Light Blue */
+    .theme-tutores {
+        background-color: #f2f2f2;
+        color: #333;
+    }
+
+    /* Light */
+    .theme-espacios {
+        background-color: #90be6d;
+    }
+
+    /* Green */
+    .theme-guardias {
+        background-color: #b35968;
+    }
+
+    /* Red */
+</style>
 <body>
 <div class="container mt-5">
     <div class="card shadow-sm">
@@ -10,23 +73,38 @@
             <h5 class="card-title mb-0" th:text="'Mi agenda - ' + ${user}"></h5>
         </div>
         <div class="card-body bg-light">
-            <ul class="list-group list-group-flush">
-                <li class="list-group-item d-flex justify-content-between align-items-center" onclick="location.href='/asignaturas'">
-                    <span>Asignaturas</span>
-                </li>
-                <li class="list-group-item d-flex justify-content-between align-items-center" onclick="location.href='/profesores'">
-                    <span>Profesores</span>
-                </li>
-                <li class="list-group-item d-flex justify-content-between align-items-center" onclick="location.href='/profesores/tutores'">
-                    <span>Tutores</span>
-                </li>
-                <li class="list-group-item d-flex justify-content-between align-items-center" onclick="location.href='/espacios'">
-                    <span>Espacios</span>
-                </li>
-                <li class="list-group-item d-flex justify-content-between align-items-center" onclick="location.href='/guardias'">
-                    <span>Guardias</span>
-                </li>
-            </ul>
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="menu-item theme-asignaturas" onclick="location.href='/asignaturas'">
+                        <img src="/images/menu/asignaturas.png" alt="asignaturas" width="20%"/>
+                        <span>Asignaturas</span>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="menu-item theme-profesores" onclick="location.href='/profesores'">
+                        <img src="/images/menu/profesor.png" alt="profesores" width="20%"/>
+                        <span>Profesores</span>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="menu-item theme-tutores" onclick="location.href='/profesores/tutores'">
+                        <img src="/images/menu/profesor.png" alt="tutores" width="20%"/>
+                        <span>Tutores</span>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="menu-item theme-espacios" onclick="location.href='/espacios'">
+                        <img src="/images/menu/aula.png" alt="espacios" width="20%"/>
+                        <span>Espacios</span>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="menu-item theme-guardias" onclick="location.href='/guardias'">
+                        <img src="/images/menu/guardia.png" alt="guardias" width="20%"/>
+                        <span>Guardias</span>
+                    </div>
+                </div>
+            </div>
         </div>
         <div class="card-footer text-muted bg-white">
             <small th:text="${fecha}"></small>
@@ -35,5 +113,5 @@
 </div>
 </body>
 
-<div th:replace="/fragments/bootstrap.html"></div>
+<div th:replace="~{/fragments/links.html}"></div>
 </html>

@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <div th:replace="/fragments/head.html"></div>
+    <div th:replace="~{/fragments/head.html}"></div>
 </head>
 <body>
 <div class="container mt-5">
@@ -15,13 +15,9 @@
                     <button type="button" class="btn btn-outline-success btn-sm" onclick="location.href='/profesores/tutores'">Ver tutores</button>
                 </div>
                 <div class="col-7">
-                    <form id="filtrosTutores" method="get" th:action="@{'/profesores/tutores'}">
+                    <form id="filtrosForm" method="get" th:action="@{'/profesores'}">
                         <div class="form-group row justify-content-end mb-0">
-                            <div class="col-md-4">
-                                <select class="form-control form-control-sm" id="cursoFilter" name="curso" onchange="$('#filtrosTutores').submit()">
-                                    <option value="0">Max</option>
-                                </select>
-                            </div>
+                            <div th:replace="~{/fragments/filterPage.html}"></div>
                         </div>
                     </form>
                 </div>
@@ -37,12 +33,13 @@
                 </tr>
                 </thead>
                 <tbody>
-                <tr th:each="profesor : ${profesores}" th:id="'tr_' + ${profesor.id}">
+                <tr th:each="profesor : ${page}" th:id="'tr_' + ${profesor.id}">
                     <th scope="row" th:text="${profesor.id}"></th>
                     <td th:text="${profesor.nombre}"></td>
                 </tr>
                 </tbody>
             </table>
+            <div th:replace="~{/fragments/pagination.html}"></div>
         </div>
         <div class="card-footer text-muted bg-white d-flex justify-content-end">
             <button type="button" class="btn btn-dark" onclick="location.href='/menu'">Volver</button>
@@ -50,5 +47,5 @@
     </div>
 </div>
 </body>
-<div th:replace="/fragments/bootstrap.html"></div>
+<div th:replace="~{/fragments/links.html}"></div>
 </html>

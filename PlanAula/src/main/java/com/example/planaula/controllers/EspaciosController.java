@@ -54,7 +54,43 @@ public class EspaciosController {
         model.addAttribute("asignaturas", asignaturaDTOList);
 
         List<EspacioDTO> espacioDTOList = espaciosService.findAllEspaciosByDiaAndHoraAndAulaAndAsignatura(dia,hora,asignatura);
-        model.addAttribute("espacios", espacioDTOList );
+
+
+        if(!espacioDTOList.isEmpty() && aula != 0){
+            AulaDTO aulaDTO = aulasService.findAulaByid(aula);
+            String campo = normalizarNombreCampo(aulaDTO.getNombre());
+
+            espacioDTOList = espacioDTOList.stream()
+                    .filter(espacio -> !estaVacio(obtenerValorCampoDinamico(espacio, campo)))
+                    .collect(Collectors.toList());
+        }
+
+        model.addAttribute("espacios", espacioDTOList);
         return "espacios";
     }
+
+private String normalizarNombreCampo(String nombreAula) {
+    return nombreAula.toLowerCase()
+            .replaceAll("\\s+", "")
+            .replaceAll("á", "a")
+            .replaceAll("é", "e")
+            .replaceAll("í", "i")
+            .replaceAll("ó", "o")
+            .replaceAll("ú", "u");
+}
+
+private String obtenerValorCampoDinamico(EspacioDTO espacio, String nombreCampo) {
+    try {
+        Field campo = EspacioDTO.class.getDeclaredField(nombreCampo);
+        campo.setAccessible(true);
+        Object valor = campo.get(espacio);
+        return valor != null ? valor.toString() : null;
+    } catch (NoSuchFieldException | IllegalAccessException e) {
+        return null;
+    }
+}
+
+private boolean estaVacio(String valor) {
+    return valor == null || valor.trim().isEmpty();
+}
 }

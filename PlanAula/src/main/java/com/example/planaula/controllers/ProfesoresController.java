@@ -5,13 +5,15 @@ import com.example.planaula.Dto.ProfesorDTO;
 import com.example.planaula.Dto.TutorDTO;
 import com.example.planaula.services.CursosService;
 import com.example.planaula.services.ProfesoresService;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Controller
@@ -27,25 +29,26 @@ public class ProfesoresController {
     }
 
     @GetMapping("")
-    public String findAllProfesores(Model model) {
-        List<ProfesorDTO> profesorDTOList = profesoresService.findAllProfesores();
-        model.addAttribute("profesores", profesorDTOList);
+    public String findAllProfesores(@RequestParam(required = false, defaultValue = "0") int page,
+                                    @RequestParam(required = false, defaultValue = "15") int size,
+                                    Model model) {
+        Page<ProfesorDTO> profesorDTOList = profesoresService.findPageProfesores(PageRequest.of(page, size));
+        model.addAttribute("page", profesorDTOList);
         return "profesores";
     }
 
 
     @GetMapping("/tutores")
     public String findAllTutores(@RequestParam(required = false, defaultValue = "0") int curso,
-                                 @RequestParam(required = false, defaultValue = "0") int profesor, Model model) {
+                                 @RequestParam(required = false, defaultValue = "0") int profesor,
+                                 @RequestParam(required = false, defaultValue = "0") int page,
+                                 @RequestParam(required = false, defaultValue = "15") int size,
+                                 Model model) {
         model.addAttribute("cursoFiltro", curso);
         model.addAttribute("profesorFiltro", profesor);
-        List<TutorDTO> tutorDTOList;
-        if(curso == 0 && profesor == 0) {
-             tutorDTOList = profesoresService.findAllTutores();
-        }else{
-            tutorDTOList = profesoresService.findAllTutoresByCursoAndProfesor(curso, profesor);
-        }
-        model.addAttribute("tutores", tutorDTOList);
+        Page<TutorDTO> tutorDTOList;
+        tutorDTOList = profesoresService.findPageTutoresByCursoAndProfesor(curso, profesor, PageRequest.of(page, size));
+        model.addAttribute("page", tutorDTOList);
 
         List<ProfesorDTO> profesorDTOList = profesoresService.findAllProfesores();
         model.addAttribute("profesores", profesorDTOList);

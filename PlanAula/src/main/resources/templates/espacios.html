@@ -1,39 +1,39 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <div th:replace="/fragments/head.html"></div>
+    <div th:replace="~{/fragments/head.html}"></div>
 </head>
 <body>
 <div class="container mt-3">
     <div class="card shadow-sm">
         <div class="card-header bg-primary text-white"><h5 class="card-title mb-0">Espacios</h5></div>
         <div class="card-body filter-section">
-            <form id="filtrosEspacios" method="get" th:action="@{'/espacios'}">
+            <form id="filtrosForm" method="get" th:action="@{'/espacios'}">
                 <div class="row">
                     <div class="col-md-3">
                         <label for="diaFilter" class="form-label">Filtrar por Día:</label>
-                        <select class="form-control" id="diaFilter" name="dia" onchange="$('#filtrosEspacios').submit()">
+                        <select class="form-control" id="diaFilter" name="dia" onchange="$('#filtrosForm').submit()">
                             <option value="0">Todos los días</option>
                             <option th:each=" dia : ${dias}" th:value="${dia.id}" th:text="${dia.nombre}" th:selected="${diaFiltro == dia.id}"></option>
                         </select>
                     </div>
                     <div class="col-md-3">
                         <label for="horaFilter" class="form-label">Filtrar por Hora:</label>
-                        <select class="form-control" id="horaFilter" name="hora" onchange="$('#filtrosEspacios').submit()">
+                        <select class="form-control" id="horaFilter" name="hora" onchange="$('#filtrosForm').submit()">
                             <option value="0">Todas las horas</option>
                             <option th:each=" hora: ${horas}" th:value="${hora.id}" th:text="${hora.nombre}" th:selected="${horaFiltro == hora.id}"></option>
                         </select>
                     </div>
                     <div class="col-md-3">
                         <label for="aulaFilter" class="form-label">Filtrar por Aula:</label>
-                        <select class="form-control" id="aulaFilter" name="aula" onchange="$('#filtrosEspacios').submit()">
+                        <select class="form-control" id="aulaFilter" name="aula" onchange="$('#filtrosForm').submit()">
                             <option value="0">Todas las aulas</option>
                             <option th:each=" aula : ${aulas}" th:value="${aula.id}" th:text="${aula.nombre}" th:selected="${aulaFiltro == aula.id}"></option>
                         </select>
                     </div>
                     <div class="col-md-3">
                         <label for="asignaturaFilter" class="form-label">Filtrar por Asignatura:</label>
-                        <select class="form-control" id="asignaturaFilter" name="asignatura" onchange="$('#filtrosEspacios').submit()">
+                        <select class="form-control" id="asignaturaFilter" name="asignatura" onchange="$('#filtrosForm').submit()">
                             <option value="0">Todas las asignaturas</option>
                             <option th:each=" asignatura : ${asignaturas}" th:value="${asignatura.id}" th:text="${asignatura.nombre}" th:selected="${asignaturaFiltro == asignatura.id}"></option>
                         </select>
@@ -61,87 +61,87 @@
                                 </tr>
                                 </thead>
                                 <tbody>
-                                <tr th:if="${espacio.aula1A != null}">
+                                <tr th:if="${espacio.aula1a != null}">
                                     <th>Aula 1A</th>
-                                    <td th:text="${espacio.aula1A}"></td>
+                                    <td th:text="${espacio.aula1a}"></td>
                                 </tr>
-                                <tr th:if="${espacio.aula1B != null}">
+                                <tr th:if="${espacio.aula1b != null}">
                                     <th>Aula 1B</th>
-                                    <td th:text="${espacio.aula1B}"></td>
+                                    <td th:text="${espacio.aula1b}"></td>
                                 </tr>
-                                <tr th:if="${espacio.aula2A != null}">
+                                <tr th:if="${espacio.aula2a != null}">
                                     <th>Aula 2A</th>
-                                    <td th:text="${espacio.aula2A}"></td>
+                                    <td th:text="${espacio.aula2a}"></td>
                                 </tr>
-                                <tr th:if="${espacio.aula2B != null}">
+                                <tr th:if="${espacio.aula2b != null}">
                                     <th>Aula 2B</th>
-                                    <td th:text="${espacio.aula2B}"></td>
+                                    <td th:text="${espacio.aula2b}"></td>
                                 </tr>
-                                <tr th:if="${espacio.aula3A != null}">
+                                <tr th:if="${espacio.aula3a != null}">
                                     <th>Aula 3A</th>
-                                    <td th:text="${espacio.aula3A}"></td>
+                                    <td th:text="${espacio.aula3a}"></td>
                                 </tr>
-                                <tr th:if="${espacio.aula3B != null}">
+                                <tr th:if="${espacio.aula3b != null}">
                                     <th>Aula 3B</th>
-                                    <td th:text="${espacio.aula3B}"></td>
+                                    <td th:text="${espacio.aula3b}"></td>
                                 </tr>
-                                <tr th:if="${espacio.aula4A != null}">
+                                <tr th:if="${espacio.aula4a != null}">
                                     <th>Aula 4A</th>
-                                    <td th:text="${espacio.aula4A}"></td>
+                                    <td th:text="${espacio.aula4a}"></td>
                                 </tr>
-                                <tr th:if="${espacio.aula4B != null}">
+                                <tr th:if="${espacio.aula4b != null}">
                                     <th>Aula 4B</th>
-                                    <td th:text="${espacio.aula4B}"></td>
+                                    <td th:text="${espacio.aula4b}"></td>
                                 </tr>
-                                <tr th:if="${espacio.aula1CC != null}">
+                                <tr th:if="${espacio.aula1cc != null}">
                                     <th>Aula 1CC</th>
-                                    <td th:text="${espacio.aula1CC}"></td>
+                                    <td th:text="${espacio.aula1cc}"></td>
                                 </tr>
-                                <tr th:if="${espacio.aula1SS != null}">
+                                <tr th:if="${espacio.aula1ss != null}">
                                     <th>Aula 1SS</th>
-                                    <td th:text="${espacio.aula1SS}"></td>
+                                    <td th:text="${espacio.aula1ss}"></td>
                                 </tr>
-                                <tr th:if="${espacio.labCC != null}">
+                                <tr th:if="${espacio.labcc != null}">
                                     <th>Lab CC</th>
-                                    <td th:text="${espacio.labCC}"></td>
+                                    <td th:text="${espacio.labcc}"></td>
                                 </tr>
-                                <tr th:if="${espacio.labId != null}">
+                                <tr th:if="${espacio.labid != null}">
                                     <th>Lab ID</th>
-                                    <td th:text="${espacio.labId}"></td>
+                                    <td th:text="${espacio.labid}"></td>
                                 </tr>
-                                <tr th:if="${espacio.desdobleA != null}">
+                                <tr th:if="${espacio.desdoblea != null}">
                                     <th>Desdoble A</th>
-                                    <td th:text="${espacio.desdobleA}"></td>
+                                    <td th:text="${espacio.desdoblea}"></td>
                                 </tr>
-                                <tr th:if="${espacio.desdobleB != null}">
+                                <tr th:if="${espacio.desdobleb != null}">
                                     <th>Desdoble B</th>
-                                    <td th:text="${espacio.desdobleB}"></td>
+                                    <td th:text="${espacio.desdobleb}"></td>
                                 </tr>
-                                <tr th:if="${espacio.desdobleC != null}">
+                                <tr th:if="${espacio.desdoblec != null}">
                                     <th>Desdoble C</th>
-                                    <td th:text="${espacio.desdobleC}"></td>
+                                    <td th:text="${espacio.desdoblec}"></td>
                                 </tr>
-                                <tr th:if="${espacio.aEnlace != null}">
+                                <tr th:if="${espacio.aenlace != null}">
                                     <th>A Enlace</th>
-                                    <td th:text="${espacio.aEnlace}"></td>
+                                    <td th:text="${espacio.aenlace}"></td>
                                 </tr>
-                                <tr th:if="${espacio.bajoPatio != null}">
+                                <tr th:if="${espacio.bajopatio != null}">
                                     <th>Bajo Patio</th>
-                                    <td th:text="${espacio.bajoPatio}"></td>
+                                    <td th:text="${espacio.bajopatio}"></td>
                                 </tr>
-                                <tr th:if="${espacio.bajoEspejos != null}">
+                                <tr th:if="${espacio.bajoespejos != null}">
                                     <th>Bajo Espejos</th>
-                                    <td th:text="${espacio.bajoEspejos}"></td>
+                                    <td th:text="${espacio.bajoespejos}"></td>
                                 </tr>
                                 </tbody>
                             </table>
                         </div>
                     </div>
                 </div>
-                <div th:unless="${#lists.size(espacios) > 0}" class="alert alert-danger" role="alert"> No existen
-                    espacios
-                    para los filtros ingresados
-                </div>
+            </div>
+            <div th:unless="${#lists.size(espacios) > 0}" class="alert alert-danger" role="alert"> No existen
+                espacios
+                para los filtros ingresados
             </div>
         </div>
         <div class="card-footer text-muted bg-white d-flex justify-content-end">
@@ -150,5 +150,5 @@
     </div>
 </div>
 </body>
-<div th:replace="/fragments/bootstrap.html"></div>
+<div th:replace="~{/fragments/links.html}"></div>
 </html>
