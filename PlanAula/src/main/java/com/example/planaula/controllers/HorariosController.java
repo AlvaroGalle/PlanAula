@@ -15,31 +15,45 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Controller
-@RequestMapping("/guardias")
-public class GuardiasController {
+@RequestMapping("/horarios")
+public class HorariosController {
 
     private final GuardiasService guardiasService;
     private final HorasService horasService;
     private final DiasService diasService;
+    private final CursosService cursosService;
     private final ProfesoresService profesoresService;
+    private final HorariosService horariosService;
+    private final AsignaturasService asignaturasService;
+    private final AulasService aulasService;
 
-    public GuardiasController(GuardiasService guardiasService, HorasService horasService, DiasService diasService, ProfesoresService profesoresService) {
+    public HorariosController(GuardiasService guardiasService, HorasService horasService, DiasService diasService, CursosService cursosService, ProfesoresService profesoresService, HorariosService horariosService, AsignaturasService asignaturasService, AulasService aulasService) {
         this.guardiasService = guardiasService;
         this.horasService = horasService;
         this.diasService = diasService;
+        this.cursosService = cursosService;
         this.profesoresService = profesoresService;
+        this.horariosService = horariosService;
+        this.asignaturasService = asignaturasService;
+        this.aulasService = aulasService;
     }
 
     @GetMapping("")
-    public String findAllGuardias(@RequestParam(required = false, defaultValue = "0") int dia,
-                                                @RequestParam(required = false, defaultValue = "0") int hora,
-                                                @RequestParam(required = false, defaultValue = "0") String turno,
-                                                @RequestParam(required = false, defaultValue = "0") int profesor,
-                                                Model model) {
+    public String findHorarios(@RequestParam(required = false, defaultValue = "0") int dia,
+                                         @RequestParam(required = false, defaultValue = "0") int hora,
+                                         @RequestParam(required = false, defaultValue = "0") String turno,
+                                         @RequestParam(required = false, defaultValue = "0") int curso,
+                                         @RequestParam(required = false, defaultValue = "0") int asignatura,
+                                         @RequestParam(required = false, defaultValue = "0") int profesor,
+                                         @RequestParam(required = false, defaultValue = "0") int aula,
+                                         Model model) {
         model.addAttribute("diaFiltro", dia);
         model.addAttribute("horaFiltro", hora);
         model.addAttribute("turnoFiltro", turno);
+        model.addAttribute("cursoFiltro", curso);
         model.addAttribute("profesorFiltro", profesor);
+        model.addAttribute("aulaFiltro", aula);
+        model.addAttribute("asignaturaFiltro", asignatura);
 
         List<DiaDTO> diaDTOList =  diasService.findAllDias();
         model.addAttribute("dias", diaDTOList);
@@ -47,8 +61,17 @@ public class GuardiasController {
         List<HoraDTO> horaDTOList =  horasService.findAllHoras();
         model.addAttribute("horas", horaDTOList);
 
+        List<CursoDTO> cursoDTOList =  cursosService.findAllCursos();
+        model.addAttribute("cursos", cursoDTOList);
+
         List<ProfesorDTO> profesorDTOList =  profesoresService.findAllProfesores();
         model.addAttribute("profesores", profesorDTOList);
+
+        List<AulaDTO> aulaDTOList =  aulasService.findAllAulas();
+        model.addAttribute("aulas", aulaDTOList);
+
+        List<AsignaturaDTO> asignaturaDTOList =  asignaturasService.findAllAsignaturas();
+        model.addAttribute("asignaturas", asignaturaDTOList);
 
         List<GuardiasDTO> guardiasDTOList = guardiasService.findAllGuardiasByDiaAndHoraAndProfesor(dia,hora,profesor);
 
@@ -66,8 +89,11 @@ public class GuardiasController {
                     .filter(guardia -> !estaVacio(obtenerValorCampoDinamico(guardia, campo)))
                     .collect(Collectors.toList());
         }
-        model.addAttribute("page",guardiasDTOList);
-        return "guardias";
+        model.addAttribute("guardias",guardiasDTOList);
+
+        List<HorarioDTO> horarioDTOList = horariosService.findAllHorariosByDiaAndHoraAndCurso(dia,hora,curso, asignatura, profesor, aula);
+        model.addAttribute("page",horarioDTOList);
+        return "horarios";
     }
 
         private String obtenerValorCampoDinamico(GuardiasDTO guardia, String nombreCampo) {

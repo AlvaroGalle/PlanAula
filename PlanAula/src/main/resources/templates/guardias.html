@@ -10,40 +10,24 @@
         <div class="card-body filter-section">
             <form id="filtrosForm" method="get" th:action="@{'/guardias'}">
                 <div class="row">
-                    <div class="col-md-3">
-                        <label for="diaFilter" class="form-label">Filtrar por Día:</label>
-                        <select class="form-control" id="diaFilter" name="dia" onchange="$('#filtrosForm').submit()">
-                            <option value="0">Todos los días</option>
-                            <option th:each=" dia : ${dias}" th:value="${dia.id}" th:text="${dia.nombre}" th:selected="${diaFiltro == dia.id}"></option>
-                        </select>
+                    <div class="col-md-3 mb-3">
+                        <div th:replace="~{/fragments/filtros/filterDia.html}"></div>
                     </div>
-                    <div class="col-md-3">
-                        <label for="horaFilter" class="form-label">Filtrar por Hora:</label>
-                        <select class="form-control" id="horaFilter" name="hora" onchange="$('#filtrosForm').submit()">
-                            <option value="0">Todas las horas</option>
-                            <option th:each=" hora: ${horas}" th:value="${hora.id}" th:text="${hora.nombre}" th:selected="${horaFiltro == hora.id}"></option>
-                        </select>
+                    <div class="col-md-3 mb-3">
+                        <div th:replace="~{/fragments/filtros/filterHoras.html}"></div>
                     </div>
-                    <div class="col-md-3">
-                        <label for="turnoFilter" class="form-label">Filtrar por Turno:</label>
-                        <select class="form-control" id="turnoFilter" name="turno" onchange="$('#filtrosForm').submit()">
-                            <option value="0">Todos los turnos</option>
-                            <option th:each=" turno : ${turnos}" th:value="${turno.key}" th:text="${turno.value.toUpperCase()}" th:selected="${turnoFiltro == turno.key}"></option>
-                        </select>
+                    <div class="col-md-3 mb-3">
+                        <div th:replace="~{/fragments/filtros/filterTurno.html}"></div>
                     </div>
-                    <div class="col-md-3">
-                        <label for="profesorFilter" class="form-label">Filtrar por Profesores:</label>
-                        <select class="form-control" id="profesorFilter" name="profesor" onchange="$('#filtrosForm').submit()">
-                            <option value="0">Todos los profesores</option>
-                            <option th:each=" profesor : ${profesores}" th:value="${profesor.id}" th:text="${profesor.nombre}" th:selected="${profesorFiltro == profesor.id}"></option>
-                        </select>
+                    <div class="col-md-3 mb-3">
+                        <div th:replace="~{/fragments/filtros/filterProfesores.html}"></div>
                     </div>
                 </div>
             </form>
         </div>
         <div class="card-body bg-light">
-            <div class="row">
-                <div th:each="guardia : ${guardias}" class="col-md-6 col-lg-3 mb-3">
+            <div th:if="${#lists.size(page) > 0}" class="row">
+                <div th:each="guardia : ${page}" class="col-md-6 col-lg-3 mb-3">
                     <div class="card">
                         <div class="card-header bg-primary text-white">
                             <h5 class="card-title mb-0">
@@ -112,10 +96,7 @@
                     </div>
                 </div>
             </div>
-            <div th:unless="${#lists.size(guardias) > 0}" class="alert alert-danger" role="alert"> No existen
-                guardias
-                para los filtros ingresados
-            </div>
+            <div th:replace="~{/fragments/noResultAlert.html}"></div>
         </div>
         <div class="card-footer text-muted bg-white d-flex justify-content-end">
             <button type="button" class="btn btn-dark" onclick="location.href='/menu'">Volver</button>

@@ -1,0 +1,5 @@
+<label for="asignaturaFilter" class="form-label">Filtrar por Asignatura:</label>
+<select class="form-control" id="asignaturaFilter" name="asignatura" onchange="$('#filtrosForm').submit()">
+    <option value="0">Todas las asignaturas</option>
+    <option th:each=" asignatura : ${asignaturas}" th:value="${asignatura.id}" th:text="${asignatura.nombre}" th:selected="${asignaturaFiltro == asignatura.id}"></option>
+</select>

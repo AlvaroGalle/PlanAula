@@ -13,19 +13,11 @@
         <form id="filtrosForm" method="get"
               th:action="@{'/profesores/tutores'}">
         <div class="row">
-            <div class="col-md-4">
-                <label for="cursoFilter" class="form-label">Filtrar por Curso:</label>
-                <select class="form-control" id="cursoFilter" name="curso" onchange="$('#filtrosForm').submit()">
-                    <option value="0">Todos los cursos</option>
-                    <option th:each=" curso : ${cursos}" th:value="${curso.id}" th:text="${curso.nombre}" th:selected="${cursoFiltro == curso.id}"></option>
-                </select>
+            <div class="col-md-4 mb-3">
+                <div th:replace="~{/fragments/filtros/filterCursos.html}"></div>
             </div>
-            <div class="col-md-4">
-                <label for="tutorFilter" class="form-label">Filtrar por Profesor:</label>
-                <select class="form-control" id="tutorFilter" name="profesor" onchange="$('#filtrosForm').submit()">
-                    <option value="0">Todos los profesores</option>
-                    <option th:each=" profesor : ${profesores}" th:value="${profesor.id}" th:text="${profesor.nombre}" th:selected="${profesorFiltro == profesor.id}"></option>
-                </select>
+            <div class="col-md-4 mb-3">
+                <div th:replace="~{/fragments/filtros/filterProfesores.html}"></div>
             </div>
 
             <div th:replace="~{/fragments/filterPage.html}"></div>

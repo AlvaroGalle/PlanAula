@@ -67,6 +67,37 @@ public class ProfesoresService {
         }
     }
 
+    public void anadirProfesor(ProfesorDTO profesorDTO) {
+        try{
+            String maxIdSql = "SELECT MAX(id) FROM `profes 2425`";
+            Object result = entityManager.createNativeQuery(maxIdSql).getSingleResult();
+            int newId = result != null ? ((Number) result).intValue() + 1 : 1;
+            profesorDTO.setId(newId);
+
+            String insertSql = "INSERT INTO `profes 2425` (id, campo1) VALUES (:id, :nombre)";
+            int filasInsertadas = entityManager.createNativeQuery(insertSql)
+                    .setParameter("id", newId)
+                    .setParameter("nombre", profesorDTO.getNombre())
+                    .executeUpdate();
+        }catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+
+    }
+
+    public void modificarProfesor(ProfesorDTO profesorDTO) {
+        try{
+            String updateSql = "UPDATE `profes 2425` SET campo1 = :nombre WHERE id = :id";
+            int filasActualizadas = entityManager.createNativeQuery(updateSql)
+                    .setParameter("id", profesorDTO.getId())
+                    .setParameter("nombre", profesorDTO.getNombre())
+                    .executeUpdate();
+        }catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+
+    }
+
     public List<TutorDTO> findAllTutores() {
         String sql = "SELECT t.id, c.campo1 AS nombre_curso, p1.campo1 AS nombre_tutor_2425, p2.campo1 AS nombre_tutor_2324 " +
                 "FROM `tutores 2425` t LEFT JOIN cursos c ON t.curso = c.id " +

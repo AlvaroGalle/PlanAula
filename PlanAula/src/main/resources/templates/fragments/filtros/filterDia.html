@@ -1,0 +1,5 @@
+ <label for="diaFilter" class="form-label">Filtrar por Día:</label>
+    <select class="form-control" id="diaFilter" name="dia" onchange="$('#filtrosForm').submit()">
+        <option value="0">Todos los días</option>
+        <option th:each=" dia : ${dias}" th:value="${dia.id}" th:text="${dia.nombre}" th:selected="${diaFiltro == dia.id}"></option>
+    </select>

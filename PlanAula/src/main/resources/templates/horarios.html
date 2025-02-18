@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <div th:replace="~{/fragments/head.html}"></div>
+</head>
+<body>
+<div class="container mt-5">
+    <div class="card shadow-sm">
+        <div class="card-header bg-primary text-white">
+            <h5 class="card-title mb-0">Horarios</h5>
+        </div>
+        <div class="card-body filter-section">
+            <div class="row align-items-center">
+                <div class="col-12">
+                    <form id="filtrosForm" method="get" th:action="@{'/horarios'}">
+                        <div class="form-group row justify-content-end mb-0">
+                            <div class="col-md-4 mb-3">
+                                <div th:replace="~{/fragments/filtros/filterCursos.html}"></div>
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <div th:replace="~{/fragments/filtros/filterProfesores.html}"></div>
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <div th:replace="~{/fragments/filtros/filterDia.html}"></div>
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <div th:replace="~{/fragments/filtros/filterHoras.html}"></div>
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <div th:replace="~{/fragments/filtros/filterAulas.html}"></div>
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <div th:replace="~{/fragments/filtros/filterAsignaturas.html}"></div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div th:if="${#lists.size(guardias) > 0}" class="card-body bg-light">
+            <div id="carouselGuardias" class="carousel slide" data-bs-ride="carousel">
+                <div class="carousel-inner">
+                    <div th:each="guardia, iterStat : ${guardias}"
+                         th:class="${iterStat.first} ? 'carousel-item active' : 'carousel-item'">
+                        <div class="row justify-content-center">
+                            <div class="col-12 text-center mb-3">
+                                <p class="fw-bold " th:text="${guardia.dia} + ' ' + ${guardia.hora}"></p>
+                            </div>
+                            <div class="col-md-4 text-center">
+                                <div class="d-flex align-items-center justify-content-center">
+                                    <div>
+                                        <h5 class="fw-bold  mb-3">Guardias</h5>
+                                        <p class="" th:text="${guardia.guardia1}"></p>
+                                        <p class="" th:text="${guardia.guardia2}"></p>
+                                        <p class="" th:text="${guardia.guardia3}"></p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4 text-center">
+                                <div class="d-flex align-items-center justify-content-center">
+                                    <div>
+                                        <h5 class="fw-bold  mb-3">Libranza</h5>
+                                        <p class="" th:text="${guardia.libranza1}"></p>
+                                        <p class="" th:text="${guardia.libranza2}"></p>
+                                        <p class="" th:text="${guardia.libranza3}"></p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4 text-center">
+                                <div class="d-flex align-items-center justify-content-center">
+                                    <div>
+                                        <h5 class="fw-bold  mb-3">Recreo</h5>
+                                        <p class="" th:text="${guardia.recreo1}"></p>
+                                        <p class="" th:text="${guardia.recreo2}"></p>
+                                        <p class="" th:text="${guardia.recreo3}"></p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <a class="carousel-control-prev" href="#carouselExampleControls" role="button" data-slide="prev">
+                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                </a>
+                <a class="carousel-control-next" href="#carouselExampleControls" role="button" data-slide="next">
+                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                </a>
+            </div>
+        </div>
+        <div class="card-body bg-light">
+            <div th:if="${#lists.size(page) > 0}" class="row">
+            <div class="table-responsive">
+            <table class="table table-hover">
+                <thead class="table-light">
+                <tr>
+                    <!--<th>ID</th>-->
+                    <th>Día</th>
+                    <th>Hora</th>
+                    <th>Curso</th>
+                    <th>Asignatura 1</th>
+                    <th>Profesor 1</th>
+                    <th>Espacio 1</th>
+                    <th>Asignatura 2</th>
+                    <th>Profesor 2</th>
+                    <th>Espacio 2</th>
+                    <th>Asignatura 3</th>
+                    <th>Profesor 3</th>
+                    <th>Espacio 3</th>
+                    <th>Observaciones</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="horario : ${page}" th:id="'tr_' + ${horario.id}">
+                    <!--<th scope="row" th:text="${horario.id}"></th>-->
+                    <td th:text="${horario.dia}"></td>
+                    <td th:text="${horario.hora}"></td>
+                    <td th:text="${horario.curso}"></td>
+                    <td th:text="${horario.asignatura1}"></td>
+                    <td th:text="${horario.profesor1}"></td>
+                    <td th:text="${horario.espacio1}"></td>
+                    <td th:text="${horario.asignatura2}"></td>
+                    <td th:text="${horario.profesor2}"></td>
+                    <td th:text="${horario.espacio2}"></td>
+                    <td th:text="${horario.asignatura3}"></td>
+                    <td th:text="${horario.profesor3}"></td>
+                    <td th:text="${horario.espacio3}"></td>
+                    <td th:text="${horario.observaciones}"></td>
+                </tr>
+                </tbody>
+            </table>
+            <!--<div th:replace="~{/fragments/pagination.html}"></div>-->
+        </div>
+            </div>
+            <div th:replace="~{/fragments/noResultAlert.html}"></div>
+        </div>
+        <div class="card-footer text-muted bg-white d-flex justify-content-end">
+            <button type="button" class="btn btn-dark" onclick="location.href='/menu'">Volver</button>
+        </div>
+    </div>
+</div>
+</body>
+<div th:replace="~{/fragments/links.html}"></div>
+</html>

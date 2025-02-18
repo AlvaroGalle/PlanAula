@@ -11,13 +11,18 @@
         </div>
         <div class="card-body filter-section">
             <div class="row align-items-center">
-                <div class="col-5">
+                <div class="col-3">
                     <button type="button" class="btn btn-outline-success btn-sm" onclick="location.href='/profesores/tutores'">Ver tutores</button>
                 </div>
-                <div class="col-7">
+                <div class="col-3">
+                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#nuevoProfesor-modal">
+                    Añadir docente
+                </button>
+                </div>
+                <div class="col-6">
                     <form id="filtrosForm" method="get" th:action="@{'/profesores'}">
-                        <div class="form-group row justify-content-end mb-0">
-                            <div th:replace="~{/fragments/filterPage.html}"></div>
+                        <div class="form-group row justify-content-end mb-3">
+                            <div th:replace="~{/fragments/filtros/filterPage.html}"></div>
                         </div>
                     </form>
                 </div>
@@ -43,6 +48,32 @@
         </div>
         <div class="card-footer text-muted bg-white d-flex justify-content-end">
             <button type="button" class="btn btn-dark" onclick="location.href='/menu'">Volver</button>
+        </div>
+    </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade show" id="nuevoProfesor-modal" tabindex="-1" role="dialog" aria-labelledby="nuevoProfesor-modal" aria-hidden="true" style="display: none">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLongTitle">Añadir profesor</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form action="/profesores/" method="post" id="profesorForm" th:object="${profesorForm}">
+                        <div class="form-group">
+                            <label for="nombreProfesor">Nombre: </label>
+                            <input type="text" class="form-control" id="nombreProfesor" th:value="*{nombre}" placeholder="Escribe el nombre del docente">
+                        </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                <button type="button" class="btn btn-primary" onclick="$('#profesorForm').submit()">Añadir</button>
+            </div>
         </div>
     </div>
 </div>

@@ -10,33 +10,17 @@
         <div class="card-body filter-section">
             <form id="filtrosForm" method="get" th:action="@{'/espacios'}">
                 <div class="row">
-                    <div class="col-md-3">
-                        <label for="diaFilter" class="form-label">Filtrar por Día:</label>
-                        <select class="form-control" id="diaFilter" name="dia" onchange="$('#filtrosForm').submit()">
-                            <option value="0">Todos los días</option>
-                            <option th:each=" dia : ${dias}" th:value="${dia.id}" th:text="${dia.nombre}" th:selected="${diaFiltro == dia.id}"></option>
-                        </select>
+                    <div class="col-md-3 mb-3">
+                        <div th:replace="~{/fragments/filtros/filterDia.html}"></div>
                     </div>
-                    <div class="col-md-3">
-                        <label for="horaFilter" class="form-label">Filtrar por Hora:</label>
-                        <select class="form-control" id="horaFilter" name="hora" onchange="$('#filtrosForm').submit()">
-                            <option value="0">Todas las horas</option>
-                            <option th:each=" hora: ${horas}" th:value="${hora.id}" th:text="${hora.nombre}" th:selected="${horaFiltro == hora.id}"></option>
-                        </select>
+                    <div class="col-md-3 mb-3">
+                        <div th:replace="~{/fragments/filtros/filterHoras.html}"></div>
                     </div>
-                    <div class="col-md-3">
-                        <label for="aulaFilter" class="form-label">Filtrar por Aula:</label>
-                        <select class="form-control" id="aulaFilter" name="aula" onchange="$('#filtrosForm').submit()">
-                            <option value="0">Todas las aulas</option>
-                            <option th:each=" aula : ${aulas}" th:value="${aula.id}" th:text="${aula.nombre}" th:selected="${aulaFiltro == aula.id}"></option>
-                        </select>
+                    <div class="col-md-3 mb-3">
+                        <div th:replace="~{/fragments/filtros/filterAulas.html}"></div>
                     </div>
-                    <div class="col-md-3">
-                        <label for="asignaturaFilter" class="form-label">Filtrar por Asignatura:</label>
-                        <select class="form-control" id="asignaturaFilter" name="asignatura" onchange="$('#filtrosForm').submit()">
-                            <option value="0">Todas las asignaturas</option>
-                            <option th:each=" asignatura : ${asignaturas}" th:value="${asignatura.id}" th:text="${asignatura.nombre}" th:selected="${asignaturaFiltro == asignatura.id}"></option>
-                        </select>
+                    <div class="col-md-3 mb-3">
+                        <div th:replace="~{/fragments/filtros/filterAsignaturas.html}"></div>
                     </div>
                 </div>
             </form>
