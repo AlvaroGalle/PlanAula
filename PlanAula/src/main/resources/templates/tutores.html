@@ -6,8 +6,8 @@
 <body>
 <div class="container mt-3">
 <div class="card shadow-sm">
-    <div class="card-header bg-primary text-white">
-        <h5 class="card-title mb-0">Tutores</h5>
+    <div class="card-header theme-tutores text-white">
+        <h5 class="card-title mb-0 text-black">Tutores</h5>
     </div>
     <div class="card-body filter-section">
         <form id="filtrosForm" method="get"
@@ -20,7 +20,7 @@
                 <div th:replace="~{/fragments/filtros/filterProfesores.html}"></div>
             </div>
 
-            <div th:replace="~{/fragments/filterPage.html}"></div>
+            <div th:replace="~{/fragments/filtros/filterPage.html}"></div>
         </div>
         </form>
     </div>

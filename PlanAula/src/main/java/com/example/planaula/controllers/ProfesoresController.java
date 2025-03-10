@@ -7,7 +7,6 @@ import com.example.planaula.services.CursosService;
 import com.example.planaula.services.ProfesoresService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -37,16 +36,26 @@ public class ProfesoresController {
     }
 
     @PostMapping("")
-    public String anadirProfesores(@ModelAttribute ProfesorDTO profesorDTO, @RequestParam(required = false, defaultValue = "A") String accion) {
+    public String accionProfesores(@ModelAttribute ProfesorDTO profesorDTO, @RequestParam(required = false, defaultValue = "A") String accion) {
         switch (accion) {
             case "A":
                 profesoresService.anadirProfesor(profesorDTO);
                 break;
-                case "M":
+            case "M":
+                profesoresService.modificarProfesor(profesorDTO);
+                break;
+            case "E":
+                profesoresService.eliminarProfesorById(profesorDTO.getId());
+                break;
         }
         return "redirect:/profesores";
     }
 
+    @GetMapping("/{id}")
+    @ResponseBody
+    public ProfesorDTO findProfesorById(@PathVariable Integer id) {
+        return profesoresService.findProfesorById(id);
+    }
 
     @GetMapping("/tutores")
     public String findAllTutores(@RequestParam(required = false, defaultValue = "0") int curso,

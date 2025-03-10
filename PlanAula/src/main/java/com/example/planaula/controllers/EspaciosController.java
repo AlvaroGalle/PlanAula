@@ -49,9 +49,19 @@ public class EspaciosController {
 
         List<AulaDTO> aulaDTOList =  aulasService.findAllAulas();
         model.addAttribute("aulas", aulaDTOList);
+        for(AulaDTO a : aulaDTOList){
+            if(a.getId() == aula){
+                model.addAttribute("aula", a);
+            }
+        }
 
         List<AsignaturaDTO> asignaturaDTOList =  asignaturasService.findAllAsignaturas();
         model.addAttribute("asignaturas", asignaturaDTOList);
+        for(AsignaturaDTO a : asignaturaDTOList){
+            if(a.getId() == asignatura){
+                model.addAttribute("asignatura", a);
+            }
+        }
 
         List<EspacioDTO> espacioDTOList = espaciosService.findAllEspaciosByDiaAndHoraAndAulaAndAsignatura(dia,hora,asignatura);
 

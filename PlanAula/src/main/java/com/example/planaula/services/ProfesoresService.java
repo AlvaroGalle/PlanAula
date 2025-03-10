@@ -1,10 +1,10 @@
 package com.example.planaula.services;
 
-import com.example.planaula.Dto.AsignaturaDTO;
 import com.example.planaula.Dto.ProfesorDTO;
 import com.example.planaula.Dto.TutorDTO;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.Query;
+import jakarta.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -40,6 +40,16 @@ public class ProfesoresService {
                 .collect(Collectors.toList());
     }
 
+    public ProfesorDTO findProfesorById(Integer id) {
+        String sql = "SELECT * FROM `profes 2425` where `id` = :id";
+        Object[] resultado = (Object[]) entityManager.createNativeQuery(sql)
+                .setParameter("id", id)
+                .getSingleResult();
+        return new ProfesorDTO(
+                        ((Number) resultado[0]).intValue(),
+                        (String) resultado[1]);
+    }
+
     public Page<ProfesorDTO> findPageProfesores(Pageable pageable) {
         try {
             String countSql = "SELECT COUNT(*) FROM `profes 2425`";
@@ -61,17 +71,18 @@ public class ProfesoresService {
                     .collect(Collectors.toList());
 
             return new PageImpl<>(profesores, pageable, total);
-        }catch (Exception e) {
+        } catch (Exception e) {
             System.out.println(e.getMessage());
             return new PageImpl<>(Collections.emptyList(), pageable, 0);
         }
     }
 
+
+    @Transactional
     public void anadirProfesor(ProfesorDTO profesorDTO) {
-        try{
-            String maxIdSql = "SELECT MAX(id) FROM `profes 2425`";
-            Object result = entityManager.createNativeQuery(maxIdSql).getSingleResult();
-            int newId = result != null ? ((Number) result).intValue() + 1 : 1;
+        try {
+            String maxIdSql = "SELECT COALESCE(MAX(id), 0) FROM `profes 2425`";
+            int newId = ((Number) entityManager.createNativeQuery(maxIdSql).getSingleResult()).intValue() + 1;
             profesorDTO.setId(newId);
 
             String insertSql = "INSERT INTO `profes 2425` (id, campo1) VALUES (:id, :nombre)";
@@ -79,20 +90,44 @@ public class ProfesoresService {
                     .setParameter("id", newId)
                     .setParameter("nombre", profesorDTO.getNombre())
                     .executeUpdate();
-        }catch (Exception e) {
-            System.out.println(e.getMessage());
-        }
 
+            if (filasInsertadas == 0) {
+                throw new RuntimeException("No se insertó ningún registro en la base de datos.");
+            }
+
+        } catch (Exception e) {
+            // Usa logging en lugar de imprimir en consola
+            throw new RuntimeException("Error al insertar profesor: " + e.getMessage(), e);
+        }
     }
 
+
+    @Transactional
+    public void eliminarProfesorById(int id) {
+        try {
+            String deleteSql = "DELETE FROM `profes 2425` WHERE id = :id";
+            int filasEliminadas = entityManager.createNativeQuery(deleteSql)
+                    .setParameter("id", id)
+                    .executeUpdate();
+
+            if (filasEliminadas == 0) {
+                throw new RuntimeException("No se encontró un profesor con ID: " + id);
+            }
+
+        } catch (Exception e) {
+            throw new RuntimeException("Error al eliminar profesor: " + e.getMessage(), e);
+        }
+    }
+
+    @Transactional
     public void modificarProfesor(ProfesorDTO profesorDTO) {
-        try{
+        try {
             String updateSql = "UPDATE `profes 2425` SET campo1 = :nombre WHERE id = :id";
             int filasActualizadas = entityManager.createNativeQuery(updateSql)
                     .setParameter("id", profesorDTO.getId())
                     .setParameter("nombre", profesorDTO.getNombre())
                     .executeUpdate();
-        }catch (Exception e) {
+        } catch (Exception e) {
             System.out.println(e.getMessage());
         }
 
@@ -113,9 +148,9 @@ public class ProfesoresService {
         return resultados.stream()
                 .map(resultado -> new TutorDTO(
                         (resultado[0] != null ? ((Number) resultado[0]).intValue() : 0),
-                        (String)resultado[1],
-                        (String)resultado[2],
-                        (String)resultado[3]))
+                        (String) resultado[1],
+                        (String) resultado[2],
+                        (String) resultado[3]))
                 .collect(Collectors.toList());
     }
 
@@ -138,9 +173,9 @@ public class ProfesoresService {
         return resultados.stream()
                 .map(resultado -> new TutorDTO(
                         (resultado[0] != null ? ((Number) resultado[0]).intValue() : 0),
-                        (String)resultado[1],
-                        (String)resultado[2],
-                        (String)resultado[3]))
+                        (String) resultado[1],
+                        (String) resultado[2],
+                        (String) resultado[3]))
                 .collect(Collectors.toList());
     }
 
@@ -173,16 +208,15 @@ public class ProfesoresService {
             List<TutorDTO> tutores = resultados.stream()
                     .map(resultado -> new TutorDTO(
                             (resultado[0] != null ? ((Number) resultado[0]).intValue() : 0),
-                            (String)resultado[1],
-                            (String)resultado[2],
-                            (String)resultado[3]))
+                            (String) resultado[1],
+                            (String) resultado[2],
+                            (String) resultado[3]))
                     .collect(Collectors.toList());
 
             return new PageImpl<>(tutores, pageable, total);
-        }catch (Exception e) {
+        } catch (Exception e) {
             System.out.println(e.getMessage());
             return new PageImpl<>(Collections.emptyList(), pageable, 0);
         }
     }
 }
-

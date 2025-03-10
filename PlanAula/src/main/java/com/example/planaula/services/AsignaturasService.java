@@ -1,10 +1,14 @@
 package com.example.planaula.services;
 
 import com.example.planaula.Dto.AsignaturaDTO;
+import com.example.planaula.Dto.ProfesorDTO;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.Query;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.Collections;
@@ -33,5 +37,32 @@ public class AsignaturasService {
                         (String) resultado[1]
                 ))
                 .collect(Collectors.toList());
+    }
+
+    public Page<AsignaturaDTO> findPageAsignaturas(Pageable pageable) {
+        try {
+            String countSql = "SELECT COUNT(*) FROM asignaturas";
+            Query countQuery = entityManager.createNativeQuery(countSql);
+            long total = ((Number) countQuery.getSingleResult()).longValue();
+
+            String sql = "SELECT * FROM asignaturas";
+            Query query = entityManager.createNativeQuery(sql)
+                    .setFirstResult((int) pageable.getOffset())
+                    .setMaxResults(pageable.getPageSize());
+
+            List<Object[]> resultados = query.getResultList();
+
+            List<AsignaturaDTO> asignaturas = resultados.stream()
+                    .map(resultado -> new AsignaturaDTO(
+                            ((Number) resultado[0]).intValue(),
+                            (String) resultado[1]
+                    ))
+                    .collect(Collectors.toList());
+
+            return new PageImpl<>(asignaturas, pageable, total);
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            return new PageImpl<>(Collections.emptyList(), pageable, 0);
+        }
     }
 }

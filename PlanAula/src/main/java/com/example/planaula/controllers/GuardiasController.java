@@ -49,6 +49,11 @@ public class GuardiasController {
 
         List<ProfesorDTO> profesorDTOList =  profesoresService.findAllProfesores();
         model.addAttribute("profesores", profesorDTOList);
+        for(ProfesorDTO p : profesorDTOList){
+            if(p.getId() == profesor){
+                model.addAttribute("profesor", p);
+            }
+        }
 
         List<GuardiasDTO> guardiasDTOList = guardiasService.findAllGuardiasByDiaAndHoraAndProfesor(dia,hora,profesor);
 

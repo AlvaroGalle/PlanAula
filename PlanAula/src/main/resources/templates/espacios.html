@@ -6,21 +6,34 @@
 <body>
 <div class="container mt-3">
     <div class="card shadow-sm">
-        <div class="card-header bg-primary text-white"><h5 class="card-title mb-0">Espacios</h5></div>
+        <div class="card-header theme-espacios text-white"><h5 class="card-title mb-0">Espacios</h5></div>
         <div class="card-body filter-section">
             <form id="filtrosForm" method="get" th:action="@{'/espacios'}">
-                <div class="row">
-                    <div class="col-md-3 mb-3">
-                        <div th:replace="~{/fragments/filtros/filterDia.html}"></div>
-                    </div>
-                    <div class="col-md-3 mb-3">
-                        <div th:replace="~{/fragments/filtros/filterHoras.html}"></div>
-                    </div>
-                    <div class="col-md-3 mb-3">
-                        <div th:replace="~{/fragments/filtros/filterAulas.html}"></div>
-                    </div>
-                    <div class="col-md-3 mb-3">
-                        <div th:replace="~{/fragments/filtros/filterAsignaturas.html}"></div>
+                <div class="accordion" id="acordeonFiltros">
+                    <div class="accordion-item">
+                        <h2 class="accordion-header">
+                            <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseOne" aria-expanded="true" aria-controls="panelsStayOpen-collapseOne">
+                                Filtrar espacios
+                            </button>
+                        </h2>
+                        <div id="panelsStayOpen-collapseOne" class="accordion-collapse collapse show">
+                            <div class="accordion-body">
+                                <div class="row">
+                                    <div class="col-md-3 mb-3">
+                                        <div th:replace="~{/fragments/filtros/filterDia.html}"></div>
+                                    </div>
+                                    <div class="col-md-3 mb-3">
+                                        <div th:replace="~{/fragments/filtros/filterHoras.html}"></div>
+                                    </div>
+                                    <div class="col-md-3 mb-3">
+                                        <div th:replace="~{/fragments/filtros/filterAulas.html}"></div>
+                                    </div>
+                                    <div class="col-md-3 mb-3">
+                                        <div th:replace="~{/fragments/filtros/filterAsignaturas.html}"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </form>
@@ -29,9 +42,8 @@
             <div class="row">
                 <div th:each="espacio : ${espacios}" class="col-md-6 col-lg-3 mb-3">
                     <div class="card">
-                        <div class="card-header bg-primary text-white">
+                        <div class="card-header theme-espacios text-white">
                             <h5 class="card-title mb-0">
-                                <strong><span th:text="'#' + ${espacio.id}"></span></strong>
                                 <span th:text="${espacio.dia}"></span>
                                 <span th:text="${espacio.hora}"></span>
                             </h5>
@@ -46,76 +58,76 @@
                                 </thead>
                                 <tbody>
                                 <tr th:if="${espacio.aula1a != null}">
-                                    <th>Aula 1A</th>
-                                    <td th:text="${espacio.aula1a}"></td>
+                                    <th th:class="${aula != null && aula.nombre == 'Aula 1A' ? 'text-success' : ''}">Aula 1A</th>
+                                    <td th:text="${espacio.aula1a}" th:class="${asignatura != null && asignatura.nombre == espacio.aula1a ? 'text-success' : ''}"></td>
                                 </tr>
                                 <tr th:if="${espacio.aula1b != null}">
-                                    <th>Aula 1B</th>
-                                    <td th:text="${espacio.aula1b}"></td>
+                                    <th th:class="${aula != null && aula.nombre == 'Aula 1B' ? 'text-success' : ''}">Aula 1B</th>
+                                    <td th:text="${espacio.aula1b}" th:class="${asignatura != null && asignatura.nombre == espacio.aula1b ? 'text-success' : ''}"></td>
                                 </tr>
                                 <tr th:if="${espacio.aula2a != null}">
-                                    <th>Aula 2A</th>
-                                    <td th:text="${espacio.aula2a}"></td>
+                                    <th th:class="${aula != null && aula.nombre == 'Aula 2A' ? 'text-success' : ''}">Aula 2A</th>
+                                    <td th:text="${espacio.aula2a}" th:class="${asignatura != null && asignatura.nombre == espacio.aula2a ? 'text-success' : ''}"></td>
                                 </tr>
                                 <tr th:if="${espacio.aula2b != null}">
-                                    <th>Aula 2B</th>
-                                    <td th:text="${espacio.aula2b}"></td>
+                                    <th th:class="${aula != null && aula.nombre == 'Aula 2B' ? 'text-success' : ''}">Aula 2B</th>
+                                    <td th:text="${espacio.aula2b}" th:class="${asignatura != null && asignatura.nombre == espacio.aula2b ? 'text-success' : ''}"></td>
                                 </tr>
                                 <tr th:if="${espacio.aula3a != null}">
-                                    <th>Aula 3A</th>
-                                    <td th:text="${espacio.aula3a}"></td>
+                                    <th th:class="${aula != null && aula.nombre == 'Aula 3A' ? 'text-success' : ''}">Aula 3A</th>
+                                    <td th:text="${espacio.aula3a}" th:class="${asignatura != null && asignatura.nombre == espacio.aula3a ? 'text-success' : ''}"></td>
                                 </tr>
                                 <tr th:if="${espacio.aula3b != null}">
-                                    <th>Aula 3B</th>
-                                    <td th:text="${espacio.aula3b}"></td>
+                                    <th th:class="${aula != null && aula.nombre == 'Aula 3B' ? 'text-success' : ''}">Aula 3B</th>
+                                    <td th:text="${espacio.aula3b}" th:class="${asignatura != null && asignatura.nombre == espacio.aula3b ? 'text-success' : ''}"></td>
                                 </tr>
                                 <tr th:if="${espacio.aula4a != null}">
-                                    <th>Aula 4A</th>
-                                    <td th:text="${espacio.aula4a}"></td>
+                                    <th th:class="${aula != null && aula.nombre == 'Aula 4A' ? 'text-success' : ''}">Aula 4A</th>
+                                    <td th:text="${espacio.aula4a}" th:class="${asignatura != null && asignatura.nombre == espacio.aula4a ? 'text-success' : ''}"></td>
                                 </tr>
                                 <tr th:if="${espacio.aula4b != null}">
-                                    <th>Aula 4B</th>
-                                    <td th:text="${espacio.aula4b}"></td>
+                                    <th th:class="${aula != null && aula.nombre == 'Aula 4B' ? 'text-success' : ''}">Aula 4B</th>
+                                    <td th:text="${espacio.aula4b}" th:class="${asignatura != null && asignatura.nombre == espacio.aula4b ? 'text-success' : ''}"></td>
                                 </tr>
                                 <tr th:if="${espacio.aula1cc != null}">
-                                    <th>Aula 1CC</th>
-                                    <td th:text="${espacio.aula1cc}"></td>
+                                    <th th:class="${aula != null && aula.nombre == 'Aula 1CC' ? 'text-success' : ''}">Aula 1CC</th>
+                                    <td th:text="${espacio.aula1cc}" th:class="${asignatura != null && asignatura.nombre == espacio.aula1cc ? 'text-success' : ''}"></td>
                                 </tr>
                                 <tr th:if="${espacio.aula1ss != null}">
-                                    <th>Aula 1SS</th>
-                                    <td th:text="${espacio.aula1ss}"></td>
+                                    <th th:class="${aula != null && aula.nombre == 'Aula 1SS' ? 'text-success' : ''}">Aula 1SS</th>
+                                    <td th:text="${espacio.aula1ss}" th:class="${asignatura != null && asignatura.nombre == espacio.aula1ss ? 'text-success' : ''}"></td>
                                 </tr>
                                 <tr th:if="${espacio.labcc != null}">
-                                    <th>Lab CC</th>
-                                    <td th:text="${espacio.labcc}"></td>
+                                    <th th:class="${aula != null && aula.nombre == 'Lab CC' ? 'text-success' : ''}">Lab CC</th>
+                                    <td th:text="${espacio.labcc}" th:class="${asignatura != null && asignatura.nombre == espacio.labcc ? 'text-success' : ''}"></td>
                                 </tr>
                                 <tr th:if="${espacio.labid != null}">
-                                    <th>Lab ID</th>
-                                    <td th:text="${espacio.labid}"></td>
+                                    <th th:class="${aula != null && aula.nombre == 'Lab ID' ? 'text-success' : ''}">Lab ID</th>
+                                    <td th:text="${espacio.labid}" th:class="${asignatura != null && asignatura.nombre == espacio.labid ? 'text-success' : ''}"></td>
                                 </tr>
                                 <tr th:if="${espacio.desdoblea != null}">
-                                    <th>Desdoble A</th>
-                                    <td th:text="${espacio.desdoblea}"></td>
+                                    <th th:class="${aula != null && aula.nombre == 'Desdoble A' ? 'text-success' : ''}">Desdoble A</th>
+                                    <td th:text="${espacio.desdoblea}" th:class="${asignatura != null && asignatura.nombre == espacio.desdoblea ? 'text-success' : ''}"></td>
                                 </tr>
                                 <tr th:if="${espacio.desdobleb != null}">
-                                    <th>Desdoble B</th>
-                                    <td th:text="${espacio.desdobleb}"></td>
+                                    <th th:class="${aula != null && aula.nombre == 'Desdoble B' ? 'text-success' : ''}">Desdoble B</th>
+                                    <td th:text="${espacio.desdobleb}" th:class="${asignatura != null && asignatura.nombre == espacio.desdobleb ? 'text-success' : ''}"></td>
                                 </tr>
                                 <tr th:if="${espacio.desdoblec != null}">
-                                    <th>Desdoble C</th>
-                                    <td th:text="${espacio.desdoblec}"></td>
+                                    <th th:class="${aula != null && aula.nombre == 'Desdoble C' ? 'text-success' : ''}">Desdoble C</th>
+                                    <td th:text="${espacio.desdoblec}" th:class="${asignatura != null && asignatura.nombre == espacio.desdoblec ? 'text-success' : ''}"></td>
                                 </tr>
                                 <tr th:if="${espacio.aenlace != null}">
-                                    <th>A Enlace</th>
-                                    <td th:text="${espacio.aenlace}"></td>
+                                    <th th:class="${aula != null && aula.nombre == 'A Enlace' ? 'text-success' : ''}">A Enlace</th>
+                                    <td th:text="${espacio.aenlace}" th:class="${asignatura != null && asignatura.nombre == espacio.aenlace ? 'text-success' : ''}"></td>
                                 </tr>
                                 <tr th:if="${espacio.bajopatio != null}">
-                                    <th>Bajo Patio</th>
-                                    <td th:text="${espacio.bajopatio}"></td>
+                                    <th th:class="${aula != null && aula.nombre == 'Bajo Patio' ? 'text-success' : ''}">Bajo Patio</th>
+                                    <td th:text="${espacio.bajopatio}" th:class="${asignatura != null && asignatura.nombre == espacio.bajopatio ? 'text-success' : ''}"></td>
                                 </tr>
                                 <tr th:if="${espacio.bajoespejos != null}">
-                                    <th>Bajo Espejos</th>
-                                    <td th:text="${espacio.bajoespejos}"></td>
+                                    <th th:class="${aula != null && aula.nombre == 'Bajo Espejos' ? 'text-success' : ''}">Bajo Espejos</th>
+                                    <td th:text="${espacio.bajoespejos}" th:class="${asignatura != null && asignatura.nombre == espacio.bajoespejos ? 'text-success' : ''}"></td>
                                 </tr>
                                 </tbody>
                             </table>

@@ -1,0 +1,33 @@
+.body{
+    /*background-image: url("../images/corcho.jpg");*/
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+
+    font-family: sans-serif;
+}
+
+.theme-asignaturas {
+    background-color: #a7d156;
+}
+
+.theme-profesores {
+    background-color: #6ab0d6;
+}
+
+.theme-tutores {
+    background-color: #e7e7e7;
+    color: #333;
+}
+
+.theme-espacios {
+    background-color: #90be6d;
+}
+
+.theme-guardias {
+    background-color: #b35968;
+}
+
+.theme-horarios {
+    background-color: #6cc6db;
+}

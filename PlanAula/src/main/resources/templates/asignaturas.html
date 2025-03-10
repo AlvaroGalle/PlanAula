@@ -5,30 +5,51 @@
 </head>
 <body>
 <div class="container mt-3">
-<div class="card shadow-sm">
-    <div class="card-header bg-primary text-white">
-        <h5 class="card-title mb-0">Asignaturas</h5>
+
+    <div class="card shadow-sm">
+        <div class="card-header theme-asignaturas text-white">
+            <div class="row">
+                <div class="col-1"><div th:replace="~{/fragments/sideBar.html}"></div></div>
+                <div class="col"><h5 class="card-title text-start">Asignaturas</h5></div>
+            </div>
+        </div>
+        <div class="card-body filter-section">
+            <div class="row align-items-center">
+                <div class="col-6">
+                    <button type="button" class="btn btn-primary" onclick="$('#nuevoAsignatura-modal').modal('show')">
+                        Añadir asignatura
+                    </button>
+                </div>
+                <div class="col-6">
+                    <form id="filtrosForm" method="get" th:action="@{'/asignaturas'}">
+                        <div class="form-group row justify-content-end mb-3">
+                            <div th:replace="~{/fragments/filtros/filterPage.html}"></div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div class="card-body bg-light">
+            <table class="table table-hover">
+                <thead>
+                <tr>
+                    <th scope="col">#ID</th>
+                    <th scope="col">Nombre</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="asignatura : ${page}" th:id="'tr_' + ${asignatura.id}">
+                    <th scope="row" th:text="${asignatura.id}"></th>
+                    <td th:text="${asignatura.nombre}"></td>
+                </tr>
+                </tbody>
+            </table>
+            <div th:replace="~{/fragments/pagination.html}"></div>
+        </div>
+        <div class="card-footer text-muted bg-white d-flex justify-content-end">
+            <button type="button" class="btn btn-dark" onclick="location.href='/menu'">Volver</button>
+        </div>
     </div>
-    <div class="card-body bg-light">
-        <table class="table table-hover">
-            <thead>
-            <tr>
-                <th scope="col">#ID</th>
-                <th scope="col">Nombre</th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr th:each="asignatura : ${asignaturas}" th:id="'tr_' + ${asignatura.id}">
-                <th scope="row" th:text="${asignatura.id}"></th>
-                <td th:text="${asignatura.nombre}"></td>
-            </tr>
-            </tbody>
-        </table>
-    </div>
-    <div class="card-footer text-muted bg-white d-flex justify-content-end">
-        <button type="button" class="btn btn-dark" onclick="location.href='/menu'">Volver</button>
-    </div>
-</div>
 </div>
 </body>
 <div th:replace="~{/fragments/links.html}"></div>
