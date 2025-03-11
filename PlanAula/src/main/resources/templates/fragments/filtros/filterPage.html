@@ -1,10 +1,8 @@
-<div class="col-md-4">
-    <label for="sizeFilter" class="form-label">Resultados:</label>
-    <select class="form-control" id="sizeFilter" name="size" onchange="$('#filtrosForm').submit()">
-        <option value="5" th:selected="${page.size} == '5'">5</option>
-        <option value="10" th:selected="${page.size} == '10'">10</option>
-        <option value="15" th:selected="${page.size} == '15'">15</option>
-        <option th:value="${page.totalElements}" th:selected="${page.size} == ${page.totalElements}">Max</option>
-    </select>
-    <input type="hidden" id="pageFilter" name="page" th:vale="${page.number}">
-</div>
+<label for="sizeFilter" class="form-label">Resultados:</label>
+<select class="form-control" id="sizeFilter" name="size" onchange="$('#filtrosForm').submit()">
+    <option value="5" th:selected="${page.size} == '5'">5</option>
+    <option value="10" th:selected="${page.size} == '10'">10</option>
+    <option value="15" th:selected="${page.size} == '15'">15</option>
+    <option th:value="${page.totalElements}" th:selected="${page.size} == ${page.totalElements}">Max</option>
+</select>
+<input type="hidden" id="pageFilter" name="page" th:vale="${page.number}">

@@ -12,8 +12,10 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -219,4 +221,31 @@ public class ProfesoresService {
             return new PageImpl<>(Collections.emptyList(), pageable, 0);
         }
     }
+
+    @Transactional
+    public void modificarTutor(TutorDTO tutorDTO) {
+        List<String> campos = new ArrayList<>();
+        if(tutorDTO.getCurso() != null) campos.add("`curso` = :curso");
+        if(tutorDTO.getTutor2425() != null) campos.add("`tutor2425` = :tutor2425");
+        if(tutorDTO.getTutor2324() != null) campos.add("`tutor2324` = :tutor2324");
+
+        if(campos.isEmpty()) {
+            throw new IllegalArgumentException("Debe proporcionar al menos un campo para actualizar");
+        }
+        String updateSql = "UPDATE `profes 2425` SET " + String.join(", ", campos) + " WHERE id = :id";
+
+        Query query = entityManager.createNativeQuery(updateSql)
+                .setParameter("id", tutorDTO.getId());
+
+        if(tutorDTO.getCurso() != null) {
+            query.setParameter("curso", tutorDTO.getCurso());
+        }
+        if(tutorDTO.getTutor2425() != null) {
+            query.setParameter("tutor2425", Objects.equals(tutorDTO.getTutor2425(), "") ? null : tutorDTO.getTutor2425());
+        }
+        if(tutorDTO.getTutor2324() != null) {
+            query.setParameter("tutor2324", Objects.equals(tutorDTO.getTutor2324(), "") ? null : tutorDTO.getTutor2324());
+        }
+    }
+
 }

@@ -12,6 +12,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Objects;
 
 @Controller
 @RequestMapping("/profesores")
@@ -74,6 +75,16 @@ public class ProfesoresController {
 
         List<CursoDTO> cursoDTOList = cursosService.findAllCursos();
         model.addAttribute("cursos", cursoDTOList);
+        return "tutores";
+    }
+
+    @GetMapping("/tutores/modificar/{id}")
+    @ResponseBody
+    public String modificarTutor(@PathVariable Integer id,
+                                 @RequestParam String curso,
+                                 @RequestParam String profesor) {
+        TutorDTO tutorDTO = new TutorDTO(id, null, Objects.equals(curso, "2425") ? profesor : null,  Objects.equals(curso, "2324") ? profesor : null);
+        profesoresService.modificarTutor(tutorDTO);
         return "tutores";
     }
 }
