@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <div th:replace="~{/fragments/head.html}"></div>
+    <div th:replace="~{fragments/head.html}"></div>
 </head>
 
 <script>
@@ -46,13 +46,13 @@
                                     <div class="accordion-body">
                                         <div class="form-group row justify-content-end mb-0">
                                             <div class="col-md-4 mb-3">
-                                                <div th:replace="~{/fragments/filtros/filterCursos.html}"></div>
+                                                <div th:replace="~{fragments/filtros/filterCursos.html}"></div>
                                             </div>
                                             <div class="col-md-4 mb-3">
-                                                <div th:replace="~{/fragments/filtros/filterProfesores.html}"></div>
+                                                <div th:replace="~{fragments/filtros/filterProfesores.html}"></div>
                                             </div>
                                             <div class="col-md-4 mb-3">
-                                                <div th:replace="~{/fragments/filtros/filterPage.html}"></div>
+                                                <div th:replace="~{fragments/filtros/filterPage.html}"></div>
                                             </div>
                                         </div>
                                     </div>
@@ -92,8 +92,8 @@
                 </tr>
                 </tbody>
             </table>
-            <div th:replace="~{/fragments/pagination.html}"></div>
-            <div th:replace="~{/fragments/noResultAlert.html}"></div>
+            <div th:replace="~{fragments/pagination.html}"></div>
+            <div th:replace="~{fragments/noResultAlert.html}"></div>
         </div>
         <div class="card-footer text-muted bg-white d-flex justify-content-end">
             <button type="button" class="btn btn-dark" onclick="location.href='/menu'">Volver</button>
@@ -101,5 +101,5 @@
     </div>
 </div>
 </body>
-<div th:replace="~{/fragments/links.html}"></div>
+<div th:replace="~{fragments/links.html}"></div>
 </html>

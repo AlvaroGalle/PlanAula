@@ -17,10 +17,11 @@ public class DatabaseConfig {
 
     @Bean
     public DataSource dataSource() throws IOException {
-        String absolutePath = databaseFile.getFile().getAbsolutePath();
+        //String dbPath = databaseFile.getFile().getAbsolutePath();
+        String dbPath = "C:/Users/51178456/Desktop/workspace/PlanAula/Access/PNS_Fesd2425.accdb";
         return DataSourceBuilder.create()
                 .driverClassName("net.ucanaccess.jdbc.UcanaccessDriver")
-                .url("jdbc:ucanaccess://" + absolutePath)
+                .url("jdbc:ucanaccess://" + dbPath)
                 .build();
     }
 }

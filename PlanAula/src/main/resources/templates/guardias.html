@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <div th:replace="~{/fragments/head.html}"></div>
+    <div th:replace="~{fragments/head.html}"></div>
 </head>
 <body>
 <div class="container mt-3">
@@ -20,16 +20,16 @@
                             <div class="accordion-body">
                                 <div class="row">
                                     <div class="col-md-3 mb-3">
-                                        <div th:replace="~{/fragments/filtros/filterDia.html}"></div>
+                                        <div th:replace="~{fragments/filtros/filterDia.html}"></div>
                                     </div>
                                     <div class="col-md-3 mb-3">
-                                        <div th:replace="~{/fragments/filtros/filterHoras.html}"></div>
+                                        <div th:replace="~{fragments/filtros/filterHoras.html}"></div>
                                     </div>
                                     <div class="col-md-3 mb-3">
-                                        <div th:replace="~{/fragments/filtros/filterTurno.html}"></div>
+                                        <div th:replace="~{fragments/filtros/filterTurno.html}"></div>
                                     </div>
                                     <div class="col-md-3 mb-3">
-                                        <div th:replace="~{/fragments/filtros/filterProfesores.html}"></div>
+                                        <div th:replace="~{fragments/filtros/filterProfesores.html}"></div>
                                     </div>
                                 </div>
                             </div>
@@ -108,7 +108,7 @@
                     </div>
                 </div>
             </div>
-            <div th:replace="~{/fragments/noResultAlert.html}"></div>
+            <div th:replace="~{fragments/noResultAlert.html}"></div>
         </div>
         <div class="card-footer text-muted bg-white d-flex justify-content-end">
             <button type="button" class="btn btn-dark" onclick="location.href='/menu'">Volver</button>
@@ -116,5 +116,5 @@
     </div>
 </div>
 </body>
-<div th:replace="~{/fragments/links.html}"></div>
+<div th:replace="~{fragments/links.html}"></div>
 </html>

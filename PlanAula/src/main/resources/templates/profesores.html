@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <div th:replace="~{/fragments/head.html}"></div>
+    <div th:replace="~{fragments/head.html}"></div>
 </head>
 <script>
     function accionProfesores(accion, boton) {
@@ -52,7 +52,7 @@
                 <div class="col-6">
                     <form id="filtrosForm" method="get" th:action="@{'/profesores'}">
                         <div class="form-group row justify-content-end mb-3">
-                            <div th:replace="~{/fragments/filtros/filterPage.html}"></div>
+                            <div th:replace="~{fragments/filtros/filterPage.html}"></div>
                         </div>
                     </form>
                 </div>
@@ -95,7 +95,7 @@
                 </tr>
                 </tbody>
             </table>
-            <div th:replace="~{/fragments/pagination.html}"></div>
+            <div th:replace="~{fragments/pagination.html}"></div>
         </div>
         <div class="card-footer text-muted bg-white d-flex justify-content-end">
             <button type="button" class="btn btn-dark" onclick="location.href='/menu'">Volver</button>
@@ -182,5 +182,5 @@
     </div>
 </div>
 </body>
-<div th:replace="~{/fragments/links.html}"></div>
+<div th:replace="~{fragments/links.html}"></div>
 </html>

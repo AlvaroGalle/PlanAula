@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <div th:replace="~{/fragments/head.html}"></div>
+    <div th:replace="~{fragments/head.html}"></div>
 </head>
 <body>
 <div class="container mt-3">
@@ -9,7 +9,7 @@
     <div class="card shadow-sm">
         <div class="card-header theme-asignaturas text-white">
             <div class="row">
-                <div class="col-1"><div th:replace="~{/fragments/sideBar.html}"></div></div>
+                <div class="col-1"><div th:replace="~{fragments/sideBar.html}"></div></div>
                 <div class="col"><h5 class="card-title text-start">Asignaturas</h5></div>
             </div>
         </div>
@@ -23,7 +23,7 @@
                 <div class="col-6">
                     <form id="filtrosForm" method="get" th:action="@{'/asignaturas'}">
                         <div class="form-group row justify-content-end mb-3">
-                            <div th:replace="~{/fragments/filtros/filterPage.html}"></div>
+                            <div th:replace="~{fragments/filtros/filterPage.html}"></div>
                         </div>
                     </form>
                 </div>
@@ -44,7 +44,7 @@
                 </tr>
                 </tbody>
             </table>
-            <div th:replace="~{/fragments/pagination.html}"></div>
+            <div th:replace="~{fragments/pagination.html}"></div>
         </div>
         <div class="card-footer text-muted bg-white d-flex justify-content-end">
             <button type="button" class="btn btn-dark" onclick="location.href='/menu'">Volver</button>
@@ -52,5 +52,5 @@
     </div>
 </div>
 </body>
-<div th:replace="~{/fragments/links.html}"></div>
+<div th:replace="~{fragments/links.html}"></div>
 </html>
