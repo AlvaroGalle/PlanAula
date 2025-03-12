@@ -1,11 +1,11 @@
 function showMsg(type, msg) {
     arrClass = [];
-    arrClass['E'] = "bg-danger";
-    arrClass['N'] = "bg-primary";
-    arrClass['S'] = "bg-success";
-    arrClass['W'] = "bg-warning";
+    arrClass['E'] = "danger";
+    arrClass['N'] = "primary";
+    arrClass['S'] = "success";
+    arrClass['W'] = "warning";
     document.getElementById("divErrMsg") != null ? document.getElementById("divErrMsg").remove() : null;
-    $('.card').first().after('<div id="divErrMsg" class="toastify on ' + arrClass[type] + ' toastify-center toastify-top" aria-live="polite" style="transform: translate(0px, 0px); top: 15px;"></div>');
+    $('.card').first().before('<div id="divErrMsg" class="alert alert-' + arrClass[type] + '" style="z-index: 10" style="transform: translate(0px, 0px); top: 15px;"></div>');
     $('#divErrMsg').html(msg);
     setTimeout(() => {
         $('#divErrMsg').addClass('d-none');

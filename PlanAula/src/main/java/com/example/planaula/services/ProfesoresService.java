@@ -48,8 +48,8 @@ public class ProfesoresService {
                 .setParameter("id", id)
                 .getSingleResult();
         return new ProfesorDTO(
-                        ((Number) resultado[0]).intValue(),
-                        (String) resultado[1]);
+                ((Number) resultado[0]).intValue(),
+                (String) resultado[1]);
     }
 
     public Page<ProfesorDTO> findPageProfesores(Pageable pageable) {
@@ -225,26 +225,33 @@ public class ProfesoresService {
     @Transactional
     public void modificarTutor(TutorDTO tutorDTO) {
         List<String> campos = new ArrayList<>();
-        if(tutorDTO.getCurso() != null) campos.add("`curso` = :curso");
-        if(tutorDTO.getTutor2425() != null) campos.add("`tutor2425` = :tutor2425");
-        if(tutorDTO.getTutor2324() != null) campos.add("`tutor2324` = :tutor2324");
+        if (tutorDTO.getCurso() != null) campos.add("`curso` = :curso");
+        if (tutorDTO.getTutor2425() != null) campos.add("`tutor 2425` = :tutor2425");
+        if (tutorDTO.getTutor2324() != null) campos.add("`tutor 2324` = :tutor2324");
 
-        if(campos.isEmpty()) {
-            throw new IllegalArgumentException("Debe proporcionar al menos un campo para actualizar");
-        }
-        String updateSql = "UPDATE `profes 2425` SET " + String.join(", ", campos) + " WHERE id = :id";
+        try {
 
-        Query query = entityManager.createNativeQuery(updateSql)
-                .setParameter("id", tutorDTO.getId());
 
-        if(tutorDTO.getCurso() != null) {
-            query.setParameter("curso", tutorDTO.getCurso());
-        }
-        if(tutorDTO.getTutor2425() != null) {
-            query.setParameter("tutor2425", Objects.equals(tutorDTO.getTutor2425(), "") ? null : tutorDTO.getTutor2425());
-        }
-        if(tutorDTO.getTutor2324() != null) {
-            query.setParameter("tutor2324", Objects.equals(tutorDTO.getTutor2324(), "") ? null : tutorDTO.getTutor2324());
+            if (campos.isEmpty()) {
+                throw new IllegalArgumentException("Debe proporcionar al menos un campo para actualizar");
+            }
+            String updateSql = "UPDATE `tutores 2425` SET " + String.join(", ", campos) + " WHERE id = :id";
+
+            Query query = entityManager.createNativeQuery(updateSql)
+                    .setParameter("id", tutorDTO.getId());
+
+            if (tutorDTO.getCurso() != null) {
+                query.setParameter("curso", tutorDTO.getCurso());
+            }
+            if (tutorDTO.getTutor2425() != null) {
+                query.setParameter("tutor2425", Objects.equals(tutorDTO.getTutor2425(), "") ? null : tutorDTO.getTutor2425());
+            }
+            if (tutorDTO.getTutor2324() != null) {
+                query.setParameter("tutor2324", Objects.equals(tutorDTO.getTutor2324(), "") ? null : tutorDTO.getTutor2324());
+            }
+            query.executeUpdate();
+        }catch (Exception e) {
+            throw new RuntimeException(e);
         }
     }
 

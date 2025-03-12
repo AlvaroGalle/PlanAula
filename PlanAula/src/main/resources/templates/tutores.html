@@ -8,7 +8,7 @@
     function changeTutor(select, curso){
         let id = select.dataset.id;
         let profesor = select.value;
-        let url = "/tutores/modificar/" + id + "?curso=" + curso + "&profesor=" + profesor;
+        let url = "/profesores/tutores/modificar/" + id + "?curso=" + curso + "&profesor=" + profesor;
         $.ajax({
             url: url,
             type: "GET",
@@ -16,7 +16,7 @@
                 showMsg("S", 'Tutor modificado con exito');
             },
             error: function (xhr, status, error) {
-                console.error("Error al obtener profesores: ", error);
+                console.error("Error al modificar tutor: ", error);
                 showMsg('E', 'El tutor no ha podido ser modificado');
             }
         });

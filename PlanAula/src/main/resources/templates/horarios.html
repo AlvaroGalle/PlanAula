@@ -27,7 +27,10 @@
                                                 <div th:replace="~{/fragments/filtros/filterCursos.html}"></div>
                                             </div>
                                             <div class="col-md-4 mb-3">
-                                                <div th:replace="~{/fragments/filtros/filterProfesores.html}"></div>
+                                                <div th:replace="~{/fragments/filtros/filterAulas.html}"></div>
+                                            </div>
+                                            <div class="col-md-4 mb-3">
+                                                <div th:replace="~{/fragments/filtros/filterAsignaturas.html}"></div>
                                             </div>
                                             <div class="col-md-4 mb-3">
                                                 <div th:replace="~{/fragments/filtros/filterDia.html}"></div>
@@ -36,10 +39,7 @@
                                                 <div th:replace="~{/fragments/filtros/filterHoras.html}"></div>
                                             </div>
                                             <div class="col-md-4 mb-3">
-                                                <div th:replace="~{/fragments/filtros/filterAulas.html}"></div>
-                                            </div>
-                                            <div class="col-md-4 mb-3">
-                                                <div th:replace="~{/fragments/filtros/filterAsignaturas.html}"></div>
+                                                <div th:replace="~{/fragments/filtros/filterProfesores.html}"></div>
                                             </div>
                                         </div>
                                     </div>
@@ -50,8 +50,8 @@
                 </div>
             </div>
         </div>
-        <div th:if="${#lists.size(guardias) > 0}" class="card-body bg-light">
-            <div id="carouselGuardias" class="carousel slide" data-bs-ride="carousel">
+        <div th:if="${#lists.size(guardias) > 0}" class="card-body theme-horarios">
+            <div id="carouselGuardias" class="carousel slide">
                 <div class="carousel-inner">
                     <div th:each="guardia, iterStat : ${guardias}"
                          th:class="${iterStat.first} ? 'carousel-item active' : 'carousel-item'">
@@ -92,12 +92,17 @@
                         </div>
                     </div>
                 </div>
-                <a class="carousel-control-prev" href="#carouselExampleControls" role="button" data-slide="prev">
+                <div class="carousel-indicators" style="position: relative">
+                    <button th:each="guardia, iterStat : ${guardias}" type="button" data-bs-target="#carouselGuardias" th:data-bs-slide-to="${iterStat.index}" aria-current="true" th:aria-label="'Slide ' + ${iterStat}"  th:class="${iterStat.first} ? 'active' : ''"></button>
+                </div>
+                <button class="carousel-control-prev" type="button" data-bs-target="#carouselGuardias" data-bs-slide="prev">
                     <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                </a>
-                <a class="carousel-control-next" href="#carouselExampleControls" role="button" data-slide="next">
+                    <span class="visually-hidden">Previous</span>
+                </button>
+                <button class="carousel-control-next" type="button" data-bs-target="#carouselGuardias" data-bs-slide="next">
                     <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                </a>
+                    <span class="visually-hidden">Next</span>
+                </button>
             </div>
         </div>
         <div class="card-body bg-light">
