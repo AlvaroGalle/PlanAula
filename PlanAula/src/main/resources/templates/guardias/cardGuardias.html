@@ -1,0 +1,290 @@
+<script>
+    function accionGuardia(accion, turno, profesor, id) {
+        if(accion !== 'A' || (($('#nuevo_turno').val() !== "0") && ($('#nuevo_profesor').val() !== "0"))){
+            $('#accion_guardia').val(accion);
+            $('#turno_guardia').val(turno);
+            $('#profesor_guardia').val(profesor);
+            $('#id_guardia').val(id);
+            $('#guardiasForm').submit();
+        }
+    }
+</script>
+<div class="modal fade show" id="cardGuardias-modal" tabindex="-1" role="dialog" aria-labelledby="cardGuardias-modal"
+     aria-hidden="true" style="display: none">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header theme-guardias text-white">
+                <h5 class="modal-title mb-0">
+                    <span th:text="${guardia.dia}"></span>
+                    <span th:text="${guardia.hora}"></span>
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+
+            </div>
+            <div class="modal-body">
+                <div th:if="${guardia.recreo3 == null && guardia.recreo2 == null && guardia.recreo1 == null &&
+                                      guardia.libranza3 == null && guardia.libranza2 == null && guardia.libranza1 == null &&
+                                      guardia.guardia3 == null && guardia.guardia2 == null && guardia.guardia1 == null}"
+                     class="alert alert-warning" role="alert">
+                    No hay turnos asignados
+                </div>
+
+                <table th:unless="${guardia.recreo3 == null && guardia.recreo2 == null && guardia.recreo1 == null &&
+                                      guardia.libranza3 == null && guardia.libranza2 == null && guardia.libranza1 == null &&
+                                      guardia.guardia3 == null && guardia.guardia2 == null && guardia.guardia1 == null}"
+                       class="table table-sm">
+                    <thead>
+                    <tr>
+                        <th>Turno</th>
+                        <th>Asignatura</th>
+                        <th></th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:if="${guardia.guardia1 != null}" class="align-middle">
+                        <th th:class="${turnoFiltro != null && turnoFiltro == 'G1' ? 'text-success' : ''}">
+                            Guardia 1
+                        </th>
+                        <td>
+                            <select class="form-select" aria-label="select profesores" th:data-id="${guardia.id}"
+                                    onchange="accionGuardia('M', 'guardia1', this.value, this.dataset.id)">
+                                <option value="0"></option>
+                                <option th:each=" profe : ${profesores}" th:text="${profe.nombre}"
+                                        th:value="${profe.id}"
+                                        th:selected="${guardia.guardia1 == profe.nombre}"></option>
+                            </select>
+                        </td>
+                        <td th:data-id="${guardia.id}" th:data-profesor="${guardia.guardia1}"
+                            onclick="accionGuardia('E', 'guardia1', this.dataset.profesor, this.dataset.id)"
+                            class="text-danger text-center"
+                            data-toggle="tooltip" data-placement="top" title="Eliminar">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                                 class="bi bi-x-lg" viewBox="0 0 16 16">
+                                <path d="M2.146 2.854a.5.5 0 1 1 .708-.708L8 7.293l5.146-5.147a.5.5 0 0 1 .708.708L8.707 8l5.147 5.146a.5.5 0 0 1-.708.708L8 8.707l-5.146 5.147a.5.5 0 0 1-.708-.708L7.293 8z"/>
+                            </svg>
+                        </td>
+                    </tr>
+                    <tr th:if="${guardia.guardia2 != null}" class="align-middle">
+                        <th th:class="${turnoFiltro != null && turnoFiltro == 'G2' ? 'text-success' : ''}">
+                            Guardia 2
+                        </th>
+                        <td>
+                            <select class="form-select" aria-label="select profesores" th:data-id="${guardia.id}"
+                                    onchange="accionGuardia('M', 'guardia2', this.value, this.dataset.id)">
+                                <option value="0"></option>
+                                <option th:each=" profe : ${profesores}" th:text="${profe.nombre}"
+                                        th:value="${profe.id}"
+                                        th:selected="${guardia.guardia2 == profe.nombre}"></option>
+                            </select>
+                        </td>
+                        <td th:data-id="${guardia.id}" th:data-profesor="${guardia.guardia2}"
+                            onclick="accionGuardia('E', 'guardia2', this.dataset.profesor, this.dataset.id)"
+                            class="text-danger text-center"
+                            data-toggle="tooltip" data-placement="top" title="Eliminar">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                                 class="bi bi-x-lg" viewBox="0 0 16 16">
+                                <path d="M2.146 2.854a.5.5 0 1 1 .708-.708L8 7.293l5.146-5.147a.5.5 0 0 1 .708.708L8.707 8l5.147 5.146a.5.5 0 0 1-.708.708L8 8.707l-5.146 5.147a.5.5 0 0 1-.708-.708L7.293 8z"/>
+                            </svg>
+                        </td>
+                    </tr>
+                    <tr th:if="${guardia.guardia3 != null}" class="align-middle">
+                        <th th:class="${turnoFiltro != null && turnoFiltro == 'G3' ? 'text-success' : ''}">
+                            Guardia 3
+                        </th>
+                        <td>
+                            <select class="form-select" aria-label="select profesores" th:data-id="${guardia.id}"
+                                    onchange="accionGuardia('M', 'guardia3', this.value, this.dataset.id )">
+                                <option value="0"></option>
+                                <option th:each=" profe : ${profesores}" th:text="${profe.nombre}"
+                                        th:value="${profe.id}"
+                                        th:selected="${guardia.guardia3 == profe.nombre}"></option>
+                            </select>
+                        </td>
+                        <td th:data-id="${guardia.id}" th:data-profesor="${guardia.guardia3}"
+                            onclick="accionGuardia('E', 'guardia3', this.dataset.profesor, this.dataset.id)"
+                            class="text-danger text-center"
+                            data-toggle="tooltip" data-placement="top" title="Eliminar">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                                 class="bi bi-x-lg" viewBox="0 0 16 16">
+                                <path d="M2.146 2.854a.5.5 0 1 1 .708-.708L8 7.293l5.146-5.147a.5.5 0 0 1 .708.708L8.707 8l5.147 5.146a.5.5 0 0 1-.708.708L8 8.707l-5.146 5.147a.5.5 0 0 1-.708-.708L7.293 8z"/>
+                            </svg>
+                        </td>
+                    </tr>
+                    <tr th:if="${guardia.libranza1 != null}" class="align-middle">
+                        <th th:class="${turnoFiltro != null && turnoFiltro == 'L1' ? 'text-success' : ''}">
+                            Libranza 1
+                        </th>
+                        <td>
+                            <select class="form-select" aria-label="select profesores" th:data-id="${guardia.id}"
+                                    onchange="accionGuardia('M', 'libranza1', this.value, this.dataset.id )">
+                                <option value="0"></option>
+                                <option th:each=" profe : ${profesores}" th:text="${profe.nombre}"
+                                        th:value="${profe.id}"
+                                        th:selected="${guardia.libranza1 == profe.nombre}"></option>
+                            </select>
+                        </td>
+                        <td th:data-id="${guardia.id}" th:data-profesor="${guardia.libranza1}"
+                            onclick="accionGuardia('E', 'libranza1', this.dataset.profesor, this.dataset.id)"
+                            class="text-danger text-center"
+                            data-toggle="tooltip" data-placement="top" title="Eliminar">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                                 class="bi bi-x-lg" viewBox="0 0 16 16">
+                                <path d="M2.146 2.854a.5.5 0 1 1 .708-.708L8 7.293l5.146-5.147a.5.5 0 0 1 .708.708L8.707 8l5.147 5.146a.5.5 0 0 1-.708.708L8 8.707l-5.146 5.147a.5.5 0 0 1-.708-.708L7.293 8z"/>
+                            </svg>
+                        </td>
+                    </tr>
+                    <tr th:if="${guardia.libranza2 != null}" class="align-middle">
+                        <th th:class="${turnoFiltro != null && turnoFiltro == 'L2' ? 'text-success' : ''}">
+                            Libranza 2
+                        </th>
+                        <td>
+                            <select class="form-select" aria-label="select profesores" th:data-id="${guardia.id}"
+                                    onchange="accionGuardia('M', 'libranza2', this.value, this.dataset.id )">
+                                <option value="0"></option>
+                                <option th:each=" profe : ${profesores}" th:text="${profe.nombre}"
+                                        th:value="${profe.id}"
+                                        th:selected="${guardia.libranza2 == profe.nombre}"></option>
+                            </select>
+                        </td>
+                        <td th:data-id="${guardia.id}" th:data-profesor="${guardia.libranza2}"
+                            onclick="accionGuardia('E', 'libranza2', this.dataset.profesor, this.dataset.id)"
+                            class="text-danger text-center"
+                            data-toggle="tooltip" data-placement="top" title="Eliminar">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                                 class="bi bi-x-lg" viewBox="0 0 16 16">
+                                <path d="M2.146 2.854a.5.5 0 1 1 .708-.708L8 7.293l5.146-5.147a.5.5 0 0 1 .708.708L8.707 8l5.147 5.146a.5.5 0 0 1-.708.708L8 8.707l-5.146 5.147a.5.5 0 0 1-.708-.708L7.293 8z"/>
+                            </svg>
+                        </td>
+                    </tr>
+                    <tr th:if="${guardia.libranza3 != null}" class="align-middle">
+                        <th th:class="${turnoFiltro != null && turnoFiltro == 'L3' ? 'text-success' : ''}">
+                            Libranza 3
+                        </th>
+                        <td>
+                            <select class="form-select" aria-label="select profesores" th:data-id="${guardia.id}"
+                                    onchange="accionGuardia('M', 'libranza3', this.value, this.dataset.id )">
+                                <option value="0"></option>
+                                <option th:each=" profe : ${profesores}" th:text="${profe.nombre}"
+                                        th:value="${profe.id}"
+                                        th:selected="${guardia.libranza3 == profe.nombre}"></option>
+                            </select>
+                        </td>
+                        <td th:data-id="${guardia.id}" th:data-profesor="${guardia.libranza3}"
+                            onclick="accionGuardia('E', 'libranza3', this.dataset.profesor, this.dataset.id)"
+                            class="text-danger text-center"
+                            data-toggle="tooltip" data-placement="top" title="Eliminar">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                                 class="bi bi-x-lg" viewBox="0 0 16 16">
+                                <path d="M2.146 2.854a.5.5 0 1 1 .708-.708L8 7.293l5.146-5.147a.5.5 0 0 1 .708.708L8.707 8l5.147 5.146a.5.5 0 0 1-.708.708L8 8.707l-5.146 5.147a.5.5 0 0 1-.708-.708L7.293 8z"/>
+                            </svg>
+                        </td>
+                    </tr>
+                    <tr th:if="${guardia.recreo1 != null}" class="align-middle">
+                        <th th:class="${turnoFiltro != null && turnoFiltro == 'R1' ? 'text-success' : ''}">
+                            Recreo 1
+                        </th>
+                        <td>
+                            <select class="form-select" aria-label="select profesores" th:data-id="${guardia.id}"
+                                    onchange="accionGuardia('M', 'recreo1', this.value, this.dataset.id )">
+                                <option value="0"></option>
+                                <option th:each=" profe : ${profesores}" th:text="${profe.nombre}"
+                                        th:value="${profe.id}"
+                                        th:selected="${guardia.recreo1 == profe.nombre}"></option>
+                            </select>
+                        </td>
+                        <td th:data-id="${guardia.id}" th:data-profesor="${guardia.recreo1}"
+                            onclick="accionGuardia('E', 'recreo1', this.dataset.profesor, this.dataset.id)"
+                            class="text-danger text-center"
+                            data-toggle="tooltip" data-placement="top" title="Eliminar">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                                 class="bi bi-x-lg" viewBox="0 0 16 16">
+                                <path d="M2.146 2.854a.5.5 0 1 1 .708-.708L8 7.293l5.146-5.147a.5.5 0 0 1 .708.708L8.707 8l5.147 5.146a.5.5 0 0 1-.708.708L8 8.707l-5.146 5.147a.5.5 0 0 1-.708-.708L7.293 8z"/>
+                            </svg>
+                        </td>
+                    </tr>
+                    <tr th:if="${guardia.recreo2 != null}" class="align-middle">
+                        <th th:class="${turnoFiltro != null && turnoFiltro == 'R2' ? 'text-success' : ''}">
+                            Recreo 2
+                        </th>
+                        <td>
+                            <select class="form-select" aria-label="select profesores" th:data-id="${guardia.id}"
+                                    onchange="accionGuardia('M', 'recreo2', this.value, this.dataset.id )">
+                                <option value="0"></option>
+                                <option th:each=" profe : ${profesores}" th:text="${profe.nombre}"
+                                        th:value="${profe.id}"
+                                        th:selected="${guardia.recreo2 == profe.nombre}"></option>
+                            </select>
+                        </td>
+                        <td th:data-id="${guardia.id}" th:data-profesor="${guardia.recreo2}"
+                            onclick="accionGuardia('E', 'recreo2', this.dataset.profesor, this.dataset.id)"
+                            class="text-danger text-center"
+                            data-toggle="tooltip" data-placement="top" title="Eliminar">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                                 class="bi bi-x-lg" viewBox="0 0 16 16">
+                                <path d="M2.146 2.854a.5.5 0 1 1 .708-.708L8 7.293l5.146-5.147a.5.5 0 0 1 .708.708L8.707 8l5.147 5.146a.5.5 0 0 1-.708.708L8 8.707l-5.146 5.147a.5.5 0 0 1-.708-.708L7.293 8z"/>
+                            </svg>
+                        </td>
+                    </tr>
+                    <tr th:if="${guardia.recreo3 != null}" class="align-middle">
+                        <th th:class="${turnoFiltro != null && turnoFiltro == 'R3' ? 'text-success' : ''}">
+                            Recreo 3
+                        </th>
+                        <td>
+                            <select class="form-select" aria-label="select profesores" th:data-id="${guardia.id}"
+                                    onchange="accionGuardia('M', 'recreo3', this.value, this.dataset.id )">
+                                <option value="0"></option>
+                                <option th:each=" profe : ${profesores}" th:text="${profe.nombre}"
+                                        th:value="${profe.id}"
+                                        th:selected="${guardia.recreo3 == profe.nombre}"></option>
+                            </select>
+                        </td>
+                        <td th:data-id="${guardia.id}" th:data-profesor="${guardia.recreo3}"
+                            onclick="accionGuardia('E', 'recreo3', this.dataset.profesor, this.dataset.id)"
+                            class="text-danger text-center"
+                            data-toggle="tooltip" data-placement="top" title="Eliminar">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                                 class="bi bi-x-lg" viewBox="0 0 16 16">
+                                <path d="M2.146 2.854a.5.5 0 1 1 .708-.708L8 7.293l5.146-5.147a.5.5 0 0 1 .708.708L8.707 8l5.147 5.146a.5.5 0 0 1-.708.708L8 8.707l-5.146 5.147a.5.5 0 0 1-.708-.708L7.293 8z"/>
+                            </svg>
+                        </td>
+                    </tr>
+                    <tr class="align-middle">
+                        <th>
+                            <select class="form-select" aria-label="select turnos" id="nuevo_turno"
+                                onchange="accionGuardia('A', this.value, $('#nuevo_profesor').val(), this.dataset.id)">
+                                <option value="0">Turno</option>
+                                <option th:each=" turno : ${turnos}" th:value="${turno.key}" th:text="${turno.value.toUpperCase()}"></option>
+                            </select>
+                        </th>
+                        <th>
+                            <select class="form-select" aria-label="select profesores" th:data-id="${guardia.id}" id="nuevo_profesor"
+                                    onchange="accionGuardia('A', $('#nuevo_turno').val(), this.value, this.dataset.id)">
+                                <option value="0">Profesor</option>
+                                <option th:each=" profe : ${profesores}" th:text="${profe.nombre}"
+                                        th:value="${profe.id}"></option>
+                            </select>
+                        </th>
+                        <th class="align-middle text-success"
+                            data-toggle="tooltip" data-placement="top" title="Añadir">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" class="bi bi-check-lg" viewBox="0 0 16 16">
+                                <path d="M12.736 3.97a.733.733 0 0 1 1.047 0c.286.289.29.756.01 1.05L7.88 12.01a.733.733 0 0 1-1.065.02L3.217 8.384a.757.757 0 0 1 0-1.06.733.733 0 0 1 1.047 0l3.052 3.093 5.4-6.425z"/>
+                            </svg>
+                        </th>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                <button type="button" class="btn text-white theme-guardias">Aceptar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<form id="guardiasForm" action="/guardias/accion">
+    <input type="hidden" id="accion_guardia" name="accion">
+    <input type="hidden" id="turno_guardia" name="turno">
+    <input type="hidden" id="profesor_guardia" name="profesor">
+    <input type="hidden" id="id_guardia" name="id">
+</form>
