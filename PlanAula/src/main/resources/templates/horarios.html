@@ -57,15 +57,19 @@
                          th:class="${iterStat.first} ? 'carousel-item active' : 'carousel-item'">
                         <div class="row justify-content-center">
                             <div class="col-12 text-center mb-3">
-                                <p class="fw-bold " th:text="${guardia.dia} + ' ' + ${guardia.hora}"></p>
-                            </div>
+                                <span class="fw-bold " th:text="${guardia.dia} + ' ' + ${guardia.hora}"></span>
+								<div class="text-end">
+									<a th:href="'guardias?id=' + ${guardia.id}" class="btn theme-guardias text-white">Editar turnos</a>
+								</div>
+							</div>
                             <div class="col-md-4 text-center">
                                 <div class="d-flex align-items-center justify-content-center">
                                     <div>
                                         <h5 class="fw-bold  mb-3">Guardias</h5>
-                                        <p class="" th:text="${guardia.guardia1}"></p>
-                                        <p class="" th:text="${guardia.guardia2}"></p>
-                                        <p class="" th:text="${guardia.guardia3}"></p>
+										<p th:if="${guardia.guardia1 == null && guardia.guardia2 == null && guardia.guardia3 == null}" class="text-danger"><b>No hay docentes asignados</b></p>
+                                        <p th:if="${guardia.guardia1 != null}" class="text-white" th:text="${guardia.guardia1}"></p>
+                                        <p th:if="${guardia.guardia2 != null}" class="text-white" th:text="${guardia.guardia2}"></p>
+                                        <p th:if="${guardia.guardia3 != null}" class="text-white" th:text="${guardia.guardia3}"></p>
                                     </div>
                                 </div>
                             </div>
@@ -73,9 +77,10 @@
                                 <div class="d-flex align-items-center justify-content-center">
                                     <div>
                                         <h5 class="fw-bold  mb-3">Libranza</h5>
-                                        <p class="" th:text="${guardia.libranza1}"></p>
-                                        <p class="" th:text="${guardia.libranza2}"></p>
-                                        <p class="" th:text="${guardia.libranza3}"></p>
+										<p th:if="${guardia.libranza1 == null && guardia.libranza2 == null && guardia.libranza3 == null}" class="text-danger"><b>No hay docentes asignados</b></p>
+                                        <p th:if="${guardia.libranza1 != null}" class="text-white" th:text="${guardia.libranza1}"></p>
+                                        <p th:if="${guardia.libranza2 != null}" class="text-white" th:text="${guardia.libranza2}"></p>
+                                        <p th:if="${guardia.libranza3 != null}" class="text-white" th:text="${guardia.libranza3}"></p>
                                     </div>
                                 </div>
                             </div>
@@ -83,9 +88,10 @@
                                 <div class="d-flex align-items-center justify-content-center">
                                     <div>
                                         <h5 class="fw-bold  mb-3">Recreo</h5>
-                                        <p class="" th:text="${guardia.recreo1}"></p>
-                                        <p class="" th:text="${guardia.recreo2}"></p>
-                                        <p class="" th:text="${guardia.recreo3}"></p>
+										<p th:if="${guardia.recreo1 == null && guardia.recreo2 == null && guardia.recreo3 == null}" class="text-danger"><b>No hay docentes asignados</b></p>
+                                        <p th:if="${guardia.recreo1 != null}" class="text-white" th:text="${guardia.recreo1}"></p>
+                                        <p th:if="${guardia.recreo2 != null}" class="text-white" th:text="${guardia.recreo2}"></p>
+                                        <p th:if="${guardia.recreo3 != null}" class="text-white" th:text="${guardia.recreo3}"></p>
                                     </div>
                                 </div>
                             </div>

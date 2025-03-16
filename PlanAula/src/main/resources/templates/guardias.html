@@ -3,7 +3,18 @@
 <head>
     <div th:replace="~{fragments/head.html}"></div>
 </head>
+<div th:replace="~{fragments/links.html}"></div>
 <script>
+	$(document).ready(function() {
+		let id = "[[${id}]]";  
+		console.log(id)
+	       if( id !== "0"){
+			console.log(id + "2")
+			zoomCards(id);
+		   }
+	   });
+
+	   
     function zoomCards(id){
         let url = "/guardias/" + id;
         $.ajax({
@@ -172,5 +183,4 @@
 <div id="zoomCardModal">
 </div>
 </body>
-<div th:replace="~{fragments/links.html}"></div>
 </html>

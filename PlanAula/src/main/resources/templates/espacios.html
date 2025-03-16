@@ -3,6 +3,33 @@
 <head>
     <div th:replace="~{fragments/head.html}"></div>
 </head>
+<div th:replace="~{fragments/links.html}"></div>
+<script>
+	$(document).ready(function() {
+		let id = "[[${id}]]";  
+		console.log(id)
+	       if( id !== "0"){
+			console.log(id + "2")
+			zoomCards(id);
+		   }
+	   });
+
+	   
+    function zoomCards(id){
+        let url = "/espacios/" + id;
+        $.ajax({
+            url: url,
+            type: "GET",
+            success: function (data) {
+                $('#zoomCardModal').html(data);
+                $('#cardEspacios-modal').modal("show");
+            },
+            error: function (xhr, status, error) {
+                console.error("Error al obtener espacios: ", error);
+            }
+        });
+    }
+</script>
 <body>
 <div class="container mt-3">
     <div class="card shadow-sm">
@@ -145,6 +172,7 @@
         </div>
     </div>
 </div>
+<div id="zoomCardModal">
+</div>
 </body>
-<div th:replace="~{fragments/links.html}"></div>
 </html>

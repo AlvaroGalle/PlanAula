@@ -5,17 +5,21 @@ import com.example.planaula.services.*;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @Controller
 @RequestMapping("/espacios")
 public class EspaciosController {
+
+    private final String RUTATEMPLATE = "espacios/";
 
     private final EspaciosService espaciosService;
     private final AsignaturasService asignaturasService;
@@ -35,7 +39,11 @@ public class EspaciosController {
     public String findAllEspacios(@RequestParam(required = false, defaultValue = "0") int dia,
                                   @RequestParam(required = false, defaultValue = "0") int hora,
                                   @RequestParam(required = false, defaultValue = "0") int aula,
-                                  @RequestParam(required = false, defaultValue = "0") int asignatura, Model model) {
+                                  @RequestParam(required = false, defaultValue = "0") int asignatura,
+                                  @RequestParam(required = false, defaultValue = "0") String id,
+                                  Model model) {
+    	model.addAttribute("id", id);
+    	
         model.addAttribute("diaFiltro", dia);
         model.addAttribute("horaFiltro", hora);
         model.addAttribute("aulaFiltro", aula);
@@ -77,6 +85,24 @@ public class EspaciosController {
 
         model.addAttribute("espacios", espacioDTOList);
         return "espacios";
+    }
+    
+    @GetMapping("{id}")
+    public String findEspacioaById(@PathVariable int id, Model model) {
+        try {
+            EspacioDTO espacioDTO = espaciosService.findEspacioById(id);
+            model.addAttribute("espacio", espacioDTO);
+
+            List<AulaDTO> aulaDTOList =  aulasService.findAllAulas();
+            model.addAttribute("aulas", aulaDTOList);
+            
+            List<AsignaturaDTO> asignaturaDTOList =  asignaturasService.findAllAsignaturas();
+            model.addAttribute("asignaturas", asignaturaDTOList);
+            
+            return RUTATEMPLATE + "cardEspacios";
+        } catch (Exception e) {
+            return e.getMessage();
+        }
     }
 
 private String normalizarNombreCampo(String nombreAula) {

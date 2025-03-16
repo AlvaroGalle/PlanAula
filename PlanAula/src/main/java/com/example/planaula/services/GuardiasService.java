@@ -118,18 +118,18 @@ public class GuardiasService {
                 );
     }
 
-    @Transactional
-    public void accionGuardias(String accion, String turno, Integer profesor, Integer id) {
-        String sql = "UPDATE `guardias 2425` SET `" + turno + "` = " +
-                "CASE WHEN :accion = 'A' OR :accion = 'M' THEN :profesor " +
-                "WHEN :accion = 'E' THEN NULL ELSE `" + turno + "` END " +
-                "WHERE id = :id";
-
-        Object[] resultado = (Object[]) entityManager.createNativeQuery(sql)
-                .setParameter("accion", accion)
-                .setParameter("profesor", profesor)
-                .setParameter("id", id)
-                .getSingleResult();
-    }
-
+   @Transactional
+	public void accionGuardias(String accion, String turno, Integer profesor, Integer id) {
+	       try {
+	    	   entityManager.joinTransaction();
+	           String sql = "UPDATE `guardias 2425` SET `" + turno + "` = :profesor WHERE id = :id";
+	   
+	           entityManager.createNativeQuery(sql)
+	                   .setParameter("profesor", profesor)
+	                   .setParameter("id", id)
+	                   .executeUpdate();
+	       } catch (Exception e) {
+	           System.out.println("Error en la consulta: " + e.getMessage());
+	       }
+	   }
 }

@@ -1,18 +1,18 @@
 <script>
-    function accionGuardia(accion, turno, profesor, id) {
-        if(accion !== 'A' || (($('#nuevo_turno').val() !== "0") && ($('#nuevo_profesor').val() !== "0"))){
-            $('#accion_guardia').val(accion);
-            $('#turno_guardia').val(turno);
-            $('#profesor_guardia').val(profesor);
-            $('#id_guardia').val(id);
-            $('#guardiasForm').submit();
+    function accionEspacio(accion, aula, asignatura, id) {
+        if(accion !== 'A' || (($('#nuevo_aula').val() !== "0") && ($('#nuevo_asignatura').val() !== "0"))){
+            $('#accion_espacio').val(accion);
+            $('#aula_espacio').val(aula);
+            $('#asignatura_espacio').val(asignatura);
+            $('#id_espacio').val(id);
+            $('#espaciosForm').submit();
         }
     }
 </script>
-<div class="modal fade show" id="cardGuardias-modal" tabindex="-1" role="dialog" aria-labelledby="cardGuardias-modal" style="display: none">
+<div class="modal fade show" id="cardEspacios-modal" tabindex="-1" role="dialog" aria-labelledby="cardEspacios-modal" style="display: none">
     <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
-            <div class="modal-header theme-guardias text-white">
+            <!--<div class="modal-header theme-guardias text-white">
                 <h5 class="modal-title mb-0">
                     <span th:text="${guardia.dia}"></span>
                     <span th:text="${guardia.hora}"></span>
@@ -25,7 +25,7 @@
                                       guardia.libranza3 == null && guardia.libranza2 == null && guardia.libranza1 == null &&
                                       guardia.guardia3 == null && guardia.guardia2 == null && guardia.guardia1 == null}"
                      class="alert alert-warning" role="alert">
-                    No hay turnos asignados
+                    No hay aulas asignados
                 </div>
 
                 <table th:unless="${guardia.recreo3 == null && guardia.recreo2 == null && guardia.recreo1 == null &&
@@ -34,27 +34,27 @@
                        class="table table-sm">
                     <thead>
                     <tr>
-                        <th>Turno</th>
+                        <th>Aula</th>
                         <th>Asignatura</th>
                         <th></th>
                     </tr>
                     </thead>
                     <tbody>
                     <tr th:if="${guardia.guardia1 != null}" class="align-middle">
-                        <th th:class="${turnoFiltro != null && turnoFiltro == 'G1' ? 'text-success' : ''}">
+                        <th th:class="${aulaFiltro != null && aulaFiltro == 'G1' ? 'text-success' : ''}">
                             Guardia 1
                         </th>
                         <td>
-                            <select class="form-select" aria-label="select profesores" th:data-id="${guardia.id}"
-                                    onchange="accionGuardia('M', 'guardia1', this.value, this.dataset.id)">
+                            <select class="form-select" aria-label="select asignaturas" th:data-id="${guardia.id}"
+                                    onchange="accionEspacio('M', 'guardia1', this.value, this.dataset.id)">
                                 <option value="0"></option>
-                                <option th:each=" profe : ${profesores}" th:text="${profe.nombre}"
+                                <option th:each=" profe : ${asignaturas}" th:text="${profe.nombre}"
                                         th:value="${profe.id}"
                                         th:selected="${guardia.guardia1 == profe.nombre}"></option>
                             </select>
                         </td>
-                        <td th:data-id="${guardia.id}" th:data-profesor="${guardia.guardia1}"
-                            onclick="accionGuardia('E', 'guardia1', this.dataset.profesor, this.dataset.id)"
+                        <td th:data-id="${guardia.id}" th:data-asignatura="${guardia.guardia1}"
+                            onclick="accionEspacio('E', 'guardia1', this.dataset.asignatura, this.dataset.id)"
                             class="text-danger text-center"
                             data-toggle="tooltip" data-placement="top" title="Eliminar">
                             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
@@ -64,20 +64,20 @@
                         </td>
                     </tr>
                     <tr th:if="${guardia.guardia2 != null}" class="align-middle">
-                        <th th:class="${turnoFiltro != null && turnoFiltro == 'G2' ? 'text-success' : ''}">
+                        <th th:class="${aulaFiltro != null && aulaFiltro == 'G2' ? 'text-success' : ''}">
                             Guardia 2
                         </th>
                         <td>
-                            <select class="form-select" aria-label="select profesores" th:data-id="${guardia.id}"
-                                    onchange="accionGuardia('M', 'guardia2', this.value, this.dataset.id)">
+                            <select class="form-select" aria-label="select asignaturas" th:data-id="${guardia.id}"
+                                    onchange="accionEspacio('M', 'guardia2', this.value, this.dataset.id)">
                                 <option value="0"></option>
-                                <option th:each=" profe : ${profesores}" th:text="${profe.nombre}"
+                                <option th:each=" profe : ${asignaturas}" th:text="${profe.nombre}"
                                         th:value="${profe.id}"
                                         th:selected="${guardia.guardia2 == profe.nombre}"></option>
                             </select>
                         </td>
-                        <td th:data-id="${guardia.id}" th:data-profesor="${guardia.guardia2}"
-                            onclick="accionGuardia('E', 'guardia2', this.dataset.profesor, this.dataset.id)"
+                        <td th:data-id="${guardia.id}" th:data-asignatura="${guardia.guardia2}"
+                            onclick="accionEspacio('E', 'guardia2', this.dataset.asignatura, this.dataset.id)"
                             class="text-danger text-center"
                             data-toggle="tooltip" data-placement="top" title="Eliminar">
                             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
@@ -87,20 +87,20 @@
                         </td>
                     </tr>
                     <tr th:if="${guardia.guardia3 != null}" class="align-middle">
-                        <th th:class="${turnoFiltro != null && turnoFiltro == 'G3' ? 'text-success' : ''}">
+                        <th th:class="${aulaFiltro != null && aulaFiltro == 'G3' ? 'text-success' : ''}">
                             Guardia 3
                         </th>
                         <td>
-                            <select class="form-select" aria-label="select profesores" th:data-id="${guardia.id}"
-                                    onchange="accionGuardia('M', 'guardia3', this.value, this.dataset.id )">
+                            <select class="form-select" aria-label="select asignaturas" th:data-id="${guardia.id}"
+                                    onchange="accionEspacio('M', 'guardia3', this.value, this.dataset.id )">
                                 <option value="0"></option>
-                                <option th:each=" profe : ${profesores}" th:text="${profe.nombre}"
+                                <option th:each=" profe : ${asignaturas}" th:text="${profe.nombre}"
                                         th:value="${profe.id}"
                                         th:selected="${guardia.guardia3 == profe.nombre}"></option>
                             </select>
                         </td>
-                        <td th:data-id="${guardia.id}" th:data-profesor="${guardia.guardia3}"
-                            onclick="accionGuardia('E', 'guardia3', this.dataset.profesor, this.dataset.id)"
+                        <td th:data-id="${guardia.id}" th:data-asignatura="${guardia.guardia3}"
+                            onclick="accionEspacio('E', 'guardia3', this.dataset.asignatura, this.dataset.id)"
                             class="text-danger text-center"
                             data-toggle="tooltip" data-placement="top" title="Eliminar">
                             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
@@ -110,20 +110,20 @@
                         </td>
                     </tr>
                     <tr th:if="${guardia.libranza1 != null}" class="align-middle">
-                        <th th:class="${turnoFiltro != null && turnoFiltro == 'L1' ? 'text-success' : ''}">
+                        <th th:class="${aulaFiltro != null && aulaFiltro == 'L1' ? 'text-success' : ''}">
                             Libranza 1
                         </th>
                         <td>
-                            <select class="form-select" aria-label="select profesores" th:data-id="${guardia.id}"
-                                    onchange="accionGuardia('M', 'libranza1', this.value, this.dataset.id )">
+                            <select class="form-select" aria-label="select asignaturas" th:data-id="${guardia.id}"
+                                    onchange="accionEspacio('M', 'libranza1', this.value, this.dataset.id )">
                                 <option value="0"></option>
-                                <option th:each=" profe : ${profesores}" th:text="${profe.nombre}"
+                                <option th:each=" profe : ${asignaturas}" th:text="${profe.nombre}"
                                         th:value="${profe.id}"
                                         th:selected="${guardia.libranza1 == profe.nombre}"></option>
                             </select>
                         </td>
-                        <td th:data-id="${guardia.id}" th:data-profesor="${guardia.libranza1}"
-                            onclick="accionGuardia('E', 'libranza1', this.dataset.profesor, this.dataset.id)"
+                        <td th:data-id="${guardia.id}" th:data-asignatura="${guardia.libranza1}"
+                            onclick="accionEspacio('E', 'libranza1', this.dataset.asignatura, this.dataset.id)"
                             class="text-danger text-center"
                             data-toggle="tooltip" data-placement="top" title="Eliminar">
                             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
@@ -133,20 +133,20 @@
                         </td>
                     </tr>
                     <tr th:if="${guardia.libranza2 != null}" class="align-middle">
-                        <th th:class="${turnoFiltro != null && turnoFiltro == 'L2' ? 'text-success' : ''}">
+                        <th th:class="${aulaFiltro != null && aulaFiltro == 'L2' ? 'text-success' : ''}">
                             Libranza 2
                         </th>
                         <td>
-                            <select class="form-select" aria-label="select profesores" th:data-id="${guardia.id}"
-                                    onchange="accionGuardia('M', 'libranza2', this.value, this.dataset.id )">
+                            <select class="form-select" aria-label="select asignaturas" th:data-id="${guardia.id}"
+                                    onchange="accionEspacio('M', 'libranza2', this.value, this.dataset.id )">
                                 <option value="0"></option>
-                                <option th:each=" profe : ${profesores}" th:text="${profe.nombre}"
+                                <option th:each=" profe : ${asignaturas}" th:text="${profe.nombre}"
                                         th:value="${profe.id}"
                                         th:selected="${guardia.libranza2 == profe.nombre}"></option>
                             </select>
                         </td>
-                        <td th:data-id="${guardia.id}" th:data-profesor="${guardia.libranza2}"
-                            onclick="accionGuardia('E', 'libranza2', this.dataset.profesor, this.dataset.id)"
+                        <td th:data-id="${guardia.id}" th:data-asignatura="${guardia.libranza2}"
+                            onclick="accionEspacio('E', 'libranza2', this.dataset.asignatura, this.dataset.id)"
                             class="text-danger text-center"
                             data-toggle="tooltip" data-placement="top" title="Eliminar">
                             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
@@ -156,20 +156,20 @@
                         </td>
                     </tr>
                     <tr th:if="${guardia.libranza3 != null}" class="align-middle">
-                        <th th:class="${turnoFiltro != null && turnoFiltro == 'L3' ? 'text-success' : ''}">
+                        <th th:class="${aulaFiltro != null && aulaFiltro == 'L3' ? 'text-success' : ''}">
                             Libranza 3
                         </th>
                         <td>
-                            <select class="form-select" aria-label="select profesores" th:data-id="${guardia.id}"
-                                    onchange="accionGuardia('M', 'libranza3', this.value, this.dataset.id )">
+                            <select class="form-select" aria-label="select asignaturas" th:data-id="${guardia.id}"
+                                    onchange="accionEspacio('M', 'libranza3', this.value, this.dataset.id )">
                                 <option value="0"></option>
-                                <option th:each=" profe : ${profesores}" th:text="${profe.nombre}"
+                                <option th:each=" profe : ${asignaturas}" th:text="${profe.nombre}"
                                         th:value="${profe.id}"
                                         th:selected="${guardia.libranza3 == profe.nombre}"></option>
                             </select>
                         </td>
-                        <td th:data-id="${guardia.id}" th:data-profesor="${guardia.libranza3}"
-                            onclick="accionGuardia('E', 'libranza3', this.dataset.profesor, this.dataset.id)"
+                        <td th:data-id="${guardia.id}" th:data-asignatura="${guardia.libranza3}"
+                            onclick="accionEspacio('E', 'libranza3', this.dataset.asignatura, this.dataset.id)"
                             class="text-danger text-center"
                             data-toggle="tooltip" data-placement="top" title="Eliminar">
                             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
@@ -179,20 +179,20 @@
                         </td>
                     </tr>
                     <tr th:if="${guardia.recreo1 != null}" class="align-middle">
-                        <th th:class="${turnoFiltro != null && turnoFiltro == 'R1' ? 'text-success' : ''}">
+                        <th th:class="${aulaFiltro != null && aulaFiltro == 'R1' ? 'text-success' : ''}">
                             Recreo 1
                         </th>
                         <td>
-                            <select class="form-select" aria-label="select profesores" th:data-id="${guardia.id}"
-                                    onchange="accionGuardia('M', 'recreo1', this.value, this.dataset.id )">
+                            <select class="form-select" aria-label="select asignaturas" th:data-id="${guardia.id}"
+                                    onchange="accionEspacio('M', 'recreo1', this.value, this.dataset.id )">
                                 <option value="0"></option>
-                                <option th:each=" profe : ${profesores}" th:text="${profe.nombre}"
+                                <option th:each=" profe : ${asignaturas}" th:text="${profe.nombre}"
                                         th:value="${profe.id}"
                                         th:selected="${guardia.recreo1 == profe.nombre}"></option>
                             </select>
                         </td>
-                        <td th:data-id="${guardia.id}" th:data-profesor="${guardia.recreo1}"
-                            onclick="accionGuardia('E', 'recreo1', this.dataset.profesor, this.dataset.id)"
+                        <td th:data-id="${guardia.id}" th:data-asignatura="${guardia.recreo1}"
+                            onclick="accionEspacio('E', 'recreo1', this.dataset.asignatura, this.dataset.id)"
                             class="text-danger text-center"
                             data-toggle="tooltip" data-placement="top" title="Eliminar">
                             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
@@ -202,20 +202,20 @@
                         </td>
                     </tr>
                     <tr th:if="${guardia.recreo2 != null}" class="align-middle">
-                        <th th:class="${turnoFiltro != null && turnoFiltro == 'R2' ? 'text-success' : ''}">
+                        <th th:class="${aulaFiltro != null && aulaFiltro == 'R2' ? 'text-success' : ''}">
                             Recreo 2
                         </th>
                         <td>
-                            <select class="form-select" aria-label="select profesores" th:data-id="${guardia.id}"
-                                    onchange="accionGuardia('M', 'recreo2', this.value, this.dataset.id )">
+                            <select class="form-select" aria-label="select asignaturas" th:data-id="${guardia.id}"
+                                    onchange="accionEspacio('M', 'recreo2', this.value, this.dataset.id )">
                                 <option value="0"></option>
-                                <option th:each=" profe : ${profesores}" th:text="${profe.nombre}"
+                                <option th:each=" profe : ${asignaturas}" th:text="${profe.nombre}"
                                         th:value="${profe.id}"
                                         th:selected="${guardia.recreo2 == profe.nombre}"></option>
                             </select>
                         </td>
-                        <td th:data-id="${guardia.id}" th:data-profesor="${guardia.recreo2}"
-                            onclick="accionGuardia('E', 'recreo2', this.dataset.profesor, this.dataset.id)"
+                        <td th:data-id="${guardia.id}" th:data-asignatura="${guardia.recreo2}"
+                            onclick="accionEspacio('E', 'recreo2', this.dataset.asignatura, this.dataset.id)"
                             class="text-danger text-center"
                             data-toggle="tooltip" data-placement="top" title="Eliminar">
                             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
@@ -225,20 +225,20 @@
                         </td>
                     </tr>
                     <tr th:if="${guardia.recreo3 != null}" class="align-middle">
-                        <th th:class="${turnoFiltro != null && turnoFiltro == 'R3' ? 'text-success' : ''}">
+                        <th th:class="${aulaFiltro != null && aulaFiltro == 'R3' ? 'text-success' : ''}">
                             Recreo 3
                         </th>
                         <td>
-                            <select class="form-select" aria-label="select profesores" th:data-id="${guardia.id}"
-                                    onchange="accionGuardia('M', 'recreo3', this.value, this.dataset.id )">
+                            <select class="form-select" aria-label="select asignaturas" th:data-id="${guardia.id}"
+                                    onchange="accionEspacio('M', 'recreo3', this.value, this.dataset.id )">
                                 <option value="0"></option>
-                                <option th:each=" profe : ${profesores}" th:text="${profe.nombre}"
+                                <option th:each=" profe : ${asignaturas}" th:text="${profe.nombre}"
                                         th:value="${profe.id}"
                                         th:selected="${guardia.recreo3 == profe.nombre}"></option>
                             </select>
                         </td>
-                        <td th:data-id="${guardia.id}" th:data-profesor="${guardia.recreo3}"
-                            onclick="accionGuardia('E', 'recreo3', this.dataset.profesor, this.dataset.id)"
+                        <td th:data-id="${guardia.id}" th:data-asignatura="${guardia.recreo3}"
+                            onclick="accionEspacio('E', 'recreo3', this.dataset.asignatura, this.dataset.id)"
                             class="text-danger text-center"
                             data-toggle="tooltip" data-placement="top" title="Eliminar">
                             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
@@ -249,17 +249,17 @@
                     </tr>
                     <tr class="align-middle">
                         <th>
-                            <select class="form-select" aria-label="select turnos" id="nuevo_turno"
-                                onchange="accionGuardia('A', this.value, $('#nuevo_profesor').val(), this.dataset.id)">
-                                <option value="0">Turno</option>
-                                <option th:each=" turno : ${turnos}" th:value="${turno.key}" th:text="${turno.value.toUpperCase()}"></option>
+                            <select class="form-select" aria-label="select aulas" id="nuevo_aula"
+                                onchange="accionEspacio('A', this.value, $('#nuevo_asignatura').val(), this.dataset.id)">
+                                <option value="0">aula</option>
+                                <option th:each=" aula : ${aulas}" th:value="${aula.key}" th:text="${aula.value.toUpperCase()}"></option>
                             </select>
                         </th>
                         <th>
-                            <select class="form-select" aria-label="select profesores" th:data-id="${guardia.id}" id="nuevo_profesor"
-                                    onchange="accionGuardia('A', $('#nuevo_turno').val(), this.value, this.dataset.id)">
-                                <option value="0">Profesor</option>
-                                <option th:each=" profe : ${profesores}" th:text="${profe.nombre}"
+                            <select class="form-select" aria-label="select asignaturas" th:data-id="${guardia.id}" id="nuevo_asignatura"
+                                    onchange="accionEspacio('A', $('#nuevo_aula').val(), this.value, this.dataset.id)">
+                                <option value="0">asignatura</option>
+                                <option th:each=" profe : ${asignaturas}" th:text="${profe.nombre}"
                                         th:value="${profe.id}"></option>
                             </select>
                         </th>
@@ -267,7 +267,7 @@
                     </tr>
                     </tbody>
                 </table>
-            </div>
+            </div>-->
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
             </div>
@@ -275,9 +275,9 @@
     </div>
 </div>
 
-<form id="guardiasForm" action="/guardias/accion">
-    <input type="hidden" id="accion_guardia" name="accion">
-    <input type="hidden" id="turno_guardia" name="turno">
-    <input type="hidden" id="profesor_guardia" name="profesor">
-    <input type="hidden" id="id_guardia" name="id">
+<form id="espaciosForm" action="/espacios/accion">
+    <input type="hidden" id="accion_espacio" name="accion">
+    <input type="hidden" id="aula_espacio" name="aula">
+    <input type="hidden" id="asignatura_espacio" name="asignatura">
+    <input type="hidden" id="id_espacio" name="id">
 </form>

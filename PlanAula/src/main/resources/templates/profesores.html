@@ -106,8 +106,7 @@
 <form action="/profesores" method="post" id="accionesProfesorForm" th:object="${profesorForm}">
     <input type="hidden" id="accion_profesor" name="accion">
     <input type="hidden" id="id_profesor" th:field="*{id}">
-    <input type="hidden" id="nombre_profesor" th:field="*{nombre}">
-    <input type="hidden" name="_csrf" th:value="${_csrf.token}">
+    <!--<input type="hidden" name="_csrf" th:value="${_csrf.token}">-->
 </form>
 <!-- Modal -->
 <div class="modal fade show" id="nuevoProfesor-modal" tabindex="-1" role="dialog" aria-labelledby="nuevoProfesor-modal"

@@ -38,7 +38,10 @@ public class GuardiasController {
                                   @RequestParam(required = false, defaultValue = "0") int hora,
                                   @RequestParam(required = false, defaultValue = "0") String turno,
                                   @RequestParam(required = false, defaultValue = "0") int profesor,
+                                  @RequestParam(required = false, defaultValue = "0") String id,
                                   Model model) {
+    	model.addAttribute("id", id);
+    	
         model.addAttribute("diaFiltro", dia);
         model.addAttribute("horaFiltro", hora);
         model.addAttribute("turnoFiltro", turno);
@@ -62,7 +65,7 @@ public class GuardiasController {
 
         Map<String, String> mapaTurnos = this.mapaTurnos();
         model.addAttribute("turnos", mapaTurnos);
-
+        
         if (!guardiasDTOList.isEmpty() && !Objects.equals(turno, "0")) {
             String campo = mapaTurnos.getOrDefault(turno, "");
 
@@ -98,18 +101,18 @@ public class GuardiasController {
                                    @RequestParam Integer id) {
         try {
             Map<String, String> mapeoTurnos = Map.of(
-                    "guardia1", "guardia 1",
-                    "guardia2", "guardia 2",
-                    "guardia3", "guardia 3",
-                    "libranza1", "libranza 1",
-                    "libranza2", "libranza 2",
-                    "libranza3", "libranza 3",
-                    "recreo1", "recreo1",
-                    "recreo2", "recreo2",
-                    "recreo3", "recreo3"
+                    "G1", "guardia 1",
+                    "G2", "guardia 2",
+                    "G3", "guardia 3",
+                    "L1", "libranza 1",
+                    "L2", "libranza 2",
+                    "L3", "libranza 3",
+                    "R1", "recreo1",
+                    "R2", "recreo2",
+                    "R3", "recreo3"
             );
-            guardiasService.accionGuardias(accion, turno, profesor, id);
-            return "redirect:/guardias/" + id;
+            guardiasService.accionGuardias(accion, mapeoTurnos.get(turno), profesor, id);
+            return "redirect:/guardias?id=" + id;
         } catch (Exception e) {
             return e.getMessage();
         }
