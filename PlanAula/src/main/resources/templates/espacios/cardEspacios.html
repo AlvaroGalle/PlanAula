@@ -12,262 +12,315 @@
 <div class="modal fade show" id="cardEspacios-modal" tabindex="-1" role="dialog" aria-labelledby="cardEspacios-modal" style="display: none">
     <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
-            <!--<div class="modal-header theme-guardias text-white">
-                <h5 class="modal-title mb-0">
-                    <span th:text="${guardia.dia}"></span>
-                    <span th:text="${guardia.hora}"></span>
-                </h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+			<div class="modal-header theme-espacios text-white">
+				<h5 class="modal-title mb-0">
+					<span th:text="${espacio.dia}"></span>
+					<span th:text="${espacio.hora}"></span>
+				</h5>
+				<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+									
+								</div>
+			                       <div class="modal-body">
+									<div th:unless="${espacio.aula1a != null or espacio.aula1b != null or 
+									             espacio.aula2a != null or espacio.aula2b != null or 
+									             espacio.aula3a != null or espacio.aula3b != null or 
+									             espacio.aula4a != null or espacio.aula4b != null or 
+									             espacio.aula1cc != null or espacio.aula1ss != null or 
+									             espacio.labcc != null or espacio.labid != null or 
+									             espacio.desdoblea != null or espacio.desdobleb != null or 
+									             espacio.desdoblec != null or espacio.aenlace != null or 
+									             espacio.bajopatio != null or espacio.bajoespejos != null}"
+									                     class="alert alert-warning" role="alert">
+									                    No hay espacios asignados
+									                </div>
 
-            </div>
-            <div class="modal-body">
-                <div th:if="${guardia.recreo3 == null && guardia.recreo2 == null && guardia.recreo1 == null &&
-                                      guardia.libranza3 == null && guardia.libranza2 == null && guardia.libranza1 == null &&
-                                      guardia.guardia3 == null && guardia.guardia2 == null && guardia.guardia1 == null}"
-                     class="alert alert-warning" role="alert">
-                    No hay aulas asignados
-                </div>
+									                <table th:if="${espacio.aula1a != null or espacio.aula1b != null or 
+													             espacio.aula2a != null or espacio.aula2b != null or 
+													             espacio.aula3a != null or espacio.aula3b != null or 
+													             espacio.aula4a != null or espacio.aula4b != null or 
+													             espacio.aula1cc != null or espacio.aula1ss != null or 
+													             espacio.labcc != null or espacio.labid != null or 
+													             espacio.desdoblea != null or espacio.desdobleb != null or 
+													             espacio.desdoblec != null or espacio.aenlace != null or 
+													             espacio.bajopatio != null or espacio.bajoespejos != null}"
+									                       class="table table-sm">
+			                               <thead>
+			                               <tr>
+			                                   <th>Aula</th>
+			                                   <th>Asignatura</th>
+			                               </tr>
+			                               </thead>
+			                               <tbody>
+												<tr th:if="${espacio.aula1a != null}">
+													<td>
+														<select class="form-select" aria-label="select aulas" th:data-id="${espacio.id}"
+											        	onchange="accionEspacio('M', 'aula1a', this.value, this.dataset.id)">
+											        		<option value="0"></option>
+											            	<option th:each=" aula : ${aulas}" th:text="${aula.nombre}"
+											            	th:value="${aula.id}"
+											            	th:selected="${'Aula 1A' == aula.nombre}"></option>
+											         	</select>
+											     	</td>
+													<td>
+														<select class="form-select" aria-label="select aulas" th:data-id="${espacio.id}"
+														onchange="accionEspacio('M', 'aula1a', this.value, this.dataset.id )">
+															<option value="0"></option>
+															<option th:each=" asignatura : ${asignaturas}" th:text="${asignatura.nombre}"
+															th:value="${asignatura.id}"
+															th:selected="${espacio.aula1a == asignatura.nombre}"></option>
+														</select>
+													</td>
+												</tr>
+												<tr th:if="${espacio.aula1b != null}">
+																									<td>
+																										<select class="form-select" aria-label="select aulas" th:data-id="${espacio.id}"
+																							        	onchange="accionEspacio('M', 'aula1B', this.value, this.dataset.id)">
+																							        		<option value="0"></option>
+																							            	<option th:each=" aula : ${aulas}" th:text="${aula.nombre}"
+																							            	th:value="${aula.id}"
+																							            	th:selected="${'Aula 1B' == aula.nombre}"></option>
+																							         	</select>
+																							     	</td>
+																									<td>
+																										<select class="form-select" aria-label="select aulas" th:data-id="${espacio.id}"
+																										onchange="accionEspacio('M', 'aula1B', this.value, this.dataset.id )">
+																											<option value="0"></option>
+																											<option th:each=" asignatura : ${asignaturas}" th:text="${asignatura.nombre}"
+																											th:value="${asignatura.id}"
+																											th:selected="${espacio.aula1b == asignatura.nombre}"></option>
+																										</select>
+																									</td>
+																								</tr>
+																								<tr th:if="${espacio.aula2a != null}">
+																								    <td>
+																								        <select class="form-select" aria-label="select aulas" th:data-id="${espacio.id}" onchange="accionEspacio('M', 'aula2a', this.value, this.dataset.id)">
+																								            <option value="0"></option>
+																								            <option th:each="aula : ${aulas}" th:text="${aula.nombre}" th:value="${aula.id}" th:selected="${'Aula 2A' == aula.nombre}"></option>
+																								        </select>
+																								    </td>
+																								    <td>
+																								        <select class="form-select" aria-label="select asignaturas" th:data-id="${espacio.id}" onchange="accionEspacio('M', 'aula2a', this.value, this.dataset.id)">
+																								            <option value="0"></option>
+																								            <option th:each="asignatura : ${asignaturas}" th:text="${asignatura.nombre}" th:value="${asignatura.id}" th:selected="${espacio.aula2a == asignatura.nombre}"></option>
+																								        </select>
+																								    </td>
+																								</tr>
+																								<tr th:if="${espacio.aula2b != null}">
+																								    <td>
+																								        <select class="form-select" aria-label="select aulas" th:data-id="${espacio.id}" onchange="accionEspacio('M', 'aula2b', this.value, this.dataset.id)">
+																								            <option value="0"></option>
+																								            <option th:each="aula : ${aulas}" th:text="${aula.nombre}" th:value="${aula.id}" th:selected="${'Aula 2B' == aula.nombre}"></option>
+																								        </select>
+																								    </td>
+																								    <td>
+																								        <select class="form-select" aria-label="select asignaturas" th:data-id="${espacio.id}" onchange="accionEspacio('M', 'aula2b', this.value, this.dataset.id)">
+																								            <option value="0"></option>
+																								            <option th:each="asignatura : ${asignaturas}" th:text="${asignatura.nombre}" th:value="${asignatura.id}" th:selected="${espacio.aula2b == asignatura.nombre}"></option>
+																								        </select>
+																								    </td>
+																								</tr>
+																								<tr th:if="${espacio.aula3a != null}">
+																								    <td>
+																								        <select class="form-select" aria-label="select aulas" th:data-id="${espacio.id}" onchange="accionEspacio('M', 'aula3a', this.value, this.dataset.id)">
+																								            <option value="0"></option>
+																								            <option th:each="aula : ${aulas}" th:text="${aula.nombre}" th:value="${aula.id}" th:selected="${'Aula 3A' == aula.nombre}"></option>
+																								        </select>
+																								    </td>
+																								    <td>
+																								        <select class="form-select" aria-label="select asignaturas" th:data-id="${espacio.id}" onchange="accionEspacio('M', 'aula3a', this.value, this.dataset.id)">
+																								            <option value="0"></option>
+																								            <option th:each="asignatura : ${asignaturas}" th:text="${asignatura.nombre}" th:value="${asignatura.id}" th:selected="${espacio.aula3a == asignatura.nombre}"></option>
+																								        </select>
+																								    </td>
+																								</tr>
+																								<tr th:if="${espacio.aula3b != null}">
+																								    <td>
+																								        <select class="form-select" aria-label="select aulas" th:data-id="${espacio.id}" onchange="accionEspacio('M', 'aula3b', this.value, this.dataset.id)">
+																								            <option value="0"></option>
+																								            <option th:each="aula : ${aulas}" th:text="${aula.nombre}" th:value="${aula.id}" th:selected="${'Aula 3B' == aula.nombre}"></option>
+																								        </select>
+																								    </td>
+																								    <td>
+																								        <select class="form-select" aria-label="select asignaturas" th:data-id="${espacio.id}" onchange="accionEspacio('M', 'aula3b', this.value, this.dataset.id)">
+																								            <option value="0"></option>
+																								            <option th:each="asignatura : ${asignaturas}" th:text="${asignatura.nombre}" th:value="${asignatura.id}" th:selected="${espacio.aula3b == asignatura.nombre}"></option>
+																								        </select>
+																								    </td>
+																								</tr>
+																								<tr th:if="${espacio.aula4a != null}">
+																								    <td>
+																								        <select class="form-select" aria-label="select aulas" th:data-id="${espacio.id}" onchange="accionEspacio('M', 'aula4a', this.value, this.dataset.id)">
+																								            <option value="0"></option>
+																								            <option th:each="aula : ${aulas}" th:text="${aula.nombre}" th:value="${aula.id}" th:selected="${'Aula 4A' == aula.nombre}"></option>
+																								        </select>
+																								    </td>
+																								    <td>
+																								        <select class="form-select" aria-label="select asignaturas" th:data-id="${espacio.id}" onchange="accionEspacio('M', 'aula4a', this.value, this.dataset.id)">
+																								            <option value="0"></option>
+																								            <option th:each="asignatura : ${asignaturas}" th:text="${asignatura.nombre}" th:value="${asignatura.id}" th:selected="${espacio.aula4a == asignatura.nombre}"></option>
+																								        </select>
+																								    </td>
+																								</tr>
+																								<tr th:if="${espacio.aula4b != null}">
+																								    <td>
+																								        <select class="form-select" aria-label="select aulas" th:data-id="${espacio.id}" onchange="accionEspacio('M', 'aula4b', this.value, this.dataset.id)">
+																								            <option value="0"></option>
+																								            <option th:each="aula : ${aulas}" th:text="${aula.nombre}" th:value="${aula.id}" th:selected="${'Aula 4B' == aula.nombre}"></option>
+																								        </select>
+																								    </td>
+																								    <td>
+																								        <select class="form-select" aria-label="select asignaturas" th:data-id="${espacio.id}" onchange="accionEspacio('M', 'aula4b', this.value, this.dataset.id)">
+																								            <option value="0"></option>
+																								            <option th:each="asignatura : ${asignaturas}" th:text="${asignatura.nombre}" th:value="${asignatura.id}" th:selected="${espacio.aula4b == asignatura.nombre}"></option>
+																								        </select>
+																								    </td>
+																								</tr>
+																								<tr th:if="${espacio.aula1cc != null}">
+																								    <td>
+																								        <select class="form-select" aria-label="select aulas" th:data-id="${espacio.id}" onchange="accionEspacio('M', 'aula1cc', this.value, this.dataset.id)">
+																								            <option value="0"></option>
+																								            <option th:each="aula : ${aulas}" th:text="${aula.nombre}" th:value="${aula.id}" th:selected="${'Aula 1CC' == aula.nombre}"></option>
+																								        </select>
+																								    </td>
+																								    <td>
+																								        <select class="form-select" aria-label="select asignaturas" th:data-id="${espacio.id}" onchange="accionEspacio('M', 'aula1cc', this.value, this.dataset.id)">
+																								            <option value="0"></option>
+																								            <option th:each="asignatura : ${asignaturas}" th:text="${asignatura.nombre}" th:value="${asignatura.id}" th:selected="${espacio.aula1cc == asignatura.nombre}"></option>
+																								        </select>
+																								    </td>
+																								</tr>
+																								<tr th:if="${espacio.aula1ss != null}">
+																								    <td>
+																								        <select class="form-select" aria-label="select aulas" th:data-id="${espacio.id}" onchange="accionEspacio('M', 'aula1ss', this.value, this.dataset.id)">
+																								            <option value="0"></option>
+																								            <option th:each="aula : ${aulas}" th:text="${aula.nombre}" th:value="${aula.id}" th:selected="${'Aula 1SS' == aula.nombre}"></option>
+																								        </select>
+																								    </td>
+																								    <td>
+																								        <select class="form-select" aria-label="select asignaturas" th:data-id="${espacio.id}" onchange="accionEspacio('M', 'aula1ss', this.value, this.dataset.id)">
+																								            <option value="0"></option>
+																								            <option th:each="asignatura : ${asignaturas}" th:text="${asignatura.nombre}" th:value="${asignatura.id}" th:selected="${espacio.aula1ss == asignatura.nombre}"></option>
+																								        </select>
+																								    </td>
+																								</tr>
+																								<tr th:if="${espacio.labcc != null}">
+																								    <td>
+																								        <select class="form-select" aria-label="select aulas" th:data-id="${espacio.id}" onchange="accionEspacio('M', 'labcc', this.value, this.dataset.id)">
+																								            <option value="0"></option>
+																								            <option th:each="aula : ${aulas}" th:text="${aula.nombre}" th:value="${aula.id}" th:selected="${'LabCC' == aula.nombre}"></option>
+																								        </select>
+																								    </td>
+																								    <td>
+																								        <select class="form-select" aria-label="select asignaturas" th:data-id="${espacio.id}" onchange="accionEspacio('M', 'labcc', this.value, this.dataset.id)">
+																								            <option value="0"></option>
+																								            <option th:each="asignatura : ${asignaturas}" th:text="${asignatura.nombre}" th:value="${asignatura.id}" th:selected="${espacio.labcc == asignatura.nombre}"></option>
+																								        </select>
+																								    </td>
+																								</tr>
+																								<tr th:if="${espacio.labid != null}">
+																								    <td>
+																								        <select class="form-select" aria-label="select aulas" th:data-id="${espacio.id}" onchange="accionEspacio('M', 'labid', this.value, this.dataset.id)">
+																								            <option value="0"></option>
+																								            <option th:each="aula : ${aulas}" th:text="${aula.nombre}" th:value="${aula.id}" th:selected="${'LabID' == aula.nombre}"></option>
+																								        </select>
+																								    </td>
+																								    <td>
+																								        <select class="form-select" aria-label="select asignaturas" th:data-id="${espacio.id}" onchange="accionEspacio('M', 'labid', this.value, this.dataset.id)">
+																								            <option value="0"></option>
+																								            <option th:each="asignatura : ${asignaturas}" th:text="${asignatura.nombre}" th:value="${asignatura.id}" th:selected="${espacio.labid == asignatura.nombre}"></option>
+																								        </select>
+																								    </td>
+																								</tr>
+																								<tr th:if="${espacio.desdoblea != null}">
+																								    <td>
+																								        <select class="form-select" aria-label="select aulas" th:data-id="${espacio.id}" onchange="accionEspacio('M', 'desdoblea', this.value, this.dataset.id)">
+																								            <option value="0"></option>
+																								            <option th:each="aula : ${aulas}" th:text="${aula.nombre}" th:value="${aula.id}" th:selected="${'Desdoble A' == aula.nombre}"></option>
+																								        </select>
+																								    </td>
+																								    <td>
+																								        <select class="form-select" aria-label="select asignaturas" th:data-id="${espacio.id}" onchange="accionEspacio('M', 'desdoblea', this.value, this.dataset.id)">
+																								            <option value="0"></option>
+																								            <option th:each="asignatura : ${asignaturas}" th:text="${asignatura.nombre}" th:value="${asignatura.id}" th:selected="${espacio.desdoblea == asignatura.nombre}"></option>
+																								        </select>
+																								    </td>
+																								</tr>
+																								<tr th:if="${espacio.desdobleb != null}">
+																								    <td>
+																								        <select class="form-select" aria-label="select aulas" th:data-id="${espacio.id}" onchange="accionEspacio('M', 'desdobleb', this.value, this.dataset.id)">
+																								            <option value="0"></option>
+																								            <option th:each="aula : ${aulas}" th:text="${aula.nombre}" th:value="${aula.id}" th:selected="${'Desdoble B' == aula.nombre}"></option>
+																								        </select>
+																								    </td>
+																								    <td>
+																								        <select class="form-select" aria-label="select asignaturas" th:data-id="${espacio.id}" onchange="accionEspacio('M', 'desdobleb', this.value, this.dataset.id)">
+																								            <option value="0"></option>
+																								            <option th:each="asignatura : ${asignaturas}" th:text="${asignatura.nombre}" th:value="${asignatura.id}" th:selected="${espacio.desdobleb == asignatura.nombre}"></option>
+																								        </select>
+																								    </td>
+																								</tr>
+																								<tr th:if="${espacio.desdoblec != null}">
+																								    <td>
+																								        <select class="form-select" aria-label="select aulas" th:data-id="${espacio.id}" onchange="accionEspacio('M', 'desdoblec', this.value, this.dataset.id)">
+																								            <option value="0"></option>
+																								            <option th:each="aula : ${aulas}" th:text="${aula.nombre}" th:value="${aula.id}" th:selected="${'Desdoble C' == aula.nombre}"></option>
+																								        </select>
+																								    </td>
+																								    <td>
+																								        <select class="form-select" aria-label="select asignaturas" th:data-id="${espacio.id}" onchange="accionEspacio('M', 'desdoblec', this.value, this.dataset.id)">
+																								            <option value="0"></option>
+																								            <option th:each="asignatura : ${asignaturas}" th:text="${asignatura.nombre}" th:value="${asignatura.id}" th:selected="${espacio.desdoblec == asignatura.nombre}"></option>
+																								        </select>
+																								    </td>
+																								</tr>
+																								<tr th:if="${espacio.aenlace != null}">
+																								    <td>
+																								        <select class="form-select" aria-label="select aulas" th:data-id="${espacio.id}" onchange="accionEspacio('M', 'aenlace', this.value, this.dataset.id)">
+																								            <option value="0"></option>
+																								            <option th:each="aula : ${aulas}" th:text="${aula.nombre}" th:value="${aula.id}" th:selected="${'Aula Enlace' == aula.nombre}"></option>
+																								        </select>
+																								    </td>
+																								    <td>
+																								        <select class="form-select" aria-label="select asignaturas" th:data-id="${espacio.id}" onchange="accionEspacio('M', 'aenlace', this.value, this.dataset.id)">
+																								            <option value="0"></option>
+																								            <option th:each="asignatura : ${asignaturas}" th:text="${asignatura.nombre}" th:value="${asignatura.id}" th:selected="${espacio.aenlace == asignatura.nombre}"></option>
+																								        </select>
+																								    </td>
+																								</tr>
+																								<tr th:if="${espacio.bajopatio != null}">
+																								    <td>
+																								        <select class="form-select" aria-label="select aulas" th:data-id="${espacio.id}" onchange="accionEspacio('M', 'bajopatio', this.value, this.dataset.id)">
+																								            <option value="0"></option>
+																								            <option th:each="aula : ${aulas}" th:text="${aula.nombre}" th:value="${aula.id}" th:selected="${'Bajo Patio' == aula.nombre}"></option>
+																								        </select>
+																								    </td>
+																								    <td>
+																								        <select class="form-select" aria-label="select asignaturas" th:data-id="${espacio.id}" onchange="accionEspacio('M', 'bajopatio', this.value, this.dataset.id)">
+																								            <option value="0"></option>
+																								            <option th:each="asignatura : ${asignaturas}" th:text="${asignatura.nombre}" th:value="${asignatura.id}" th:selected="${espacio.bajopatio == asignatura.nombre}"></option>
+																								        </select>
+																								    </td>
+																								</tr>
+																								<tr th:if="${espacio.bajoespejos != null}">
+																								    <td>
+																								        <select class="form-select" aria-label="select aulas" th:data-id="${espacio.id}" onchange="accionEspacio('M', 'bajoespejos', this.value, this.dataset.id)">
+																								            <option value="0"></option>
+																								            <option th:each="aula : ${aulas}" th:text="${aula.nombre}" th:value="${aula.id}" th:selected="${'Bajo Espejos' == aula.nombre}"></option>
+																								        </select>
+																								    </td>
+																								    <td>
+																								        <select class="form-select" aria-label="select asignaturas" th:data-id="${espacio.id}" onchange="accionEspacio('M', 'bajoespejos', this.value, this.dataset.id)">
+																								            <option value="0"></option>
+																								            <option th:each="asignatura : ${asignaturas}" th:text="${asignatura.nombre}" th:value="${asignatura.id}" th:selected="${espacio.bajoespejos == asignatura.nombre}"></option>
+																								        </select>
+																								    </td>
+																								</tr>
 
-                <table th:unless="${guardia.recreo3 == null && guardia.recreo2 == null && guardia.recreo1 == null &&
-                                      guardia.libranza3 == null && guardia.libranza2 == null && guardia.libranza1 == null &&
-                                      guardia.guardia3 == null && guardia.guardia2 == null && guardia.guardia1 == null}"
-                       class="table table-sm">
-                    <thead>
-                    <tr>
-                        <th>Aula</th>
-                        <th>Asignatura</th>
-                        <th></th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <tr th:if="${guardia.guardia1 != null}" class="align-middle">
-                        <th th:class="${aulaFiltro != null && aulaFiltro == 'G1' ? 'text-success' : ''}">
-                            Guardia 1
-                        </th>
-                        <td>
-                            <select class="form-select" aria-label="select asignaturas" th:data-id="${guardia.id}"
-                                    onchange="accionEspacio('M', 'guardia1', this.value, this.dataset.id)">
-                                <option value="0"></option>
-                                <option th:each=" profe : ${asignaturas}" th:text="${profe.nombre}"
-                                        th:value="${profe.id}"
-                                        th:selected="${guardia.guardia1 == profe.nombre}"></option>
-                            </select>
-                        </td>
-                        <td th:data-id="${guardia.id}" th:data-asignatura="${guardia.guardia1}"
-                            onclick="accionEspacio('E', 'guardia1', this.dataset.asignatura, this.dataset.id)"
-                            class="text-danger text-center"
-                            data-toggle="tooltip" data-placement="top" title="Eliminar">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
-                                 class="bi bi-x-lg" viewBox="0 0 16 16">
-                                <path d="M2.146 2.854a.5.5 0 1 1 .708-.708L8 7.293l5.146-5.147a.5.5 0 0 1 .708.708L8.707 8l5.147 5.146a.5.5 0 0 1-.708.708L8 8.707l-5.146 5.147a.5.5 0 0 1-.708-.708L7.293 8z"/>
-                            </svg>
-                        </td>
-                    </tr>
-                    <tr th:if="${guardia.guardia2 != null}" class="align-middle">
-                        <th th:class="${aulaFiltro != null && aulaFiltro == 'G2' ? 'text-success' : ''}">
-                            Guardia 2
-                        </th>
-                        <td>
-                            <select class="form-select" aria-label="select asignaturas" th:data-id="${guardia.id}"
-                                    onchange="accionEspacio('M', 'guardia2', this.value, this.dataset.id)">
-                                <option value="0"></option>
-                                <option th:each=" profe : ${asignaturas}" th:text="${profe.nombre}"
-                                        th:value="${profe.id}"
-                                        th:selected="${guardia.guardia2 == profe.nombre}"></option>
-                            </select>
-                        </td>
-                        <td th:data-id="${guardia.id}" th:data-asignatura="${guardia.guardia2}"
-                            onclick="accionEspacio('E', 'guardia2', this.dataset.asignatura, this.dataset.id)"
-                            class="text-danger text-center"
-                            data-toggle="tooltip" data-placement="top" title="Eliminar">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
-                                 class="bi bi-x-lg" viewBox="0 0 16 16">
-                                <path d="M2.146 2.854a.5.5 0 1 1 .708-.708L8 7.293l5.146-5.147a.5.5 0 0 1 .708.708L8.707 8l5.147 5.146a.5.5 0 0 1-.708.708L8 8.707l-5.146 5.147a.5.5 0 0 1-.708-.708L7.293 8z"/>
-                            </svg>
-                        </td>
-                    </tr>
-                    <tr th:if="${guardia.guardia3 != null}" class="align-middle">
-                        <th th:class="${aulaFiltro != null && aulaFiltro == 'G3' ? 'text-success' : ''}">
-                            Guardia 3
-                        </th>
-                        <td>
-                            <select class="form-select" aria-label="select asignaturas" th:data-id="${guardia.id}"
-                                    onchange="accionEspacio('M', 'guardia3', this.value, this.dataset.id )">
-                                <option value="0"></option>
-                                <option th:each=" profe : ${asignaturas}" th:text="${profe.nombre}"
-                                        th:value="${profe.id}"
-                                        th:selected="${guardia.guardia3 == profe.nombre}"></option>
-                            </select>
-                        </td>
-                        <td th:data-id="${guardia.id}" th:data-asignatura="${guardia.guardia3}"
-                            onclick="accionEspacio('E', 'guardia3', this.dataset.asignatura, this.dataset.id)"
-                            class="text-danger text-center"
-                            data-toggle="tooltip" data-placement="top" title="Eliminar">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
-                                 class="bi bi-x-lg" viewBox="0 0 16 16">
-                                <path d="M2.146 2.854a.5.5 0 1 1 .708-.708L8 7.293l5.146-5.147a.5.5 0 0 1 .708.708L8.707 8l5.147 5.146a.5.5 0 0 1-.708.708L8 8.707l-5.146 5.147a.5.5 0 0 1-.708-.708L7.293 8z"/>
-                            </svg>
-                        </td>
-                    </tr>
-                    <tr th:if="${guardia.libranza1 != null}" class="align-middle">
-                        <th th:class="${aulaFiltro != null && aulaFiltro == 'L1' ? 'text-success' : ''}">
-                            Libranza 1
-                        </th>
-                        <td>
-                            <select class="form-select" aria-label="select asignaturas" th:data-id="${guardia.id}"
-                                    onchange="accionEspacio('M', 'libranza1', this.value, this.dataset.id )">
-                                <option value="0"></option>
-                                <option th:each=" profe : ${asignaturas}" th:text="${profe.nombre}"
-                                        th:value="${profe.id}"
-                                        th:selected="${guardia.libranza1 == profe.nombre}"></option>
-                            </select>
-                        </td>
-                        <td th:data-id="${guardia.id}" th:data-asignatura="${guardia.libranza1}"
-                            onclick="accionEspacio('E', 'libranza1', this.dataset.asignatura, this.dataset.id)"
-                            class="text-danger text-center"
-                            data-toggle="tooltip" data-placement="top" title="Eliminar">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
-                                 class="bi bi-x-lg" viewBox="0 0 16 16">
-                                <path d="M2.146 2.854a.5.5 0 1 1 .708-.708L8 7.293l5.146-5.147a.5.5 0 0 1 .708.708L8.707 8l5.147 5.146a.5.5 0 0 1-.708.708L8 8.707l-5.146 5.147a.5.5 0 0 1-.708-.708L7.293 8z"/>
-                            </svg>
-                        </td>
-                    </tr>
-                    <tr th:if="${guardia.libranza2 != null}" class="align-middle">
-                        <th th:class="${aulaFiltro != null && aulaFiltro == 'L2' ? 'text-success' : ''}">
-                            Libranza 2
-                        </th>
-                        <td>
-                            <select class="form-select" aria-label="select asignaturas" th:data-id="${guardia.id}"
-                                    onchange="accionEspacio('M', 'libranza2', this.value, this.dataset.id )">
-                                <option value="0"></option>
-                                <option th:each=" profe : ${asignaturas}" th:text="${profe.nombre}"
-                                        th:value="${profe.id}"
-                                        th:selected="${guardia.libranza2 == profe.nombre}"></option>
-                            </select>
-                        </td>
-                        <td th:data-id="${guardia.id}" th:data-asignatura="${guardia.libranza2}"
-                            onclick="accionEspacio('E', 'libranza2', this.dataset.asignatura, this.dataset.id)"
-                            class="text-danger text-center"
-                            data-toggle="tooltip" data-placement="top" title="Eliminar">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
-                                 class="bi bi-x-lg" viewBox="0 0 16 16">
-                                <path d="M2.146 2.854a.5.5 0 1 1 .708-.708L8 7.293l5.146-5.147a.5.5 0 0 1 .708.708L8.707 8l5.147 5.146a.5.5 0 0 1-.708.708L8 8.707l-5.146 5.147a.5.5 0 0 1-.708-.708L7.293 8z"/>
-                            </svg>
-                        </td>
-                    </tr>
-                    <tr th:if="${guardia.libranza3 != null}" class="align-middle">
-                        <th th:class="${aulaFiltro != null && aulaFiltro == 'L3' ? 'text-success' : ''}">
-                            Libranza 3
-                        </th>
-                        <td>
-                            <select class="form-select" aria-label="select asignaturas" th:data-id="${guardia.id}"
-                                    onchange="accionEspacio('M', 'libranza3', this.value, this.dataset.id )">
-                                <option value="0"></option>
-                                <option th:each=" profe : ${asignaturas}" th:text="${profe.nombre}"
-                                        th:value="${profe.id}"
-                                        th:selected="${guardia.libranza3 == profe.nombre}"></option>
-                            </select>
-                        </td>
-                        <td th:data-id="${guardia.id}" th:data-asignatura="${guardia.libranza3}"
-                            onclick="accionEspacio('E', 'libranza3', this.dataset.asignatura, this.dataset.id)"
-                            class="text-danger text-center"
-                            data-toggle="tooltip" data-placement="top" title="Eliminar">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
-                                 class="bi bi-x-lg" viewBox="0 0 16 16">
-                                <path d="M2.146 2.854a.5.5 0 1 1 .708-.708L8 7.293l5.146-5.147a.5.5 0 0 1 .708.708L8.707 8l5.147 5.146a.5.5 0 0 1-.708.708L8 8.707l-5.146 5.147a.5.5 0 0 1-.708-.708L7.293 8z"/>
-                            </svg>
-                        </td>
-                    </tr>
-                    <tr th:if="${guardia.recreo1 != null}" class="align-middle">
-                        <th th:class="${aulaFiltro != null && aulaFiltro == 'R1' ? 'text-success' : ''}">
-                            Recreo 1
-                        </th>
-                        <td>
-                            <select class="form-select" aria-label="select asignaturas" th:data-id="${guardia.id}"
-                                    onchange="accionEspacio('M', 'recreo1', this.value, this.dataset.id )">
-                                <option value="0"></option>
-                                <option th:each=" profe : ${asignaturas}" th:text="${profe.nombre}"
-                                        th:value="${profe.id}"
-                                        th:selected="${guardia.recreo1 == profe.nombre}"></option>
-                            </select>
-                        </td>
-                        <td th:data-id="${guardia.id}" th:data-asignatura="${guardia.recreo1}"
-                            onclick="accionEspacio('E', 'recreo1', this.dataset.asignatura, this.dataset.id)"
-                            class="text-danger text-center"
-                            data-toggle="tooltip" data-placement="top" title="Eliminar">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
-                                 class="bi bi-x-lg" viewBox="0 0 16 16">
-                                <path d="M2.146 2.854a.5.5 0 1 1 .708-.708L8 7.293l5.146-5.147a.5.5 0 0 1 .708.708L8.707 8l5.147 5.146a.5.5 0 0 1-.708.708L8 8.707l-5.146 5.147a.5.5 0 0 1-.708-.708L7.293 8z"/>
-                            </svg>
-                        </td>
-                    </tr>
-                    <tr th:if="${guardia.recreo2 != null}" class="align-middle">
-                        <th th:class="${aulaFiltro != null && aulaFiltro == 'R2' ? 'text-success' : ''}">
-                            Recreo 2
-                        </th>
-                        <td>
-                            <select class="form-select" aria-label="select asignaturas" th:data-id="${guardia.id}"
-                                    onchange="accionEspacio('M', 'recreo2', this.value, this.dataset.id )">
-                                <option value="0"></option>
-                                <option th:each=" profe : ${asignaturas}" th:text="${profe.nombre}"
-                                        th:value="${profe.id}"
-                                        th:selected="${guardia.recreo2 == profe.nombre}"></option>
-                            </select>
-                        </td>
-                        <td th:data-id="${guardia.id}" th:data-asignatura="${guardia.recreo2}"
-                            onclick="accionEspacio('E', 'recreo2', this.dataset.asignatura, this.dataset.id)"
-                            class="text-danger text-center"
-                            data-toggle="tooltip" data-placement="top" title="Eliminar">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
-                                 class="bi bi-x-lg" viewBox="0 0 16 16">
-                                <path d="M2.146 2.854a.5.5 0 1 1 .708-.708L8 7.293l5.146-5.147a.5.5 0 0 1 .708.708L8.707 8l5.147 5.146a.5.5 0 0 1-.708.708L8 8.707l-5.146 5.147a.5.5 0 0 1-.708-.708L7.293 8z"/>
-                            </svg>
-                        </td>
-                    </tr>
-                    <tr th:if="${guardia.recreo3 != null}" class="align-middle">
-                        <th th:class="${aulaFiltro != null && aulaFiltro == 'R3' ? 'text-success' : ''}">
-                            Recreo 3
-                        </th>
-                        <td>
-                            <select class="form-select" aria-label="select asignaturas" th:data-id="${guardia.id}"
-                                    onchange="accionEspacio('M', 'recreo3', this.value, this.dataset.id )">
-                                <option value="0"></option>
-                                <option th:each=" profe : ${asignaturas}" th:text="${profe.nombre}"
-                                        th:value="${profe.id}"
-                                        th:selected="${guardia.recreo3 == profe.nombre}"></option>
-                            </select>
-                        </td>
-                        <td th:data-id="${guardia.id}" th:data-asignatura="${guardia.recreo3}"
-                            onclick="accionEspacio('E', 'recreo3', this.dataset.asignatura, this.dataset.id)"
-                            class="text-danger text-center"
-                            data-toggle="tooltip" data-placement="top" title="Eliminar">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
-                                 class="bi bi-x-lg" viewBox="0 0 16 16">
-                                <path d="M2.146 2.854a.5.5 0 1 1 .708-.708L8 7.293l5.146-5.147a.5.5 0 0 1 .708.708L8.707 8l5.147 5.146a.5.5 0 0 1-.708.708L8 8.707l-5.146 5.147a.5.5 0 0 1-.708-.708L7.293 8z"/>
-                            </svg>
-                        </td>
-                    </tr>
-                    <tr class="align-middle">
-                        <th>
-                            <select class="form-select" aria-label="select aulas" id="nuevo_aula"
-                                onchange="accionEspacio('A', this.value, $('#nuevo_asignatura').val(), this.dataset.id)">
-                                <option value="0">aula</option>
-                                <option th:each=" aula : ${aulas}" th:value="${aula.key}" th:text="${aula.value.toUpperCase()}"></option>
-                            </select>
-                        </th>
-                        <th>
-                            <select class="form-select" aria-label="select asignaturas" th:data-id="${guardia.id}" id="nuevo_asignatura"
-                                    onchange="accionEspacio('A', $('#nuevo_aula').val(), this.value, this.dataset.id)">
-                                <option value="0">asignatura</option>
-                                <option th:each=" profe : ${asignaturas}" th:text="${profe.nombre}"
-                                        th:value="${profe.id}"></option>
-                            </select>
-                        </th>
-                        <th></th>
-                    </tr>
-                    </tbody>
-                </table>
-            </div>-->
+
+			                               </tbody>
+			                           </table>
+			                       </div>
+   
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
             </div>
