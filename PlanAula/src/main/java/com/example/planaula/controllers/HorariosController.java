@@ -91,8 +91,13 @@ public class HorariosController {
         }
         model.addAttribute("guardias",guardiasDTOList);
 
-        List<HorarioDTO> horarioDTOList = horariosService.findAllHorariosByDiaAndHoraAndCurso(dia,hora,curso, asignatura, profesor, aula);
+        List<HorarioDTO> horarioDTOList = horariosService.findAllHorariosByDiaAndHoraAndCurso(dia, hora, curso, asignatura, profesor, aula);
         model.addAttribute("page",horarioDTOList);
+        
+        int tableCurso = curso != 0 ? curso : 1;
+        List<HorarioDTO> horariosCursoDTOlist = horariosService.findAllHorariosByDiaAndHoraAndCurso(0, 0, tableCurso, 0, 0, 0);
+        model.addAttribute("tableCurso", tableCurso);
+        model.addAttribute("horarioCurso", horariosCursoDTOlist );
         return "horarios";
     }
 
