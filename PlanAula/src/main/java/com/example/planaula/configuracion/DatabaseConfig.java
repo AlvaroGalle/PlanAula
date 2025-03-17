@@ -15,13 +15,14 @@ public class DatabaseConfig {
     @Value("classpath:database/PNS_Fesd2425.accdb")
     private Resource databaseFile;
 
-    @Bean
-    public DataSource dataSource() throws IOException {
-        String dbPath = databaseFile.getFile().getAbsolutePath();
-        //String dbPath = "C:/Users/51178456/Desktop/workspace/PlanAula/Access/PNS_Fesd2425.accdb";
-        return DataSourceBuilder.create()
-                .driverClassName("net.ucanaccess.jdbc.UcanaccessDriver")
-                .url("jdbc:ucanaccess://" + dbPath)
-                .build();
-    }
+        @Bean
+        public DataSource dataSource() throws IOException {
+            String dbPath = databaseFile.getFile().getAbsolutePath();
+            //String dbPath = "C:/Users/51178456/Desktop/workspace/PlanAula/Access/PNS_Fesd2425.accdb";
+            return DataSourceBuilder.create()
+                    .driverClassName("net.ucanaccess.jdbc.UcanaccessDriver")
+                    .url("jdbc:ucanaccess://" + dbPath +
+                            ";openExclusive=false;ignoreCase=true;memory=false")
+                    .build();
+        }
 }

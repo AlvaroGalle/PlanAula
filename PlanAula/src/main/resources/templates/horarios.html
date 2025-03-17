@@ -3,253 +3,331 @@
 <head>
     <div th:replace="~{fragments/head.html}"></div>
 </head>
+<div th:replace="~{fragments/links.html}"></div>
+<style>
+    .nav-link {
+        color: black !important;
+    }
+</style>
+<script th:inline="javascript">
+    $(document).ready(()=>{
+        activePanel([[${active}]]);
+    });
+
+    function editarTurno(id){
+        let filtros = {
+           'dia' : $('#diaFilter').val(),
+           'hora' : $('#horaFilter').val(),
+           'profesor' : $('#profesorFilter').val()
+        }
+        let url = "guardias?id=" + id;
+        Object.entries(filtros).forEach(([clave, valor])=>{
+            if(valor !== "0"){
+                url += "&" + clave + "=" + valor;
+            }
+        })
+        location.href = url;
+    }
+</script>
 <body>
 <div class="container mt-5">
     <div class="card shadow-sm">
-        <div class="card-header theme-horarios text-white">
-            <h5 class="card-title mb-0">Horarios</h5>
-			<ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
-			            <li class="nav-item th" role="presentation">
-			                <a class="nav-link active" id="pills-1-tab" data-bs-toggle="pill" href="#lista-tab" role="tab" aria-controls="lista-tab" aria-selected="true">
-								<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-list-ul" viewBox="0 0 16 16">
-								  <path fill-rule="evenodd" d="M5 11.5a.5.5 0 0 1 .5-.5h9a.5.5 0 0 1 0 1h-9a.5.5 0 0 1-.5-.5m0-4a.5.5 0 0 1 .5-.5h9a.5.5 0 0 1 0 1h-9a.5.5 0 0 1-.5-.5m0-4a.5.5 0 0 1 .5-.5h9a.5.5 0 0 1 0 1h-9a.5.5 0 0 1-.5-.5m-3 1a1 1 0 1 0 0-2 1 1 0 0 0 0 2m0 4a1 1 0 1 0 0-2 1 1 0 0 0 0 2m0 4a1 1 0 1 0 0-2 1 1 0 0 0 0 2"/>
-								</svg>
-			                </a>
-			            </li>
-			            <li class="nav-item" role="presentation">
-			                <a class="nav-link" id="pills-2-tab" data-bs-toggle="pill" href="#pills-2" role="tab" aria-controls="pills-2" aria-selected="false">
-								<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-grid" viewBox="0 0 16 16">
-								  <path d="M1 2.5A1.5 1.5 0 0 1 2.5 1h3A1.5 1.5 0 0 1 7 2.5v3A1.5 1.5 0 0 1 5.5 7h-3A1.5 1.5 0 0 1 1 5.5zM2.5 2a.5.5 0 0 0-.5.5v3a.5.5 0 0 0 .5.5h3a.5.5 0 0 0 .5-.5v-3a.5.5 0 0 0-.5-.5zm6.5.5A1.5 1.5 0 0 1 10.5 1h3A1.5 1.5 0 0 1 15 2.5v3A1.5 1.5 0 0 1 13.5 7h-3A1.5 1.5 0 0 1 9 5.5zm1.5-.5a.5.5 0 0 0-.5.5v3a.5.5 0 0 0 .5.5h3a.5.5 0 0 0 .5-.5v-3a.5.5 0 0 0-.5-.5zM1 10.5A1.5 1.5 0 0 1 2.5 9h3A1.5 1.5 0 0 1 7 10.5v3A1.5 1.5 0 0 1 5.5 15h-3A1.5 1.5 0 0 1 1 13.5zm1.5-.5a.5.5 0 0 0-.5.5v3a.5.5 0 0 0 .5.5h3a.5.5 0 0 0 .5-.5v-3a.5.5 0 0 0-.5-.5zm6.5.5A1.5 1.5 0 0 1 10.5 9h3a1.5 1.5 0 0 1 1.5 1.5v3a1.5 1.5 0 0 1-1.5 1.5h-3A1.5 1.5 0 0 1 9 13.5zm1.5-.5a.5.5 0 0 0-.5.5v3a.5.5 0 0 0 .5.5h3a.5.5 0 0 0 .5-.5v-3a.5.5 0 0 0-.5-.5z"/>
-								</svg>
-			                </a>
-			            </li>
-			        </ul>
-        </div>
-		<div class="tab-content" id="tabContent">
-		           <div class="tab-pane fade show active" id="lista-tab" role="tabpanel" aria-labelledby="lista-tab">
-        <div class="card-body filter-section">
-            <div class="row align-items-center">
-                <div class="col-12">
-                    <form id="filtrosForm" method="get" th:action="@{'/horarios'}">
-                        <div class="accordion" id="acordeonFiltros">
-                            <div class="accordion-item">
-                                <h2 class="accordion-header">
-                                    <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseOne" aria-expanded="true" aria-controls="panelsStayOpen-collapseOne">
-                                        Filtrar horarios
-                                    </button>
-                                </h2>
-                                <div id="panelsStayOpen-collapseOne" class="accordion-collapse collapse show">
-                                    <div class="accordion-body">
-                                        <div class="form-group row justify-content-end mb-0">
-                                            <div class="col-md-4 mb-3">
-                                                <div th:replace="~{fragments/filtros/filterCursos.html}"></div>
+        <div class="card">
+            <div class="card-header theme-horarios text-white d-flex justify-content-between align-items-center">
+                <h5 class="card-title mb-0">Horarios</h5>
+                <ul class="nav nav-tabs border-0" id="pills-tab" role="tablist">
+                    <li class="nav-item" role="presentation">
+                        <a class="btn nav-link" id="lista-nav" data-bs-toggle="pill" href="#lista-tab"
+                           role="tab" aria-controls="lista-tab" aria-selected="true">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                                 class="bi bi-list-ul" viewBox="0 0 16 16">
+                                <path fill-rule="evenodd"
+                                      d="M5 11.5a.5.5 0 0 1 .5-.5h9a.5.5 0 0 1 0 1h-9a.5.5 0 0 1-.5-.5m0-4a.5.5 0 0 1 .5-.5h9a.5.5 0 0 1 0 1h-9a.5.5 0 0 1-.5-.5m0-4a.5.5 0 0 1 .5-.5h9a.5.5 0 0 1 0 1h-9a.5.5 0 0 1-.5-.5m-3 1a1 1 0 1 0 0-2 1 1 0 0 0 0 2m0 4a1 1 0 1 0 0-2 1 1 0 0 0 0 2m0 4a1 1 0 1 0 0-2 1 1 0 0 0 0 2"></path>
+                            </svg>
+                        </a>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <a class="btn nav-link" id="cuadro-nav" data-bs-toggle="pill" href="#cuadro-nav" role="tab"
+                           aria-controls="pills-2" aria-selected="false">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                                 class="bi bi-grid" viewBox="0 0 16 16">
+                                <path d="M1 2.5A1.5 1.5 0 0 1 2.5 1h3A1.5 1.5 0 0 1 7 2.5v3A1.5 1.5 0 0 1 5.5 7h-3A1.5 1.5 0 0 1 1 5.5zM2.5 2a.5.5 0 0 0-.5.5v3a.5.5 0 0 0 .5.5h3a.5.5 0 0 0 .5-.5v-3a.5.5 0 0 0-.5-.5zm6.5.5A1.5 1.5 0 0 1 10.5 1h3A1.5 1.5 0 0 1 15 2.5v3A1.5 1.5 0 0 1 13.5 7h-3A1.5 1.5 0 0 1 9 5.5zm1.5-.5a.5.5 0 0 0-.5.5v3a.5.5 0 0 0 .5.5h3a.5.5 0 0 0 .5-.5v-3a.5.5 0 0 0-.5-.5zM1 10.5A1.5 1.5 0 0 1 2.5 9h3A1.5 1.5 0 0 1 7 10.5v3A1.5 1.5 0 0 1 5.5 15h-3A1.5 1.5 0 0 1 1 13.5zm1.5-.5a.5.5 0 0 0-.5.5v3a.5.5 0 0 0 .5.5h3a.5.5 0 0 0 .5-.5v-3a.5.5 0 0 0-.5-.5zm6.5.5A1.5 1.5 0 0 1 10.5 9h3a1.5 1.5 0 0 1 1.5 1.5v3a1.5 1.5 0 0 1-1.5 1.5h-3A1.5 1.5 0 0 1 9 13.5zm1.5-.5a.5.5 0 0 0-.5.5v3a.5.5 0 0 0 .5.5h3a.5.5 0 0 0 .5-.5v-3a.5.5 0 0 0-.5-.5z"></path>
+                            </svg>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+            <div class="tab-content" id="tabContent">
+                <div class="tab-pane fade show" id="lista-tab" role="tabpanel" aria-labelledby="lista-tab">
+                    <div class="card-body filter-section">
+                        <div class="row align-items-center">
+                            <div class="col-12">
+                                <form id="filtrosForm" method="get" th:action="@{'/horarios'}">
+                                    <div class="accordion" id="acordeonFiltros">
+                                        <div class="accordion-item">
+                                            <h2 class="accordion-header">
+                                                <button class="accordion-button" type="button" data-bs-toggle="collapse"
+                                                        data-bs-target="#panelsStayOpen-collapseOne"
+                                                        aria-expanded="true"
+                                                        aria-controls="panelsStayOpen-collapseOne">
+                                                    Filtrar horarios
+                                                </button>
+                                            </h2>
+                                            <div id="panelsStayOpen-collapseOne"
+                                                 class="accordion-collapse collapse show">
+                                                <div class="accordion-body">
+                                                    <div class="form-group row justify-content-end mb-0">
+                                                        <div class="col-md-4 mb-3">
+                                                            <div th:replace="~{fragments/filtros/filterCursos.html}"></div>
+                                                        </div>
+                                                        <div class="col-md-4 mb-3">
+                                                            <div th:replace="~{fragments/filtros/filterAulas.html}"></div>
+                                                        </div>
+                                                        <div class="col-md-4 mb-3">
+                                                            <div th:replace="~{fragments/filtros/filterAsignaturas.html}"></div>
+                                                        </div>
+                                                        <div class="col-md-4 mb-3">
+                                                            <div th:replace="~{fragments/filtros/filterDia.html}"></div>
+                                                        </div>
+                                                        <div class="col-md-4 mb-3">
+                                                            <div th:replace="~{fragments/filtros/filterHoras.html}"></div>
+                                                        </div>
+                                                        <div class="col-md-4 mb-3">
+                                                            <div th:replace="~{fragments/filtros/filterProfesores.html}"></div>
+                                                        </div>
+                                                    </div>
+                                                </div>
                                             </div>
-                                            <div class="col-md-4 mb-3">
-                                                <div th:replace="~{fragments/filtros/filterAulas.html}"></div>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                    <div th:if="${#lists.size(guardias) > 0}" class="card-body theme-horarios">
+                        <div id="carouselGuardias" class="carousel slide">
+                            <div class="carousel-inner">
+                                <div th:each="guardia, iterStat : ${guardias}"
+                                     th:class="${iterStat.first} ? 'carousel-item active' : 'carousel-item'">
+                                    <div class="row justify-content-center">
+                                        <div class="col-12 d-flex justify-content-center align-items-center mb-3">
+                                            <a class="fw-bold text-black" th:data-id="${guardia.id}" href="#"
+                                               onclick="editarTurno(this.dataset.id)"
+                                                  th:text="${guardia.dia} + ' ' + ${guardia.hora}" title="Editar turno"></a>
+                                        </div>
+
+                                        <div class="col-md-4 text-center">
+                                            <div class="d-flex align-items-center justify-content-center">
+                                                <div>
+                                                    <h5 class="fw-bold  mb-3">Guardias</h5>
+                                                    <p th:if="${guardia.guardia1 == null && guardia.guardia2 == null && guardia.guardia3 == null}"
+                                                       class="text-danger"><b>No hay docentes asignados</b></p>
+                                                    <p th:if="${guardia.guardia1 != null}" class="text-white"
+                                                       th:text="${guardia.guardia1}"></p>
+                                                    <p th:if="${guardia.guardia2 != null}" class="text-white"
+                                                       th:text="${guardia.guardia2}"></p>
+                                                    <p th:if="${guardia.guardia3 != null}" class="text-white"
+                                                       th:text="${guardia.guardia3}"></p>
+                                                </div>
                                             </div>
-                                            <div class="col-md-4 mb-3">
-                                                <div th:replace="~{fragments/filtros/filterAsignaturas.html}"></div>
+                                        </div>
+                                        <div class="col-md-4 text-center">
+                                            <div class="d-flex align-items-center justify-content-center">
+                                                <div>
+                                                    <h5 class="fw-bold  mb-3">Libranza</h5>
+                                                    <p th:if="${guardia.libranza1 == null && guardia.libranza2 == null && guardia.libranza3 == null}"
+                                                       class="text-danger"><b>No hay docentes asignados</b></p>
+                                                    <p th:if="${guardia.libranza1 != null}" class="text-white"
+                                                       th:text="${guardia.libranza1}"></p>
+                                                    <p th:if="${guardia.libranza2 != null}" class="text-white"
+                                                       th:text="${guardia.libranza2}"></p>
+                                                    <p th:if="${guardia.libranza3 != null}" class="text-white"
+                                                       th:text="${guardia.libranza3}"></p>
+                                                </div>
                                             </div>
-                                            <div class="col-md-4 mb-3">
-                                                <div th:replace="~{fragments/filtros/filterDia.html}"></div>
-                                            </div>
-                                            <div class="col-md-4 mb-3">
-                                                <div th:replace="~{fragments/filtros/filterHoras.html}"></div>
-                                            </div>
-                                            <div class="col-md-4 mb-3">
-                                                <div th:replace="~{fragments/filtros/filterProfesores.html}"></div>
+                                        </div>
+                                        <div class="col-md-4 text-center">
+                                            <div class="d-flex align-items-center justify-content-center">
+                                                <div>
+                                                    <h5 class="fw-bold  mb-3">Recreo</h5>
+                                                    <p th:if="${guardia.recreo1 == null && guardia.recreo2 == null && guardia.recreo3 == null}"
+                                                       class="text-danger"><b>No hay docentes asignados</b></p>
+                                                    <p th:if="${guardia.recreo1 != null}" class="text-white"
+                                                       th:text="${guardia.recreo1}"></p>
+                                                    <p th:if="${guardia.recreo2 != null}" class="text-white"
+                                                       th:text="${guardia.recreo2}"></p>
+                                                    <p th:if="${guardia.recreo3 != null}" class="text-white"
+                                                       th:text="${guardia.recreo3}"></p>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                    </form>
-                </div>
-            </div>
-        </div>
-        <div th:if="${#lists.size(guardias) > 0}" class="card-body theme-horarios">
-            <div id="carouselGuardias" class="carousel slide">
-                <div class="carousel-inner">
-                    <div th:each="guardia, iterStat : ${guardias}"
-                         th:class="${iterStat.first} ? 'carousel-item active' : 'carousel-item'">
-                        <div class="row justify-content-center">
-                            <div class="col-12 text-center mb-3">
-                                <span class="fw-bold " th:text="${guardia.dia} + ' ' + ${guardia.hora}"></span>
-								<div class="text-end">
-									<a th:href="'guardias?id=' + ${guardia.id}" class="btn theme-guardias text-white">Editar turnos</a>
-								</div>
-							</div>
-                            <div class="col-md-4 text-center">
-                                <div class="d-flex align-items-center justify-content-center">
-                                    <div>
-                                        <h5 class="fw-bold  mb-3">Guardias</h5>
-										<p th:if="${guardia.guardia1 == null && guardia.guardia2 == null && guardia.guardia3 == null}" class="text-danger"><b>No hay docentes asignados</b></p>
-                                        <p th:if="${guardia.guardia1 != null}" class="text-white" th:text="${guardia.guardia1}"></p>
-                                        <p th:if="${guardia.guardia2 != null}" class="text-white" th:text="${guardia.guardia2}"></p>
-                                        <p th:if="${guardia.guardia3 != null}" class="text-white" th:text="${guardia.guardia3}"></p>
-                                    </div>
-                                </div>
+                            <div class="carousel-indicators" style="position: relative">
+                                <button th:each="guardia, iterStat : ${guardias}" type="button"
+                                        data-bs-target="#carouselGuardias" th:data-bs-slide-to="${iterStat.index}"
+                                        aria-current="true" th:aria-label="'Slide ' + ${iterStat}"
+                                        th:class="${iterStat.first} ? 'active' : ''"></button>
                             </div>
-                            <div class="col-md-4 text-center">
-                                <div class="d-flex align-items-center justify-content-center">
-                                    <div>
-                                        <h5 class="fw-bold  mb-3">Libranza</h5>
-										<p th:if="${guardia.libranza1 == null && guardia.libranza2 == null && guardia.libranza3 == null}" class="text-danger"><b>No hay docentes asignados</b></p>
-                                        <p th:if="${guardia.libranza1 != null}" class="text-white" th:text="${guardia.libranza1}"></p>
-                                        <p th:if="${guardia.libranza2 != null}" class="text-white" th:text="${guardia.libranza2}"></p>
-                                        <p th:if="${guardia.libranza3 != null}" class="text-white" th:text="${guardia.libranza3}"></p>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-md-4 text-center">
-                                <div class="d-flex align-items-center justify-content-center">
-                                    <div>
-                                        <h5 class="fw-bold  mb-3">Recreo</h5>
-										<p th:if="${guardia.recreo1 == null && guardia.recreo2 == null && guardia.recreo3 == null}" class="text-danger"><b>No hay docentes asignados</b></p>
-                                        <p th:if="${guardia.recreo1 != null}" class="text-white" th:text="${guardia.recreo1}"></p>
-                                        <p th:if="${guardia.recreo2 != null}" class="text-white" th:text="${guardia.recreo2}"></p>
-                                        <p th:if="${guardia.recreo3 != null}" class="text-white" th:text="${guardia.recreo3}"></p>
-                                    </div>
-                                </div>
-                            </div>
+                            <button class="carousel-control-prev" type="button" data-bs-target="#carouselGuardias"
+                                    data-bs-slide="prev">
+                                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                                <span class="visually-hidden">Previous</span>
+                            </button>
+                            <button class="carousel-control-next" type="button" data-bs-target="#carouselGuardias"
+                                    data-bs-slide="next">
+                                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                                <span class="visually-hidden">Next</span>
+                            </button>
                         </div>
                     </div>
+                    <div class="card-body bg-light">
+                        <div th:if="${#lists.size(page) > 0}" class="row">
+                            <div class="table-responsive">
+                                <table class="table table-hover">
+                                    <thead class="table-light">
+                                    <tr>
+                                        <!--<th>ID</th>-->
+                                        <th>Día</th>
+                                        <th>Hora</th>
+                                        <th>Curso</th>
+                                        <th>Asignatura 1</th>
+                                        <th>Profesor 1</th>
+                                        <th>Espacio 1</th>
+                                        <th>Asignatura 2</th>
+                                        <th>Profesor 2</th>
+                                        <th>Espacio 2</th>
+                                        <th>Asignatura 3</th>
+                                        <th>Profesor 3</th>
+                                        <th>Espacio 3</th>
+                                        <th>Observaciones</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr th:each="horario : ${page}" th:id="'tr_' + ${horario.id}">
+                                        <!--<th scope="row" th:text="${horario.id}"></th>-->
+                                        <td th:text="${horario.dia}"></td>
+                                        <td th:text="${horario.hora}"></td>
+                                        <td th:text="${horario.curso}"></td>
+                                        <td th:text="${horario.asignatura1}"></td>
+                                        <td th:text="${horario.profesor1}"></td>
+                                        <td th:text="${horario.espacio1}"></td>
+                                        <td th:text="${horario.asignatura2}"></td>
+                                        <td th:text="${horario.profesor2}"></td>
+                                        <td th:text="${horario.espacio2}"></td>
+                                        <td th:text="${horario.asignatura3}"></td>
+                                        <td th:text="${horario.profesor3}"></td>
+                                        <td th:text="${horario.espacio3}"></td>
+                                        <td th:text="${horario.observaciones}"></td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                                <!--<div th:replace="~{fragments/pagination.html}"></div>-->
+                            </div>
+                        </div>
+                        <div th:replace="~{fragments/noResultAlert.html}"></div>
+                    </div>
                 </div>
-                <div class="carousel-indicators" style="position: relative">
-                    <button th:each="guardia, iterStat : ${guardias}" type="button" data-bs-target="#carouselGuardias" th:data-bs-slide-to="${iterStat.index}" aria-current="true" th:aria-label="'Slide ' + ${iterStat}"  th:class="${iterStat.first} ? 'active' : ''"></button>
+                <div class="tab-pane fade" id="cuadro-tab" role="tabpanel" aria-labelledby="cuadro-tab">
+                    <div class="card-body">
+                        <table class="table table-bordered table-striped">
+                            <thead class="thead-dark">
+                            <tr>
+                                <th scope="col">
+                                    <select class="form-control" id="tableCurso" name="curso"
+                                            onchange="$('#filtrosForm').submit()">
+                                        <option th:each="curso : ${cursos}" th:value="${curso.id}"
+                                                th:text="${curso.nombre}"
+                                                th:selected="${tableCurso == curso.id}"></option>
+                                    </select>
+                                </th>
+                                <th scope="col" th:each="dia : ${dias}" th:text="${dia.nombre}"></th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr th:each="hora : ${horas}">
+                                <td th:text="${hora.nombre}"></td>
+                                <td th:each="dia : ${dias}">
+                                    <div th:each="item : ${horarioCurso}"
+                                         th:if="${item.dia == dia.nombre && item.hora == hora.nombre}">
+                                        <div th:unless="${item.espacio1 == null && item.espacio2 == null && item.espacio3 == null}"
+                                             class="accordion" th:id="'acordeon' + ${item.id}">
+                                            <div th:if="${item.espacio1 != null}" class="accordion-item">
+                                                <h2 class="accordion-header">
+                                                    <button th:text="${item.espacio1}" class="accordion-button"
+                                                            type="button"
+                                                            data-bs-toggle="collapse"
+                                                            th:data-bs-target="'#collapse1' + ${item.id}"
+                                                            aria-expanded="true"
+                                                            aria-controls="collapseOne">
+                                                    </button>
+                                                </h2>
+                                                <div th:id="'collapse1' + ${item.id}"
+                                                     class="accordion-collapse collapse show"
+                                                     th:data-bs-parent="'#acordeon' + ${item.id}">
+                                                    <div class="accordion-body">
+                                                        <p th:text="${item.asignatura1}"></p>
+                                                        <p th:text="${item.profesor1}"></p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div th:if="${item.espacio2 != null}" class="accordion-item">
+                                                <h2 class="accordion-header">
+                                                    <button th:text="${item.espacio2}"
+                                                            class="accordion-button collapsed"
+                                                            type="button" data-bs-toggle="collapse"
+                                                            th:data-bs-target="'#collapse2' + ${item.id}"
+                                                            aria-expanded="false"
+                                                            aria-controls="collapseTwo">
+                                                    </button>
+                                                </h2>
+                                                <div th:id="'collapse2' + ${item.id}"
+                                                     class="accordion-collapse collapse"
+                                                     data-bs-parent="#accordionExample">
+                                                    <div class="accordion-body">
+                                                        <p th:text="${item.asignatura2}"></p>
+                                                        <p th:text="${item.profesor2}"></p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div th:if="${item.espacio3 != null}" class="accordion-item">
+                                                <h2 class="accordion-header">
+                                                    <button th:text="${item.espacio3}"
+                                                            class="accordion-button collapsed"
+                                                            type="button" data-bs-toggle="collapse"
+                                                            th:data-bs-target="'#collapse3' + ${item.id}"
+                                                            aria-expanded="false"
+                                                            aria-controls="collapseThree">
+                                                    </button>
+                                                </h2>
+                                                <div th:id="'collapse3' + ${item.id}"
+                                                     class="accordion-collapse collapse"
+                                                     data-bs-parent="#accordionExample">
+                                                    <div class="accordion-body">
+                                                        <p th:text="${item.asignatura3}"></p>
+                                                        <p th:text="${item.profesor3}"></p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div th:if="${item.espacio1 == null && item.espacio2 == null && item.espacio3 == null}"
+                                             class="alert alert-info" role="alert">
+                                            Hora libre
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
-                <button class="carousel-control-prev" type="button" data-bs-target="#carouselGuardias" data-bs-slide="prev">
-                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                    <span class="visually-hidden">Previous</span>
-                </button>
-                <button class="carousel-control-next" type="button" data-bs-target="#carouselGuardias" data-bs-slide="next">
-                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                    <span class="visually-hidden">Next</span>
-                </button>
             </div>
-        </div>
-        <div class="card-body bg-light">
-            <div th:if="${#lists.size(page) > 0}" class="row">
-            <div class="table-responsive">
-            <table class="table table-hover">
-                <thead class="table-light">
-                <tr>
-                    <!--<th>ID</th>-->
-                    <th>Día</th>
-                    <th>Hora</th>
-                    <th>Curso</th>
-                    <th>Asignatura 1</th>
-                    <th>Profesor 1</th>
-                    <th>Espacio 1</th>
-                    <th>Asignatura 2</th>
-                    <th>Profesor 2</th>
-                    <th>Espacio 2</th>
-                    <th>Asignatura 3</th>
-                    <th>Profesor 3</th>
-                    <th>Espacio 3</th>
-                    <th>Observaciones</th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr th:each="horario : ${page}" th:id="'tr_' + ${horario.id}">
-                    <!--<th scope="row" th:text="${horario.id}"></th>-->
-                    <td th:text="${horario.dia}"></td>
-                    <td th:text="${horario.hora}"></td>
-                    <td th:text="${horario.curso}"></td>
-                    <td th:text="${horario.asignatura1}"></td>
-                    <td th:text="${horario.profesor1}"></td>
-                    <td th:text="${horario.espacio1}"></td>
-                    <td th:text="${horario.asignatura2}"></td>
-                    <td th:text="${horario.profesor2}"></td>
-                    <td th:text="${horario.espacio2}"></td>
-                    <td th:text="${horario.asignatura3}"></td>
-                    <td th:text="${horario.profesor3}"></td>
-                    <td th:text="${horario.espacio3}"></td>
-                    <td th:text="${horario.observaciones}"></td>
-                </tr>
-                </tbody>
-            </table>
-            <!--<div th:replace="~{fragments/pagination.html}"></div>-->
-        </div>
+            <div class="card-footer text-muted bg-white d-flex justify-content-end">
+                <button type="button" class="btn btn-dark" onclick="location.href='/menu'">Volver</button>
             </div>
-            <div th:replace="~{fragments/noResultAlert.html}"></div>
-        </div>
-		</div>
-		</div>
-		<div class="tab-pane fade" id="pills-2" role="tabpanel" aria-labelledby="pills-2-tab">
-		   
-  <div class="card-body">
-	<table class="table table-bordered table-striped">
-	  <thead class="thead-dark">
-	    <tr>
-	      <th scope="col">
-	        <select class="form-control" id="tableCurso" name="curso" onchange="$('#filtrosForm').submit()">
-	          <option th:each="curso : ${cursos}" th:value="${curso.id}" th:text="${curso.nombre}" th:selected="${tableCurso == curso.id}"></option>
-	        </select>
-	      </th>
-	      <th scope="col" th:each="dia : ${dias}" th:text="${dia.nombre}"></th>
-	    </tr>
-	  </thead>
-	  <tbody>
-	    <tr th:each="hora : ${horas}">
-	      <td th:text="${hora.nombre}"></td>
-	      <!-- Recorremos los días y las horas para mostrar las asignaturas, profesores y espacios correspondientes -->
-	      <td th:each="dia : ${dias}">
-	        <div th:each="item : ${horarioCurso}" 
-	             th:if="${item.dia == dia.nombre && item.hora == hora.nombre}">
-				 <div class="accordion" th:id="'acordeon' + ${item.id}">
-				   <div th:if="${item.espacio1 != null}" class="accordion-item">
-				     <h2 class="accordion-header">
-				       <button th:text="${item.espacio1}" class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
-				       </button>
-				     </h2>
-				     <div id="collapseOne" class="accordion-collapse collapse show" data-bs-parent="#accordionExample">
-				       <div class="accordion-body">
-							<p th:text="${item.asignatura1}"></p>
-							<p th:text="${item.profesor1}"></p>
-				       </div>
-				     </div>
-				   </div>
-				   <div th:if="${item.espacio2 != null}" class="accordion-item">
-				     <h2 class="accordion-header">
-				       <button th:text="${item.espacio2}" class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
-				       </button>
-				     </h2>
-				     <div id="collapseTwo" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
-				       <div class="accordion-body">
-							<p th:text="${item.asignatura2}"></p>
-							<span th:text="${item.profesor2}"></p>
-				       </div>
-				     </div>
-				   </div>
-				   <div th:if="${item.espacio3}" class="accordion-item">
-				     <h2 class="accordion-header">
-				       <button th:text="${item.espacio3}" class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
-				       </button>
-				     </h2>
-				     <div id="collapseThree" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
-				       <div class="accordion-body">
-							<p th:text="${item.asignatura3}"></p>
-							<span th:text="${item.profesor3}"></p>
-				       </div>
-				     </div>
-				   </div>
-				 </div>
-	        </div>
-	      </td>
-	    </tr>
-	  </tbody>
-	</table>
-
-</div>
-
-			</div>
-        <div class="card-footer text-muted bg-white d-flex justify-content-end">
-            <button type="button" class="btn btn-dark" onclick="location.href='/menu'">Volver</button>
         </div>
     </div>
 </div>
 </body>
-<div th:replace="~{fragments/links.html}"></div>
 </html>

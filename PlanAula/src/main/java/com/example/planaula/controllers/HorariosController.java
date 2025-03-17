@@ -46,7 +46,10 @@ public class HorariosController {
                                          @RequestParam(required = false, defaultValue = "0") int asignatura,
                                          @RequestParam(required = false, defaultValue = "0") int profesor,
                                          @RequestParam(required = false, defaultValue = "0") int aula,
+                                         @RequestParam(required = false, defaultValue = "lista") String active,
                                          Model model) {
+        model.addAttribute("active", active);
+
         model.addAttribute("diaFiltro", dia);
         model.addAttribute("horaFiltro", hora);
         model.addAttribute("turnoFiltro", turno);

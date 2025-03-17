@@ -16,3 +16,8 @@ function cambiarPagina(page) {
     $('#pageFilter').val(page);
     $('#filtrosForm').submit();
 }
+
+function activePanel(active) {
+    document.getElementById(`${active}-nav`).classList.add("active");
+    document.getElementById(`${active}-tab`).classList.add("active");
+}

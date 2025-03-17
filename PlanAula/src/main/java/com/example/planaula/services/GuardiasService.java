@@ -1,15 +1,18 @@
 package com.example.planaula.services;
 
-import com.example.planaula.Dto.AsignaturaDTO;
 import com.example.planaula.Dto.GuardiasDTO;
 import jakarta.persistence.EntityManager;
 import jakarta.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
+import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Service;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -18,6 +21,9 @@ public class GuardiasService {
 
     @Autowired
     private EntityManager entityManager;
+
+    @Autowired
+    private JdbcTemplate jdbcTemplate;
 
     public List<GuardiasDTO> findAllGuardiasByDiaAndHoraAndProfesor(Integer dia, Integer hora, Integer profesor) {
         String sql = "SELECT g.id, d.campo1, h.campo1, \n" +
@@ -102,6 +108,7 @@ public class GuardiasService {
                 .setParameter("id", id)
                 .getSingleResult();
 
+        entityManager.close();
         return new GuardiasDTO(
                         ((Number) resultado[0]).intValue(),
                         (String) resultado[1],
@@ -118,17 +125,17 @@ public class GuardiasService {
                 );
     }
 
-   @Transactional
 	public void accionGuardias(String accion, String turno, Integer profesor, Integer id) {
 	       try {
-	    	   entityManager.joinTransaction();
-	           String sql = "UPDATE `guardias 2425` SET `" + turno + "` = :profesor WHERE id = :id";
-	   
-	           entityManager.createNativeQuery(sql)
-	                   .setParameter("profesor", profesor)
-	                   .setParameter("id", id)
-	                   .executeUpdate();
-	       } catch (Exception e) {
+               NamedParameterJdbcTemplate namedJdbcTemplate = new NamedParameterJdbcTemplate(jdbcTemplate);
+
+               String sql = "UPDATE `guardias 2425` SET [" + turno + "] = :profesor WHERE id = :id";
+               MapSqlParameterSource parametros = new MapSqlParameterSource();
+               parametros.addValue("profesor", profesor);
+               parametros.addValue("id", id);
+               int filas = namedJdbcTemplate.update(sql, parametros);
+               System.out.println("Filas afectadas: " + filas);
+           } catch (Exception e) {
 	           System.out.println("Error en la consulta: " + e.getMessage());
 	       }
 	   }

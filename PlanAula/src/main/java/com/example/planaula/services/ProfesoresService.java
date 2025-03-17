@@ -121,19 +121,19 @@ public class ProfesoresService {
         }
     }
 
-    @Transactional
-    public void modificarProfesor(ProfesorDTO profesorDTO) {
-        try {
-            String updateSql = "UPDATE `profes 2425` SET campo1 = :nombre WHERE id = :id";
-            int filasActualizadas = entityManager.createNativeQuery(updateSql)
-                    .setParameter("id", profesorDTO.getId())
-                    .setParameter("nombre", profesorDTO.getNombre())
-                    .executeUpdate();
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
-        }
+        @Transactional
+        public void modificarProfesor(ProfesorDTO profesorDTO) {
+            try {
+                String updateSql = "UPDATE `profes 2425` SET campo1 = :nombre WHERE id = :id";
+                int filasActualizadas = entityManager.createNativeQuery(updateSql)
+                        .setParameter("id", profesorDTO.getId())
+                        .setParameter("nombre", profesorDTO.getNombre())
+                        .executeUpdate();
+            } catch (Exception e) {
+                System.out.println("Error en la consulta: " + e.getMessage());
+            }
 
-    }
+        }
 
     public List<TutorDTO> findAllTutores() {
         String sql = "SELECT t.id, c.campo1 AS nombre_curso, p1.campo1 AS nombre_tutor_2425, p2.campo1 AS nombre_tutor_2324 " +
@@ -222,7 +222,6 @@ public class ProfesoresService {
         }
     }
 
-    @Transactional
     public void modificarTutor(TutorDTO tutorDTO) {
         List<String> campos = new ArrayList<>();
         if (tutorDTO.getCurso() != null) campos.add("`curso` = :curso");
@@ -240,6 +239,7 @@ public class ProfesoresService {
             Query query = entityManager.createNativeQuery(updateSql)
                     .setParameter("id", tutorDTO.getId());
 
+            entityManager.close();
             if (tutorDTO.getCurso() != null) {
                 query.setParameter("curso", tutorDTO.getCurso());
             }

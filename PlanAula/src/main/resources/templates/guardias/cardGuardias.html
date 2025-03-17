@@ -249,7 +249,7 @@
                     </tr>
                     <tr class="align-middle">
                         <th>
-                            <select class="form-select" aria-label="select turnos" id="nuevo_turno"
+                            <select class="form-select" aria-label="select turnos" id="nuevo_turno" th:data-id="${guardia.id}"
                                 onchange="accionGuardia('A', this.value, $('#nuevo_profesor').val(), this.dataset.id)">
                                 <option value="0">Turno</option>
                                 <option th:each=" turno : ${turnos}" th:value="${turno.key}" th:text="${turno.value.toUpperCase()}"></option>
