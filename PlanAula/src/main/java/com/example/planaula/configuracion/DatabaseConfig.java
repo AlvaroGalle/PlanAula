@@ -22,7 +22,10 @@ public class DatabaseConfig {
             return DataSourceBuilder.create()
                     .driverClassName("net.ucanaccess.jdbc.UcanaccessDriver")
                     .url("jdbc:ucanaccess://" + dbPath +
-                            ";openExclusive=false;ignoreCase=true;memory=false")
+                            ";openExclusive=false" +
+                            ";ignoreCase=true" +
+                            ";memory=false" +
+                            ";singleConnection=true")
                     .build();
         }
 }

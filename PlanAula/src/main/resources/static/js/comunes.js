@@ -19,5 +19,5 @@ function cambiarPagina(page) {
 
 function activePanel(active) {
     document.getElementById(`${active}-nav`).classList.add("active");
-    document.getElementById(`${active}-tab`).classList.add("active");
+    document.getElementById(`${active}-tab`).classList.add("active", "show");
 }

@@ -10,24 +10,42 @@
     }
 </style>
 <script th:inline="javascript">
-    $(document).ready(()=>{
+    $(document).ready(() => {
         activePanel([[${active}]]);
+        tableHorario();
     });
 
-    function editarTurno(id){
+    function editarTurno(id) {
         let filtros = {
-           'dia' : $('#diaFilter').val(),
-           'hora' : $('#horaFilter').val(),
-           'profesor' : $('#profesorFilter').val()
+            'dia': $('#diaFilter').val(),
+            'hora': $('#horaFilter').val(),
+            'profesor': $('#profesorFilter').val()
         }
         let url = "guardias?id=" + id;
-        Object.entries(filtros).forEach(([clave, valor])=>{
-            if(valor !== "0"){
+        Object.entries(filtros).forEach(([clave, valor]) => {
+            if (valor !== "0") {
                 url += "&" + clave + "=" + valor;
             }
         })
         location.href = url;
     }
+
+    function tableHorario(){
+        let trs = document.querySelectorAll('#tableHorario tr');
+        trs.forEach((tr)=>{
+            let tds = tr.querySelectorAll('td');
+            if (tds.length > 1) {
+                for(let i = 1; i < tds.length; i++){
+                    let td = tds[i];
+                    td.innerHTML = td.children.length > 0 ? td.innerHTML : '<div th:if="${item.espacio1 == null && item.espacio2 == null && item.espacio3 == null}"\n' +
+                        '                                             class="alert alert-danger" role="alert">\n' +
+                        '                                            Sin asignar\n' +
+                        '                                        </div>';
+                }
+            }
+        })
+    }
+
 </script>
 <body>
 <div class="container mt-5">
@@ -37,7 +55,7 @@
                 <h5 class="card-title mb-0">Horarios</h5>
                 <ul class="nav nav-tabs border-0" id="pills-tab" role="tablist">
                     <li class="nav-item" role="presentation">
-                        <a class="btn nav-link" id="lista-nav" data-bs-toggle="pill" href="#lista-tab"
+                        <a class="btn nav-link" id="lista-nav" data-bs-toggle="tab" href="#lista-tab"
                            role="tab" aria-controls="lista-tab" aria-selected="true">
                             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
                                  class="bi bi-list-ul" viewBox="0 0 16 16">
@@ -47,8 +65,8 @@
                         </a>
                     </li>
                     <li class="nav-item" role="presentation">
-                        <a class="btn nav-link" id="cuadro-nav" data-bs-toggle="pill" href="#cuadro-nav" role="tab"
-                           aria-controls="pills-2" aria-selected="false">
+                        <a class="btn nav-link" id="cuadro-nav" data-bs-toggle="tab" href="#cuadro-tab" role="tab"
+                           aria-controls="cuadro-tab" aria-selected="false">
                             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
                                  class="bi bi-grid" viewBox="0 0 16 16">
                                 <path d="M1 2.5A1.5 1.5 0 0 1 2.5 1h3A1.5 1.5 0 0 1 7 2.5v3A1.5 1.5 0 0 1 5.5 7h-3A1.5 1.5 0 0 1 1 5.5zM2.5 2a.5.5 0 0 0-.5.5v3a.5.5 0 0 0 .5.5h3a.5.5 0 0 0 .5-.5v-3a.5.5 0 0 0-.5-.5zm6.5.5A1.5 1.5 0 0 1 10.5 1h3A1.5 1.5 0 0 1 15 2.5v3A1.5 1.5 0 0 1 13.5 7h-3A1.5 1.5 0 0 1 9 5.5zm1.5-.5a.5.5 0 0 0-.5.5v3a.5.5 0 0 0 .5.5h3a.5.5 0 0 0 .5-.5v-3a.5.5 0 0 0-.5-.5zM1 10.5A1.5 1.5 0 0 1 2.5 9h3A1.5 1.5 0 0 1 7 10.5v3A1.5 1.5 0 0 1 5.5 15h-3A1.5 1.5 0 0 1 1 13.5zm1.5-.5a.5.5 0 0 0-.5.5v3a.5.5 0 0 0 .5.5h3a.5.5 0 0 0 .5-.5v-3a.5.5 0 0 0-.5-.5zm6.5.5A1.5 1.5 0 0 1 10.5 9h3a1.5 1.5 0 0 1 1.5 1.5v3a1.5 1.5 0 0 1-1.5 1.5h-3A1.5 1.5 0 0 1 9 13.5zm1.5-.5a.5.5 0 0 0-.5.5v3a.5.5 0 0 0 .5.5h3a.5.5 0 0 0 .5-.5v-3a.5.5 0 0 0-.5-.5z"></path>
@@ -113,7 +131,8 @@
                                         <div class="col-12 d-flex justify-content-center align-items-center mb-3">
                                             <a class="fw-bold text-black" th:data-id="${guardia.id}" href="#"
                                                onclick="editarTurno(this.dataset.id)"
-                                                  th:text="${guardia.dia} + ' ' + ${guardia.hora}" title="Editar turno"></a>
+                                               th:text="${guardia.dia} + ' ' + ${guardia.hora}"
+                                               title="Editar turno"></a>
                                         </div>
 
                                         <div class="col-md-4 text-center">
@@ -245,10 +264,10 @@
                                 <th scope="col" th:each="dia : ${dias}" th:text="${dia.nombre}"></th>
                             </tr>
                             </thead>
-                            <tbody>
+                            <tbody id="tableHorario">
                             <tr th:each="hora : ${horas}">
                                 <td th:text="${hora.nombre}"></td>
-                                <td th:each="dia : ${dias}">
+                                <td th:each="dia : ${dias}" th:id="${hora.id} + '-' + ${dia.id}">
                                     <div th:each="item : ${horarioCurso}"
                                          th:if="${item.dia == dia.nombre && item.hora == hora.nombre}">
                                         <div th:unless="${item.espacio1 == null && item.espacio2 == null && item.espacio3 == null}"
