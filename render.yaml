@@ -12,3 +12,5 @@ services:
         value: neondb_owner
       - key: SPRING_DATASOURCE_PASSWORD
         value: npg_GSLYW14clndC
+      - key: JAVA_VERSION
+        value: "17"
