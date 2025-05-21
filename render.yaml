@@ -1,0 +1,16 @@
+services:
+  - type: web
+    name: PlanAula
+    env: java
+    plan: free
+    buildCommand: cd PlanAula && ./gradlew build
+    startCommand: cd PlanAula && java -jar build/libs/*.jar
+    envVars:
+      - key: SPRING_DATASOURCE_URL
+        value: jdbc:postgresql://ep-cold-haze-a4wofpwp-pooler.us-east-1.aws.neon.tech/neondb?sslmode=require
+      - key: SPRING_DATASOURCE_USERNAME
+        value: neondb_owner
+      - key: SPRING_DATASOURCE_PASSWORD
+        value: npg_GSLYW14clndC
+      - key: JAVA_VERSION
+        value: "17"
