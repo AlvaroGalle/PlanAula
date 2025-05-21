@@ -25,11 +25,6 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation 'org.thymeleaf.extras:thymeleaf-extras-springsecurity6'
     implementation 'org.projectlombok:lombok'
-<<<<<<< HEAD
-=======
-    implementation 'org.springframework.boot:spring-boot-starter-data-jdbc'
-    implementation 'org.postgresql:postgresql:42.6.0' // <- ESTA LÍNEA ES NUEVA
->>>>>>> 1bc1ef63b2c98c44e4efaa8dca0dbc3fe628aaf5
 
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testImplementation 'org.springframework.security:spring-security-test'
@@ -39,10 +34,12 @@ dependencies {
     developmentOnly 'org.springframework.boot:spring-boot-devtools'
 }
 
-<<<<<<< HEAD
-=======
-/*developmentOnly 'org.springframework.boot:spring-boot-devtools'*/
->>>>>>> 1bc1ef63b2c98c44e4efaa8dca0dbc3fe628aaf5
 tasks.named('test') {
     useJUnitPlatform()
 }
+
+tasks.withType(JavaCompile).configureEach {
+    options.compilerArgs = ['-parameters']
+    options.encoding = 'UTF-8'
+}
+

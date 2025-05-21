@@ -26,10 +26,10 @@ public class SecurityConfig {
                         .anyRequest().authenticated()
                 )
                 .formLogin(login -> login
-                         .loginPage("/login")
+                         /*.loginPage("/login")
                          .loginProcessingUrl("/login")
                          .usernameParameter("nombre")
-                         .passwordParameter("contrasena")
+                         .passwordParameter("contrasena")*/
                         .defaultSuccessUrl("/menu", true)
                         .failureUrl("/?error=true")
                         .permitAll())
