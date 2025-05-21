@@ -37,7 +37,7 @@
             if (tds.length > 1) {
                 for(let i = 1; i < tds.length; i++){
                     let td = tds[i];
-                    td.innerHTML = td.children.length > 0 ? td.innerHTML : '<div th:if="${item.espacio1 == null && item.espacio2 == null && item.espacio3 == null}"\n' +
+                    td.innerHTML = td.children.length > 0 ? td.innerHTML : '<div th:if="${item.espacio == null}"\n' +
                         '                                             class="alert alert-danger" role="alert">\n' +
                         '                                            Sin asignar\n' +
                         '                                        </div>';
@@ -122,7 +122,7 @@
                             </div>
                         </div>
                     </div>
-                    <div th:if="${#lists.size(guardias) > 0}" class="card-body theme-horarios">
+                    <!--<div th:if="${#lists.size(guardias) > 0}" class="card-body theme-horarios">
                         <div id="carouselGuardias" class="carousel slide">
                             <div class="carousel-inner">
                                 <div th:each="guardia, iterStat : ${guardias}"
@@ -200,7 +200,7 @@
                                 <span class="visually-hidden">Next</span>
                             </button>
                         </div>
-                    </div>
+                    </div>-->
                     <div class="card-body bg-light">
                         <div th:if="${#lists.size(page) > 0}" class="row">
                             <div class="table-responsive">
@@ -211,15 +211,9 @@
                                         <th>Día</th>
                                         <th>Hora</th>
                                         <th>Curso</th>
-                                        <th>Asignatura 1</th>
-                                        <th>Profesor 1</th>
-                                        <th>Espacio 1</th>
-                                        <th>Asignatura 2</th>
-                                        <th>Profesor 2</th>
-                                        <th>Espacio 2</th>
-                                        <th>Asignatura 3</th>
-                                        <th>Profesor 3</th>
-                                        <th>Espacio 3</th>
+                                        <th>Asignatura</th>
+                                        <th>Profesor</th>
+                                        <th>Espacio</th>
                                         <th>Observaciones</th>
                                     </tr>
                                     </thead>
@@ -229,15 +223,9 @@
                                         <td th:text="${horario.dia}"></td>
                                         <td th:text="${horario.hora}"></td>
                                         <td th:text="${horario.curso}"></td>
-                                        <td th:text="${horario.asignatura1}"></td>
-                                        <td th:text="${horario.profesor1}"></td>
-                                        <td th:text="${horario.espacio1}"></td>
-                                        <td th:text="${horario.asignatura2}"></td>
-                                        <td th:text="${horario.profesor2}"></td>
-                                        <td th:text="${horario.espacio2}"></td>
-                                        <td th:text="${horario.asignatura3}"></td>
-                                        <td th:text="${horario.profesor3}"></td>
-                                        <td th:text="${horario.espacio3}"></td>
+                                        <td th:text="${horario.asignatura}"></td>
+                                        <td th:text="${horario.profesor}"></td>
+                                        <td th:text="${horario.espacio}"></td>
                                         <td th:text="${horario.observaciones}"></td>
                                     </tr>
                                     </tbody>
@@ -270,67 +258,29 @@
                                 <td th:each="dia : ${dias}" th:id="${hora.id} + '-' + ${dia.id}">
                                     <div th:each="item : ${horarioCurso}"
                                          th:if="${item.dia == dia.nombre && item.hora == hora.nombre}">
-                                        <div th:unless="${item.espacio1 == null && item.espacio2 == null && item.espacio3 == null}"
+                                        <div th:unless="${item.espacio == null}"
                                              class="accordion" th:id="'acordeon' + ${item.id}">
-                                            <div th:if="${item.espacio1 != null}" class="accordion-item">
+                                            <div th:if="${item.espacio != null}" class="accordion-item">
                                                 <h2 class="accordion-header">
-                                                    <button th:text="${item.espacio1}" class="accordion-button"
+                                                    <button th:text="${item.espacio}" class="accordion-button"
                                                             type="button"
                                                             data-bs-toggle="collapse"
-                                                            th:data-bs-target="'#collapse1' + ${item.id}"
+                                                            th:data-bs-target="'#collapse' + ${item.id}"
                                                             aria-expanded="true"
                                                             aria-controls="collapseOne">
                                                     </button>
                                                 </h2>
-                                                <div th:id="'collapse1' + ${item.id}"
+                                                <div th:id="'collapse' + ${item.id}"
                                                      class="accordion-collapse collapse show"
                                                      th:data-bs-parent="'#acordeon' + ${item.id}">
                                                     <div class="accordion-body">
-                                                        <p th:text="${item.asignatura1}"></p>
-                                                        <p th:text="${item.profesor1}"></p>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div th:if="${item.espacio2 != null}" class="accordion-item">
-                                                <h2 class="accordion-header">
-                                                    <button th:text="${item.espacio2}"
-                                                            class="accordion-button collapsed"
-                                                            type="button" data-bs-toggle="collapse"
-                                                            th:data-bs-target="'#collapse2' + ${item.id}"
-                                                            aria-expanded="false"
-                                                            aria-controls="collapseTwo">
-                                                    </button>
-                                                </h2>
-                                                <div th:id="'collapse2' + ${item.id}"
-                                                     class="accordion-collapse collapse"
-                                                     data-bs-parent="#accordionExample">
-                                                    <div class="accordion-body">
-                                                        <p th:text="${item.asignatura2}"></p>
-                                                        <p th:text="${item.profesor2}"></p>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div th:if="${item.espacio3 != null}" class="accordion-item">
-                                                <h2 class="accordion-header">
-                                                    <button th:text="${item.espacio3}"
-                                                            class="accordion-button collapsed"
-                                                            type="button" data-bs-toggle="collapse"
-                                                            th:data-bs-target="'#collapse3' + ${item.id}"
-                                                            aria-expanded="false"
-                                                            aria-controls="collapseThree">
-                                                    </button>
-                                                </h2>
-                                                <div th:id="'collapse3' + ${item.id}"
-                                                     class="accordion-collapse collapse"
-                                                     data-bs-parent="#accordionExample">
-                                                    <div class="accordion-body">
-                                                        <p th:text="${item.asignatura3}"></p>
-                                                        <p th:text="${item.profesor3}"></p>
+                                                        <p th:text="${item.asignatura}"></p>
+                                                        <p th:text="${item.profesor}"></p>
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
-                                        <div th:if="${item.espacio1 == null && item.espacio2 == null && item.espacio3 == null}"
+                                        <div th:if="${item.espacio == null}"
                                              class="alert alert-info" role="alert">
                                             Hora libre
                                         </div>

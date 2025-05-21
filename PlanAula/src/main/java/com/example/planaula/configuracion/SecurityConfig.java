@@ -22,14 +22,14 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
                 .authorizeHttpRequests(authorize -> authorize
-                        .requestMatchers("/", "/usuario/**", "/css/**", "/images/**", "/fragments/**", "/js/**").permitAll()
+                        .requestMatchers("/", "/login", "/usuario/**", "/css/**", "/images/**", "/fragments/**", "/js/**").permitAll()
                         .anyRequest().authenticated()
                 )
                 .formLogin(login -> login
-                        // .loginPage("/")
-                        // .loginProcessingUrl("/login")
-                        // .usernameParameter("nombre")
-                        // .passwordParameter("contrasena")
+                         .loginPage("/login")
+                         .loginProcessingUrl("/login")
+                         .usernameParameter("nombre")
+                         .passwordParameter("contrasena")
                         .defaultSuccessUrl("/menu", true)
                         .failureUrl("/?error=true")
                         .permitAll())

@@ -76,7 +76,7 @@ public class HorariosController {
         List<AsignaturaDTO> asignaturaDTOList =  asignaturasService.findAllAsignaturas();
         model.addAttribute("asignaturas", asignaturaDTOList);
 
-        List<GuardiasDTO> guardiasDTOList = guardiasService.findAllGuardiasByDiaAndHoraAndProfesor(dia,hora,profesor);
+        /*List<GuardiasDTO> guardiasDTOList = guardiasService.findAllGuardiasByDiaAndHoraAndProfesor(dia,hora,profesor);
 
         Map<String, String> mapaTurnos = Map.of(
                 "G1", "guardia1", "G2", "guardia2", "G3", "guardia3",
@@ -92,7 +92,7 @@ public class HorariosController {
                     .filter(guardia -> !estaVacio(obtenerValorCampoDinamico(guardia, campo)))
                     .collect(Collectors.toList());
         }
-        model.addAttribute("guardias",guardiasDTOList);
+        model.addAttribute("guardias",guardiasDTOList);*/
 
         List<HorarioDTO> horarioDTOList = horariosService.findAllHorariosByDiaAndHoraAndCurso(dia, hora, curso, asignatura, profesor, aula);
         model.addAttribute("page",horarioDTOList);

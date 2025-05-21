@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <div th:replace="~{fragments/head.html}"></div>
+</head>
+<div th:replace="~{fragments/links.html}"></div>
+<script>
+</script>
+<body><!-- Section: Design Block -->
+<section class="text-center text-lg-start">
+  <style>
+    .cascading-right {
+      margin-right: -50px;
+    }
+
+    @media (max-width: 991.98px) {
+      .cascading-right {
+        margin-right: 0;
+      }
+    }
+  </style>
+
+  <!-- Jumbotron -->
+  <div class="container py-4">
+    <div class="row g-0 align-items-center">
+      <div class="col-lg-6 mb-5 mb-lg-0">
+        <div class="card cascading-right bg-body-tertiary" style="
+            backdrop-filter: blur(30px);
+            ">
+          <div class="card-body p-5 shadow-5 text-center">
+            <h2 class="fw-bold mb-5">Sign up now</h2>
+            <form th:action="@{/login}" method="post">
+
+              <!-- Email input -->
+              <div data-mdb-input-init class="form-outline mb-4">
+                <label class="form-label" for="nombre">Usuario</label>
+                <input type="text" id="nombre" class="form-control" />
+              </div>
+
+              <!-- Password input -->
+              <div data-mdb-input-init class="form-outline mb-4">
+                <label class="form-label" for="contrasena">Contraseña</label>
+                <input type="password" id="contrasena" class="form-control" />
+              </div>
+
+              <!-- Submit button -->
+              <button type="submit" data-mdb-button-init data-mdb-ripple-init class="btn btn-primary btn-block mb-4">
+                Sign up
+              </button>
+
+              <!-- Register buttons -->
+              <div class="text-center">
+                <p>or sign up with:</p>
+                <button  type="button" data-mdb-button-init data-mdb-ripple-init class="btn btn-link btn-floating mx-1">
+                  <i class="fab fa-facebook-f"></i>
+                </button>
+
+                <button  type="button" data-mdb-button-init data-mdb-ripple-init class="btn btn-link btn-floating mx-1">
+                  <i class="fab fa-google"></i>
+                </button>
+
+                <button  type="button" data-mdb-button-init data-mdb-ripple-init class="btn btn-link btn-floating mx-1">
+                  <i class="fab fa-twitter"></i>
+                </button>
+
+                <button  type="button" data-mdb-button-init data-mdb-ripple-init class="btn btn-link btn-floating mx-1">
+                  <i class="fab fa-github"></i>
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-lg-6 mb-5 mb-lg-0">
+        <img src="/images/agenda.jpg" class="w-100 rounded-4 shadow-4"
+             alt="" />
+      </div>
+    </div>
+  </div>
+  <!-- Jumbotron -->
+</section>
+<!-- Section: Design Block -->
+</body>
+</html>

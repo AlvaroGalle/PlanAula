@@ -31,7 +31,7 @@ public class HorasService {
         return resultados.stream()
                 .map(resultado -> new HoraDTO(
                         ((Number) resultado[0]).intValue(),
-                        (String) resultado[1]
+                        (resultado[1].toString())
                 ))
                 .collect(Collectors.toList());
     }

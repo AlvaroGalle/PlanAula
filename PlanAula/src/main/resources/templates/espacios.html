@@ -5,17 +5,17 @@
 </head>
 <div th:replace="~{fragments/links.html}"></div>
 <script>
-	$(document).ready(function() {
-		let id = "[[${id}]]";  
-		console.log(id)
-	       if( id !== "0"){
-			console.log(id + "2")
-			zoomCards(id);
-		   }
-	   });
+    $(document).ready(function () {
+        let id = "[[${id}]]";
+        console.log(id)
+        if (id !== "0") {
+            console.log(id + "2")
+            zoomCards(id);
+        }
+    });
 
-	   
-    function zoomCards(id){
+
+    function zoomCards(id) {
         let url = "/espacios/" + id;
         $.ajax({
             url: url,
@@ -39,7 +39,9 @@
                 <div class="accordion" id="acordeonFiltros">
                     <div class="accordion-item">
                         <h2 class="accordion-header">
-                            <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseOne" aria-expanded="true" aria-controls="panelsStayOpen-collapseOne">
+                            <button class="accordion-button" type="button" data-bs-toggle="collapse"
+                                    data-bs-target="#panelsStayOpen-collapseOne" aria-expanded="true"
+                                    aria-controls="panelsStayOpen-collapseOne">
                                 Filtrar espacios
                             </button>
                         </h2>
@@ -70,42 +72,27 @@
                 <div th:each="espacio : ${espacios}" class="col-md-6 col-lg-3 mb-3">
                     <div class="card" th:data-id="${espacio.id}" ondblclick="zoomCards(this.dataset.id)">
                         <div class="card-header theme-espacios text-white">
-							<div class="row">
-								<div class="col-9">
-                            		<h5 class="card-title mb-0">
-                                		<span th:text="${espacio.dia}"></span>
-                                		<span th:text="${espacio.hora}"></span>
-                            		</h5>
-								</div>
-								<div class="col-3 text-end" th:data-id="${espacio.id}" onclick="zoomCards(this.dataset.id)">
-									<img class="w-50" src="/images/editar.png" alt="editar card">
-								</div>
-                        	</div>
-						</div>
+                            <div class="row">
+                                <div class="col-9">
+                                    <h5 class="card-title mb-0">
+                                        <span th:text="${espacio.dia}"></span>
+                                        <span th:text="${espacio.hora}"></span>
+                                    </h5>
+                                </div>
+                                <div class="col-3 text-end" th:data-id="${espacio.id}"
+                                     onclick="zoomCards(this.dataset.id)">
+                                    <img class="w-50" src="/images/editar.png" alt="editar card">
+                                </div>
+                            </div>
+                        </div>
                         <div class="card-body">
-							<div th:unless="${espacio.aula1a != null or espacio.aula1b != null or 
-																             espacio.aula2a != null or espacio.aula2b != null or 
-																             espacio.aula3a != null or espacio.aula3b != null or 
-																             espacio.aula4a != null or espacio.aula4b != null or 
-																             espacio.aula1cc != null or espacio.aula1ss != null or 
-																             espacio.labcc != null or espacio.labid != null or 
-																             espacio.desdoblea != null or espacio.desdobleb != null or 
-																             espacio.desdoblec != null or espacio.aenlace != null or 
-																             espacio.bajopatio != null or espacio.bajoespejos != null}"
-																                     class="alert alert-warning" role="alert">
-																                    No hay espacios asignados
-																                </div>
+                            <div th:unless="${espacio.aula != null}"
+                                 class="alert alert-warning" role="alert">
+                                No hay espacios asignados
+                            </div>
 
-																                <table th:if="${espacio.aula1a != null or espacio.aula1b != null or 
-																				             espacio.aula2a != null or espacio.aula2b != null or 
-																				             espacio.aula3a != null or espacio.aula3b != null or 
-																				             espacio.aula4a != null or espacio.aula4b != null or 
-																				             espacio.aula1cc != null or espacio.aula1ss != null or 
-																				             espacio.labcc != null or espacio.labid != null or 
-																				             espacio.desdoblea != null or espacio.desdobleb != null or 
-																				             espacio.desdoblec != null or espacio.aenlace != null or 
-																				             espacio.bajopatio != null or espacio.bajoespejos != null}"
-																                       class="table table-sm">
+                            <table th:if="${espacio.aula}"
+                                   class="table table-sm">
                                 <thead>
                                 <tr>
                                     <th>Aula</th>
@@ -113,77 +100,11 @@
                                 </tr>
                                 </thead>
                                 <tbody>
-                                <tr th:if="${espacio.aula1a != null}">
-                                    <th th:class="${aula != null && aula.nombre == 'Aula 1A' ? 'text-success' : ''}">Aula 1A</th>
-                                    <td th:text="${espacio.aula1a}" th:class="${asignatura != null && asignatura.nombre == espacio.aula1a ? 'text-success' : ''}"></td>
-                                </tr>
-                                <tr th:if="${espacio.aula1b != null}">
-                                    <th th:class="${aula != null && aula.nombre == 'Aula 1B' ? 'text-success' : ''}">Aula 1B</th>
-                                    <td th:text="${espacio.aula1b}" th:class="${asignatura != null && asignatura.nombre == espacio.aula1b ? 'text-success' : ''}"></td>
-                                </tr>
-                                <tr th:if="${espacio.aula2a != null}">
-                                    <th th:class="${aula != null && aula.nombre == 'Aula 2A' ? 'text-success' : ''}">Aula 2A</th>
-                                    <td th:text="${espacio.aula2a}" th:class="${asignatura != null && asignatura.nombre == espacio.aula2a ? 'text-success' : ''}"></td>
-                                </tr>
-                                <tr th:if="${espacio.aula2b != null}">
-                                    <th th:class="${aula != null && aula.nombre == 'Aula 2B' ? 'text-success' : ''}">Aula 2B</th>
-                                    <td th:text="${espacio.aula2b}" th:class="${asignatura != null && asignatura.nombre == espacio.aula2b ? 'text-success' : ''}"></td>
-                                </tr>
-                                <tr th:if="${espacio.aula3a != null}">
-                                    <th th:class="${aula != null && aula.nombre == 'Aula 3A' ? 'text-success' : ''}">Aula 3A</th>
-                                    <td th:text="${espacio.aula3a}" th:class="${asignatura != null && asignatura.nombre == espacio.aula3a ? 'text-success' : ''}"></td>
-                                </tr>
-                                <tr th:if="${espacio.aula3b != null}">
-                                    <th th:class="${aula != null && aula.nombre == 'Aula 3B' ? 'text-success' : ''}">Aula 3B</th>
-                                    <td th:text="${espacio.aula3b}" th:class="${asignatura != null && asignatura.nombre == espacio.aula3b ? 'text-success' : ''}"></td>
-                                </tr>
-                                <tr th:if="${espacio.aula4a != null}">
-                                    <th th:class="${aula != null && aula.nombre == 'Aula 4A' ? 'text-success' : ''}">Aula 4A</th>
-                                    <td th:text="${espacio.aula4a}" th:class="${asignatura != null && asignatura.nombre == espacio.aula4a ? 'text-success' : ''}"></td>
-                                </tr>
-                                <tr th:if="${espacio.aula4b != null}">
-                                    <th th:class="${aula != null && aula.nombre == 'Aula 4B' ? 'text-success' : ''}">Aula 4B</th>
-                                    <td th:text="${espacio.aula4b}" th:class="${asignatura != null && asignatura.nombre == espacio.aula4b ? 'text-success' : ''}"></td>
-                                </tr>
-                                <tr th:if="${espacio.aula1cc != null}">
-                                    <th th:class="${aula != null && aula.nombre == 'Aula 1CC' ? 'text-success' : ''}">Aula 1CC</th>
-                                    <td th:text="${espacio.aula1cc}" th:class="${asignatura != null && asignatura.nombre == espacio.aula1cc ? 'text-success' : ''}"></td>
-                                </tr>
-                                <tr th:if="${espacio.aula1ss != null}">
-                                    <th th:class="${aula != null && aula.nombre == 'Aula 1SS' ? 'text-success' : ''}">Aula 1SS</th>
-                                    <td th:text="${espacio.aula1ss}" th:class="${asignatura != null && asignatura.nombre == espacio.aula1ss ? 'text-success' : ''}"></td>
-                                </tr>
-                                <tr th:if="${espacio.labcc != null}">
-                                    <th th:class="${aula != null && aula.nombre == 'Lab CC' ? 'text-success' : ''}">Lab CC</th>
-                                    <td th:text="${espacio.labcc}" th:class="${asignatura != null && asignatura.nombre == espacio.labcc ? 'text-success' : ''}"></td>
-                                </tr>
-                                <tr th:if="${espacio.labid != null}">
-                                    <th th:class="${aula != null && aula.nombre == 'Lab ID' ? 'text-success' : ''}">Lab ID</th>
-                                    <td th:text="${espacio.labid}" th:class="${asignatura != null && asignatura.nombre == espacio.labid ? 'text-success' : ''}"></td>
-                                </tr>
-                                <tr th:if="${espacio.desdoblea != null}">
-                                    <th th:class="${aula != null && aula.nombre == 'Desdoble A' ? 'text-success' : ''}">Desdoble A</th>
-                                    <td th:text="${espacio.desdoblea}" th:class="${asignatura != null && asignatura.nombre == espacio.desdoblea ? 'text-success' : ''}"></td>
-                                </tr>
-                                <tr th:if="${espacio.desdobleb != null}">
-                                    <th th:class="${aula != null && aula.nombre == 'Desdoble B' ? 'text-success' : ''}">Desdoble B</th>
-                                    <td th:text="${espacio.desdobleb}" th:class="${asignatura != null && asignatura.nombre == espacio.desdobleb ? 'text-success' : ''}"></td>
-                                </tr>
-                                <tr th:if="${espacio.desdoblec != null}">
-                                    <th th:class="${aula != null && aula.nombre == 'Desdoble C' ? 'text-success' : ''}">Desdoble C</th>
-                                    <td th:text="${espacio.desdoblec}" th:class="${asignatura != null && asignatura.nombre == espacio.desdoblec ? 'text-success' : ''}"></td>
-                                </tr>
-                                <tr th:if="${espacio.aenlace != null}">
-                                    <th th:class="${aula != null && aula.nombre == 'A Enlace' ? 'text-success' : ''}">A Enlace</th>
-                                    <td th:text="${espacio.aenlace}" th:class="${asignatura != null && asignatura.nombre == espacio.aenlace ? 'text-success' : ''}"></td>
-                                </tr>
-                                <tr th:if="${espacio.bajopatio != null}">
-                                    <th th:class="${aula != null && aula.nombre == 'Bajo Patio' ? 'text-success' : ''}">Bajo Patio</th>
-                                    <td th:text="${espacio.bajopatio}" th:class="${asignatura != null && asignatura.nombre == espacio.bajopatio ? 'text-success' : ''}"></td>
-                                </tr>
-                                <tr th:if="${espacio.bajoespejos != null}">
-                                    <th th:class="${aula != null && aula.nombre == 'Bajo Espejos' ? 'text-success' : ''}">Bajo Espejos</th>
-                                    <td th:text="${espacio.bajoespejos}" th:class="${asignatura != null && asignatura.nombre == espacio.bajoespejos ? 'text-success' : ''}"></td>
+                                <tr th:if="${espacio.aula != null}">
+                                    <th th:class="${aula != null && aula.nombre == espacio.aula ? 'text-success' : ''}"  th:text="${espacio.aula}">
+                                    </th>
+                                    <td th:text="${espacio.asignatura}"
+                                        th:class="${asignatura != null && asignatura.nombre == espacio.asignatura ? 'text-success' : ''}"></td>
                                 </tr>
                                 </tbody>
                             </table>
@@ -191,9 +112,7 @@
                     </div>
                 </div>
             </div>
-            <div th:unless="${#lists.size(espacios) > 0}" class="alert alert-danger" role="alert"> No existen
-                espacios
-                para los filtros ingresados
+            <div th:unless="${#lists.size(espacios) > 0}" class="alert alert-danger" role="alert"> No existen espacios para los filtros ingresados
             </div>
         </div>
         <div class="card-footer text-muted bg-white d-flex justify-content-end">
