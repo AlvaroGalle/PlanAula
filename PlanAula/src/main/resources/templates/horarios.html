@@ -11,8 +11,8 @@
 </style>
 <script th:inline="javascript">
     $(document).ready(() => {
-        activePanel([[${active}]]);
-        tableHorario();
+        activePanel([[${tab}]]);
+        //tableHorario();
     });
 
     function editarTurno(id) {
@@ -76,11 +76,12 @@
                 </ul>
             </div>
             <div class="tab-content" id="tabContent">
-                <div class="tab-pane fade show" id="lista-tab" role="tabpanel" aria-labelledby="lista-tab">
+                <div class="tab-pane fade show" id="lista-tab" role="tabpanel" onclick="$('#tab').val('lista')" aria-labelledby="lista-tab">
                     <div class="card-body filter-section">
                         <div class="row align-items-center">
                             <div class="col-12">
                                 <form id="filtrosForm" method="get" th:action="@{'/horarios'}">
+                                    <input type="hidden" id="tab" name="tab" th:value="${tab}">
                                     <div class="accordion" id="acordeonFiltros">
                                         <div class="accordion-item">
                                             <h2 class="accordion-header">
@@ -236,14 +237,14 @@
                         <div th:replace="~{fragments/noResultAlert.html}"></div>
                     </div>
                 </div>
-                <div class="tab-pane fade" id="cuadro-tab" role="tabpanel" aria-labelledby="cuadro-tab">
+                <div class="tab-pane fade" id="cuadro-tab" role="tabpanel" onclick="$('#tab').val('cuadro')" aria-labelledby="cuadro-tab">
                     <div class="card-body">
                         <table class="table table-bordered table-striped">
                             <thead class="thead-dark">
                             <tr>
                                 <th scope="col">
                                     <select class="form-control" id="tableCurso" name="curso"
-                                            onchange="$('#filtrosForm').submit()">
+                                            onchange="$('#cursoFilter').val(this.value); $('#filtrosForm').submit()">
                                         <option th:each="curso : ${cursos}" th:value="${curso.id}"
                                                 th:text="${curso.nombre}"
                                                 th:selected="${tableCurso == curso.id}"></option>
@@ -271,19 +272,19 @@
                                                     </button>
                                                 </h2>
                                                 <div th:id="'collapse' + ${item.id}"
-                                                     class="accordion-collapse collapse show"
+                                                     class="accordion-collapse collapse"
                                                      th:data-bs-parent="'#acordeon' + ${item.id}">
                                                     <div class="accordion-body">
-                                                        <p th:text="${item.asignatura}"></p>
-                                                        <p th:text="${item.profesor}"></p>
+                                                        <p th:text="${item.asignatura + ' - ' + item.profesor}"></p>
+                                                        <p th:text=""></p>
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
-                                        <div th:if="${item.espacio == null}"
+                                        <!--<div th:if="${item.espacio == null}"
                                              class="alert alert-info" role="alert">
                                             Hora libre
-                                        </div>
+                                        </div>-->
                                     </div>
                                 </td>
                             </tr>

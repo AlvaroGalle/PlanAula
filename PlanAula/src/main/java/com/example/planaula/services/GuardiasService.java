@@ -12,7 +12,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.Collections;
 import java.util.List;
-import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -25,7 +24,106 @@ public class GuardiasService {
     @Autowired
     private JdbcTemplate jdbcTemplate;
 
+    public List<GuardiasDTO> findAllRecreosByDiaAndHoraAndProfesor(Integer dia, Integer hora, Integer profesor) {
+        String sql = "SELECT r.id, p.nombre, p.apellidos, d.dia, h.hora\n" +
+                "FROM recreos r\n" +
+                "JOIN profesores p ON r.id_profesor = p.id\n" +
+                "JOIN dias d ON r.id_dia = d.id\n" +
+                "JOIN horas h ON r.id_hora = h.id\n" +
+                "WHERE \n" +
+                "    (p.id = :profesor OR :profesor = 0)\n" +
+                "    AND (d.id = :dia OR :dia = 0)\n" +
+                "    AND (h.id = :hora OR :hora = 0)\n" +
+                "ORDER BY p.nombre, d.dia, h.hora;\n";
+
+        List<Object[]> resultados = entityManager.createNativeQuery(sql)
+                .setParameter("dia", dia)
+                .setParameter("hora", hora)
+                .setParameter("profesor", profesor)
+                .getResultList();
+
+        if (resultados == null || resultados.isEmpty()) {
+            return Collections.emptyList();
+        }
+
+        return resultados.stream()
+                .map(resultado -> new GuardiasDTO(
+                        ((Number) resultado[0]).intValue(),
+                        (String) resultado[1],
+                        (String) resultado[2],
+                        (String) resultado[3],
+                        (String) resultado[4]
+                ))
+                .collect(Collectors.toList());
+    }
+
+    public List<GuardiasDTO> findAllLibranzasByDiaAndHoraAndProfesor(Integer dia, Integer hora, Integer profesor) {
+        String sql = "SELECT r.id, p.nombre, p.apellidos, d.dia, h.hora\n" +
+                "FROM libranzas r\n" +
+                "JOIN profesores p ON r.id_profesor = p.id\n" +
+                "JOIN dias d ON r.id_dia = d.id\n" +
+                "JOIN horas h ON r.id_hora = h.id\n" +
+                "WHERE \n" +
+                "    (p.id = :profesor OR :profesor = 0)\n" +
+                "    AND (d.id = :dia OR :dia = 0)\n" +
+                "    AND (h.id = :hora OR :hora = 0)\n" +
+                "ORDER BY p.nombre, d.dia, h.hora;\n";
+
+        List<Object[]> resultados = entityManager.createNativeQuery(sql)
+                .setParameter("dia", dia)
+                .setParameter("hora", hora)
+                .setParameter("profesor", profesor)
+                .getResultList();
+
+        if (resultados == null || resultados.isEmpty()) {
+            return Collections.emptyList();
+        }
+
+        return resultados.stream()
+                .map(resultado -> new GuardiasDTO(
+                        ((Number) resultado[0]).intValue(),
+                        (String) resultado[1],
+                        (String) resultado[2],
+                        (String) resultado[3],
+                        (String) resultado[4]
+                ))
+                .collect(Collectors.toList());
+    }
+
     public List<GuardiasDTO> findAllGuardiasByDiaAndHoraAndProfesor(Integer dia, Integer hora, Integer profesor) {
+        String sql = "SELECT r.id, p.nombre, p.apellidos, d.dia, h.hora\n" +
+                "FROM guardias r\n" +
+                "JOIN profesores p ON r.id_profesor = p.id\n" +
+                "JOIN dias d ON r.id_dia = d.id\n" +
+                "JOIN horas h ON r.id_hora = h.id\n" +
+                "WHERE \n" +
+                "    (p.id = :profesor OR :profesor = 0)\n" +
+                "    AND (d.id = :dia OR :dia = 0)\n" +
+                "    AND (h.id = :hora OR :hora = 0)\n" +
+                "ORDER BY p.nombre, d.dia, h.hora;\n";
+
+        List<Object[]> resultados = entityManager.createNativeQuery(sql)
+                .setParameter("dia", dia)
+                .setParameter("hora", hora)
+                .setParameter("profesor", profesor)
+                .getResultList();
+
+        if (resultados == null || resultados.isEmpty()) {
+            return Collections.emptyList();
+        }
+
+        return resultados.stream()
+                .map(resultado -> new GuardiasDTO(
+                        ((Number) resultado[0]).intValue(),
+                        (String) resultado[1],
+                        (String) resultado[2],
+                        (String) resultado[3],
+                        (String) resultado[4]
+                ))
+                .collect(Collectors.toList());
+    }
+
+    public List<GuardiasDTO> findAllByDiaAndHoraAndProfesor(Integer dia, Integer hora, Integer profesor) {
         String sql = "SELECT g.id, d.campo1, h.campo1, \n" +
         "       a1.campo1 AS Aula_1A, a2.campo1 AS Aula_1B, \n" +
                 "       a3.campo1 AS Aula_2A, a4.campo1 AS Aula_2B, \n" +
@@ -70,14 +168,7 @@ public class GuardiasService {
                         (String) resultado[1],
                         (String) resultado[2],
                         (String) resultado[3],
-                        (String) resultado[4],
-                        (String) resultado[5],
-                        (String) resultado[6],
-                        (String) resultado[7],
-                        (String) resultado[8],
-                        (String) resultado[9],
-                        (String) resultado[10],
-                        (String) resultado[11]
+                        (String) resultado[4]
                 ))
                 .collect(Collectors.toList());
     }
@@ -114,14 +205,7 @@ public class GuardiasService {
                         (String) resultado[1],
                         (String) resultado[2],
                         (String) resultado[3],
-                        (String) resultado[4],
-                        (String) resultado[5],
-                        (String) resultado[6],
-                        (String) resultado[7],
-                        (String) resultado[8],
-                        (String) resultado[9],
-                        (String) resultado[10],
-                        (String) resultado[11]
+                        (String) resultado[4]
                 );
     }
 

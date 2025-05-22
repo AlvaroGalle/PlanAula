@@ -17,9 +17,12 @@ CREATE TABLE profesores (
 CREATE TABLE tutores (
     id SERIAL PRIMARY KEY,
     id_profesor INT,
+    id_curso INT,
     anio VARCHAR(20),
     CONSTRAINT fk_profesor_tutor
-        FOREIGN KEY (id_profesor) REFERENCES profesores(id)
+        FOREIGN KEY (id_profesor) REFERENCES profesores(id),
+    CONSTRAINT fk_curso_tutor
+        FOREIGN KEY (id_curso) REFERENCES cursos(id)
 );
 
 CREATE TABLE horas (
@@ -133,15 +136,15 @@ INSERT INTO profesores (nombre, apellidos) VALUES
 ('Raul', 'Gomez'),
 ('Sofia', 'Moreno');
 
-INSERT INTO tutores (id_profesor, anio) VALUES
-(1, '1 ESO'),
-(2, '2 ESO'),
-(3, '3 ESO'),
-(4, '4 ESO'),
-(5, '1 Bachillerato'),
-(6, '2 Bachillerato'),
-(7, '1 Grado Medio'),
-(8, '2 Grado Medio');
+INSERT INTO tutores (id_profesor, id_curso, anio) VALUES
+(1, 1, '23/24'),
+(2, 2, '23/24'),
+(3, 3, '23/24'),
+(4, 4, '24/25'),
+(5, 5, '24/25'),
+(6, 6, '24/25'),
+(7, 7, '24/25'),
+(8, 8, '23/24');
 
 INSERT INTO horas (hora) VALUES
 ('08:00'),
@@ -223,3 +226,4 @@ INSERT INTO horarios (id_curso, id_profesor, id_asignatura, id_aula, id_dia, id_
 (9, 9, 9, 9, 4, 4, 'Clase de geografia'),
 (10, 10, 10, 10, 5, 5, 'Clase de educacion fisica');
 
+SELECT t.id, p.nombre, p.apellidos, c.curso, t.anio FROM tutores t JOIN profesores p ON t.id_profesor = p.id JOIN cursos c ON t.id_curso = c.id

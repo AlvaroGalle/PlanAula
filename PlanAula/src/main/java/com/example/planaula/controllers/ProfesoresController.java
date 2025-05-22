@@ -83,8 +83,8 @@ public class ProfesoresController {
     public String modificarTutor(@PathVariable Integer id,
                                  @RequestParam String curso,
                                  @RequestParam String profesor) {
-        TutorDTO tutorDTO = new TutorDTO(id, null, Objects.equals(curso, "2425") ? profesor : null,  Objects.equals(curso, "2324") ? profesor : null);
-        profesoresService.modificarTutor(tutorDTO);
+        /*TutorDTO tutorDTO = new TutorDTO(id, null, Objects.equals(curso, "2425") ? profesor : null,  Objects.equals(curso, "2324") ? profesor : null);*/
+        /*profesoresService.modificarTutor(tutorDTO);*/
         return "tutores";
     }
 }

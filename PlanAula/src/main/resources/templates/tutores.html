@@ -68,8 +68,8 @@
                 <thead>
                 <tr>
                     <th scope="col">Curso</th>
-                    <th scope="col">Tutor 24-25</th>
-                    <th scope="col">Tutor 23-24</th>
+                    <th scope="col">Docente</th>
+                    <th scope="col">Año</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -79,16 +79,10 @@
                         <select class="form-select" aria-label="select tutores" th:data-id="${tutor.id}" onchange="changeTutor(this, '2425')">
                             <option value="0"></option>
                             <option th:each=" profe : ${profesores}" th:text="${profe.nombre}"
-                                    th:value="${profe.id}" th:selected="${tutor.tutor2425 == profe.nombre}"></option>
+                                    th:value="${profe.id}" th:selected="${tutor.nombre == profe.nombre}"></option>
                         </select>
                     </td>
-                    <td>
-                        <select class="form-select" aria-label="select tutores" th:data-id="${tutor.id}" onchange="changeTutor(this, '2324')">
-                            <option value="0"></option>
-                            <option th:each=" profe : ${profesores}" th:text="${profe.nombre}"
-                                    th:value="${profe.id}" th:selected="${tutor.tutor2324 == profe.nombre}"></option>
-                        </select>
-                    </td>
+                    <td th:text="${tutor.anio}"></td>
                 </tr>
                 </tbody>
             </table>

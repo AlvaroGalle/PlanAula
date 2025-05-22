@@ -130,11 +130,9 @@ public class ProfesoresService {
 
 
     public List<TutorDTO> findAllTutores() {
-        String sql = "SELECT t.id_tutoria, c.nombre AS nombre_curso, p1.nombre AS nombre_tutor_2425, p2.nombre AS nombre_tutor_2324 " +
-                "FROM tutoria t " +
-                "LEFT JOIN cursos c ON t.id_curso = c.id_curso " +
-                "LEFT JOIN profesores p1 ON t.id = p1.id " +
-                "LEFT JOIN profesores p2 ON t.id = p2.id"; // Ajuste de nombres de tablas y columnas
+        String sql = "SELECT t.id, p.nombre, p.apellidos, c.curso t.anio\n" +
+                "FROM tutores t\n" +
+                "JOIN profesores p ON t.id_profesor = p.id";
 
         List<Object[]> resultados = entityManager.createNativeQuery(sql).getResultList();
 
@@ -147,17 +145,19 @@ public class ProfesoresService {
                         (resultado[0] != null ? ((Number) resultado[0]).intValue() : 0),
                         (String) resultado[1],
                         (String) resultado[2],
-                        (String) resultado[3]))
+                        (String) resultado[3],
+                        (String) resultado[4]
+                ))
                 .collect(Collectors.toList());
     }
 
     public List<TutorDTO> findAllTutoresByCursoAndProfesor(int curso, int profesor) {
-        String sql = "SELECT t.id_tutoria, c.nombre AS nombre_curso, p1.nombre AS nombre_tutor_2425, p2.nombre AS nombre_tutor_2324 " +
-                "FROM tutoria t " +
-                "LEFT JOIN cursos c ON t.id_curso = c.id_curso " +
-                "LEFT JOIN profesores p1 ON t.id = p1.id " +
-                "LEFT JOIN profesores p2 ON t.id = p2.id " +
-                "WHERE (:curso = 0 OR c.id_curso = :curso) AND (:profesor = 0 OR p1.id = :profesor OR p2.id = :profesor)"; // Ajuste de nombres de tablas y columnas
+        String sql = "SELECT t.id, p.nombre, p.apellidos, c.curso, t.anio\n" +
+                "FROM tutores t\n" +
+                "JOIN profesores p ON t.id_profesor = p.id\n" +
+                "JOIN cursos c ON t.id_curso = c.id\n" +
+                "WHERE (:curso IS NULL OR :curso = 0 OR c.id = :curso)\n" +
+                "AND (:profesor IS NULL OR :profesor = 0 OR p.id = :profesor)";
 
         List<Object[]> resultados = entityManager.createNativeQuery(sql)
                 .setParameter("curso", curso)
@@ -173,28 +173,32 @@ public class ProfesoresService {
                         (resultado[0] != null ? ((Number) resultado[0]).intValue() : 0),
                         (String) resultado[1],
                         (String) resultado[2],
-                        (String) resultado[3]))
+                        (String) resultado[3],
+                        (String) resultado[4]
+                ))
                 .collect(Collectors.toList());
     }
 
     public Page<TutorDTO> findPageTutoresByCursoAndProfesor(int curso, int profesor, Pageable pageable) {
         try {
-            String countSql = "SELECT COUNT(*) FROM tutoria t " +
-                    "LEFT JOIN cursos c ON t.id_curso = c.id_curso " +
-                    "LEFT JOIN profesores p1 ON t.id = p1.id " +
-                    "LEFT JOIN profesores p2 ON t.id = p2.id " +
-                    "WHERE (:curso = 0 OR c.id_curso = :curso) AND (:profesor = 0 OR p1.id = :profesor OR p2.id = :profesor)";
+            String countSql = "SELECT count(*)\n" +
+                    "FROM tutores t\n" +
+                    "JOIN profesores p ON t.id_profesor = p.id\n" +
+                    "JOIN cursos c ON t.id_curso = c.id\n" +
+                    "WHERE (:curso IS NULL OR :curso = 0 OR c.id = :curso)\n" +
+                    "AND (:profesor IS NULL OR :profesor = 0 OR p.id = :profesor)";
+
             Query countQuery = entityManager.createNativeQuery(countSql)
                     .setParameter("curso", curso)
                     .setParameter("profesor", profesor);
             long total = ((Number) countQuery.getSingleResult()).longValue();
 
-            String sql = "SELECT t.id_tutoria, c.nombre AS nombre_curso, p1.nombre AS nombre_tutor_2425, p2.nombre AS nombre_tutor_2324 " +
-                    "FROM tutoria t " +
-                    "LEFT JOIN cursos c ON t.id_curso = c.id_curso " +
-                    "LEFT JOIN profesores p1 ON t.id = p1.id " +
-                    "LEFT JOIN profesores p2 ON t.id = p2.id " +
-                    "WHERE (:curso = 0 OR c.id_curso = :curso) AND (:profesor = 0 OR p1.id = :profesor OR p2.id = :profesor)";
+            String sql = "SELECT t.id, p.nombre, p.apellidos, c.curso, t.anio\n" +
+                    "FROM tutores t\n" +
+                    "JOIN profesores p ON t.id_profesor = p.id\n" +
+                    "JOIN cursos c ON t.id_curso = c.id\n" +
+                    "WHERE (:curso IS NULL OR :curso = 0 OR c.id = :curso)\n" +
+                    "AND (:profesor IS NULL OR :profesor = 0 OR p.id = :profesor)";
 
             Query query = entityManager.createNativeQuery(sql)
                     .setParameter("curso", curso)
@@ -209,7 +213,9 @@ public class ProfesoresService {
                             (resultado[0] != null ? ((Number) resultado[0]).intValue() : 0),
                             (String) resultado[1],
                             (String) resultado[2],
-                            (String) resultado[3]))
+                            (String) resultado[3],
+                            (String) resultado[4]
+                    ))
                     .collect(Collectors.toList());
 
             return new PageImpl<>(tutores, pageable, total);
@@ -219,7 +225,7 @@ public class ProfesoresService {
         }
     }
 
-    public void modificarTutor(TutorDTO tutorDTO) {
+    /*public void modificarTutor(TutorDTO tutorDTO) {
         List<String> campos = new ArrayList<>();
         if (tutorDTO.getCurso() != null) campos.add("id_curso = :curso");
         if (tutorDTO.getTutor2425() != null) campos.add("id = :tutor2425");
@@ -247,7 +253,7 @@ public class ProfesoresService {
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
-    }
+    }*/
 
 
 }

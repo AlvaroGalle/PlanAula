@@ -61,19 +61,25 @@ public class GuardiasController {
             }*/
         }
 
-        List<GuardiasDTO> guardiasDTOList = guardiasService.findAllGuardiasByDiaAndHoraAndProfesor(dia, hora, profesor);
+        /*List<GuardiasDTO> guardiasDTOList = guardiasService.findAllGuardiasByDiaAndHoraAndProfesor(dia, hora, profesor);*/
+        List<GuardiasDTO> guardias = guardiasService.findAllGuardiasByDiaAndHoraAndProfesor(dia, hora, profesor);
+        List<GuardiasDTO> recreos = guardiasService.findAllRecreosByDiaAndHoraAndProfesor(dia, hora, profesor);
+        List<GuardiasDTO> libranza = guardiasService.findAllLibranzasByDiaAndHoraAndProfesor(dia, hora, profesor);
+        model.addAttribute("guardias", guardias);
+        model.addAttribute("recreos", recreos);
+        model.addAttribute("libranza", libranza);
 
-        Map<String, String> mapaTurnos = this.mapaTurnos();
-        model.addAttribute("turnos", mapaTurnos);
+/*        Map<String, String> mapaTurnos = this.mapaTurnos();
+        model.addAttribute("turnos", mapaTurnos);*/
         
-        if (!guardiasDTOList.isEmpty() && !Objects.equals(turno, "0")) {
+/*        if (!guardiasDTOList.isEmpty() && !Objects.equals(turno, "0")) {
             String campo = mapaTurnos.getOrDefault(turno, "");
 
             guardiasDTOList = guardiasDTOList.stream()
                     .filter(guardia -> !estaVacio(obtenerValorCampoDinamico(guardia, campo)))
                     .collect(Collectors.toList());
-        }
-        model.addAttribute("page", guardiasDTOList);
+        */
+        /*model.addAttribute("page", guardiasDTOList);*/
         return "guardias";
     }
 

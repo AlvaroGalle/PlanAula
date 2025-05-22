@@ -46,9 +46,9 @@ public class HorariosController {
                                          @RequestParam(required = false, defaultValue = "0") int asignatura,
                                          @RequestParam(required = false, defaultValue = "0") int profesor,
                                          @RequestParam(required = false, defaultValue = "0") int aula,
-                                         @RequestParam(required = false, defaultValue = "lista") String active,
+                                         @RequestParam(required = false, defaultValue = "lista") String tab,
                                          Model model) {
-        model.addAttribute("active", active);
+        model.addAttribute("tab", tab);
 
         model.addAttribute("diaFiltro", dia);
         model.addAttribute("horaFiltro", hora);
@@ -103,19 +103,4 @@ public class HorariosController {
         model.addAttribute("horarioCurso", horariosCursoDTOlist );
         return "horarios";
     }
-
-        private String obtenerValorCampoDinamico(GuardiasDTO guardia, String nombreCampo) {
-            try {
-                Field campo = GuardiasDTO.class.getDeclaredField(nombreCampo);
-                campo.setAccessible(true);
-                Object valor = campo.get(guardia);
-                return valor != null ? valor.toString() : null;
-            } catch (NoSuchFieldException | IllegalAccessException e) {
-                return null;
-            }
-        }
-
-        private boolean estaVacio(String valor) {
-            return valor == null || valor.trim().isEmpty();
-        }
 }

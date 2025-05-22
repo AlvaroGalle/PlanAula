@@ -21,7 +21,7 @@ public class AsignaturasController {
         this.asignaturasService = asignaturasService;
     }
 
-    @GetMapping("")
+    @GetMapping
     public String findAllAsignaturas(@RequestParam(required = false, defaultValue = "0") int page,
                                      @RequestParam(required = false, defaultValue = "15") int size,
                                      Model model) {

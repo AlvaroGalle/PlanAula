@@ -2,15 +2,17 @@ package com.example.planaula.Dto;
 
 public class TutorDTO{
     private int id;
+    private String nombre;
+    private String apellidos;
     private String curso;
-    private String tutor2425;
-    private String tutor2324;
+    private String anio;
 
-    public TutorDTO(int id, String curso, String tutor2425, String tutor2324) {
+    public TutorDTO(int id, String nombre, String apellidos, String curso, String anio) {
         this.id = id;
         this.curso = curso;
-        this.tutor2425 = tutor2425;
-        this.tutor2324 = tutor2324;
+        this.nombre = nombre;
+        this.apellidos = apellidos;
+        this.anio = anio;
     }
     public TutorDTO() {}
 
@@ -30,19 +32,27 @@ public class TutorDTO{
         this.curso = curso;
     }
 
-    public String getTutor2425() {
-        return tutor2425;
+    public String getNombre() {
+        return nombre;
     }
 
-    public void setTutor2425(String tutor2425) {
-        this.tutor2425 = tutor2425;
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
     }
 
-    public String getTutor2324() {
-        return tutor2324;
+    public String getApellidos() {
+        return apellidos;
     }
 
-    public void setTutor2324(String tutor2324) {
-        this.tutor2324 = tutor2324;
+    public void setApellidos(String apellidos) {
+        this.apellidos = apellidos;
+    }
+
+    public String getAnio() {
+        return anio;
+    }
+
+    public void setAnio(String anio) {
+        this.anio = anio;
     }
 }
