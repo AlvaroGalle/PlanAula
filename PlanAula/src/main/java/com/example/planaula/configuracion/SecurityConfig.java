@@ -23,16 +23,17 @@ public class SecurityConfig {
         http
                 .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers("/", "/login", "/usuario/**", "/css/**", "/images/**", "/fragments/**", "/js/**").permitAll()
+                        .requestMatchers("/admin/**").hasRole("ADMIN")
+                        .requestMatchers("/profesor/**").hasRole("PROFESOR")
+                        .requestMatchers("/alumno/**").hasRole("ALUMNO")
                         .anyRequest().authenticated()
                 )
-                .formLogin(login -> login
-                         /*.loginPage("/login")
-                         .loginProcessingUrl("/login")
-                         .usernameParameter("nombre")
-                         .passwordParameter("contrasena")*/
+                .formLogin(form -> form
+                        .loginPage("/login")
                         .defaultSuccessUrl("/menu", true)
-                        .failureUrl("/?error=true")
-                        .permitAll())
+                        .failureUrl("/login?error=true")
+                        .permitAll()
+                )
                 .logout(logout -> logout
                         .logoutUrl("/logout")
                         .logoutSuccessUrl("/?logout=true")
