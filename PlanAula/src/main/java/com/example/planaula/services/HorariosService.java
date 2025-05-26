@@ -8,13 +8,25 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.Collections;
-import java.util.List;
+import java.time.DayOfWeek;
+import java.time.LocalDate;
+import java.time.LocalTime;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Slf4j
 @Service
 public class HorariosService {
+
+    private static final Map<String, String> DIA_ESPANOL_A_INGLES = new HashMap<>();
+
+    static {
+        DIA_ESPANOL_A_INGLES.put("lunes", "MONDAY");
+        DIA_ESPANOL_A_INGLES.put("martes", "TUESDAY");
+        DIA_ESPANOL_A_INGLES.put("miercoles", "WEDNESDAY");
+        DIA_ESPANOL_A_INGLES.put("jueves", "THURSDAY");
+        DIA_ESPANOL_A_INGLES.put("viernes", "FRIDAY");
+    }
 
     @Autowired
     private EntityManager entityManager;
@@ -60,5 +72,38 @@ public class HorariosService {
                         (String) resultado[7]
                 ))
                 .collect(Collectors.toList());
+    }
+
+    public List<HorarioDTO> filtrarHorariosFuturos(List<HorarioDTO> horarios) {
+        DayOfWeek diaActual = LocalDate.now().getDayOfWeek();
+
+        LocalTime ahora = LocalTime.now();
+
+        return horarios.stream()
+                .filter(h -> esHorarioFuturo(h.getDia(), h.getHora(), diaActual, ahora))
+                .collect(Collectors.toList());
+    }
+
+    private boolean esHorarioFuturo(String diaStr, String horaStr, DayOfWeek diaActual, LocalTime ahora) {
+        String diaIngles = DIA_ESPANOL_A_INGLES.get(diaStr.toLowerCase());
+
+        if (diaIngles == null) {
+            throw new IllegalArgumentException("Día no válido: " + diaStr);
+        }
+
+        DayOfWeek diaHorario = DayOfWeek.valueOf(diaIngles);
+
+        LocalTime hora = LocalTime.parse(horaStr);
+
+        int diaActualValor = diaActual.getValue();
+        int diaHorarioValor = diaHorario.getValue();
+
+        if (diaHorarioValor > diaActualValor) {
+            return true;
+        } else if (diaHorarioValor == diaActualValor) {
+            return hora.isAfter(ahora);
+        } else {
+            return false;
+        }
     }
 }

@@ -1,97 +1,176 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Agenda de [[${user}]]</title>
     <div th:replace="~{fragments/head.html}"></div>
+    <link th:href="@{/css/custom.css}" rel="stylesheet">
+    <style>
+        body {
+            overflow-x: hidden;
+        }
+        .sidebar {
+            width: 240px;
+            position: fixed;
+            top: 0;
+            bottom: 0;
+            left: 0;
+            padding: 1rem;
+            background-color: #f8f9fa;
+        }
+        .sidebar .nav-link {
+            color: #333;
+            margin-bottom: 0.5rem;
+            border-radius: 0.25rem;
+        }
+        .sidebar .nav-link.active {
+            background-color: #0d6efd;
+            color: #fff;
+        }
+        .menu-item {
+            border-radius: 5px;
+            text-align: center;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+            color: white;
+            padding: 15px;
+            margin-bottom: 10px;
+            font-weight: bold;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 150px;
+        }
+        .menu-item:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+        }
+        .menu-item img {
+            font-size: 2em;
+            margin-bottom: 8px;
+        }
+        .content {
+            margin-left: 10%;
+            margin-right: 10%;
+            padding: 2rem;
+        }
+
+        .post-it {
+            background: #fffb8f;
+            width:17%;
+            min-height: 200px;
+            padding: 1rem;
+            margin: 1rem;
+            box-shadow: 2px 2px 6px rgba(0,0,0,0.2);
+            position: relative;
+            transform: rotate(-2deg);
+            font-family: 'Comic Sans MS', cursive, sans-serif;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .post-it::before {
+            content: '';
+            position: absolute;
+            top: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 30px;
+            height: 10px;
+            background: #d4d4d4;
+            border-radius: 2px;
+        }
+
+        .post-it:hover {
+            transform: rotate(-2deg) translateY(-10px) scale(1.05);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+    </style>
 </head>
-<div th:replace="~{fragments/links.html}"></div>
-<script>
-</script>
-<style>
-    .menu-item {
-        border-radius: 5px;
-        text-align: center;
-        cursor: pointer;
-        /*transition: background-color 0.3s ease;*/
-        transition: transform 0.2s, box-shadow 0.2s;
-        color: white;
-        padding: 15px;
-        margin-bottom: 10px;
-        font-weight: bold;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        height: 150px;
-
-    }
-
-    .menu-item:hover {
-        /*opacity: 0.8;*/
-        transform: translateY(-4px);
-        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
-    }
-
-    .menu-item i {
-        font-size: 2em;
-        margin-bottom: 8px;
-    }
-</style>
 <body>
-<div class="container mt-5">
-    <div class="card shadow-sm">
-        <div class="card-header bg-primary text-white">
-            <div class="row">
-                <div class="col-3 text-start"><img class="w-25" src="/images/menu/chincheta.png" alt="chincheta"></div>
-                <div class="col-6 d-flex justify-content-center align-items-center">
-                    <h3 class="card-title text-center" th:text="'Agenda de ' + ${user}"></h3>
+<!--<div class="sidebar">
+    <h5>PlanAula</h5>
+    <nav class="nav flex-column">
+        <a class="nav-link active" href="/asignaturas">Asignaturas</a>
+        <a class="nav-link" href="/profesores">Profesores</a>
+        <a class="nav-link" href="/profesores/tutores">Tutores</a>
+        <a class="nav-link" href="/espacios">Espacios</a>
+        <a class="nav-link" href="/guardias">Guardias</a>
+        <a class="nav-link" href="/horarios">Horarios</a>
+    </nav>
+</div>-->
+
+<div class="content">
+    <div class="container-fluid">
+        <div class="card shadow-sm">
+            <div class="card-header bg-primary text-white d-flex align-items-center">
+                <img class="me-2" src="/images/menu/chincheta.png" alt="chincheta" style="width:3%;">
+                <h3 class="mb-0 flex-grow-1 text-center" th:text="'Agenda de ' + ${user}"></h3>
+                <img class="ms-2" src="/images/menu/chincheta.png" alt="chincheta" style="width:3%;">
+            </div>
+            <div class="card-body bg-light">
+                <div class="row">
+                 <!--   <div class="col-md-4 mb-3" th:each="item : ${menuItems}">
+                        <div class="menu-item" th:onclick="|location.href='/' + ${#strings.toLowerCase(item)}|">
+                            <span th:text="${item}"></span>
+                        </div>
+                    </div>-->
+                    <div class="col-md-4">
+                        <div class="menu-item theme-asignaturas" onclick="location.href='/asignaturas'">
+                            <img src="/images/menu/asignaturas.png" alt="asignaturas" width="10%"/>
+                            <span>Asignaturas</span>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="menu-item theme-profesores" onclick="location.href='/profesores'">
+                            <img src="/images/menu/profesor.png" alt="profesores" width="10%"/>
+                            <span>Profesores</span>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="menu-item theme-tutores" onclick="location.href='/profesores/tutores'">
+                            <img src="/images/menu/tutor.png" alt="tutores" width="10%"/>
+                            <span>Tutores</span>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="menu-item theme-espacios" onclick="location.href='/espacios'">
+                            <img src="/images/menu/aula.png" alt="espacios" width="10%"/>
+                            <span>Espacios</span>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="menu-item theme-guardias" onclick="location.href='/guardias'">
+                            <img src="/images/menu/guardia.png" alt="guardias" width="10%"/>
+                            <span>Guardias</span>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="menu-item theme-horarios" onclick="location.href='/horarios'">
+                            <img src="/images/menu/horario.png" alt="guardias" width="10%"/>
+                            <span>Horarios</span>
+                        </div>
+                    </div>
                 </div>
-                <div class="col-3 text-end"><img class="w-25" src="/images/menu/chincheta.png" alt="chincheta"></div>
+            </div>
+            <div class="card-footer text-muted bg-white">
+                <small th:text="${fecha}"></small>
             </div>
         </div>
-        <div class="card-body bg-light">
-            <div class="row">
-                <div class="col-md-4">
-                    <div class="menu-item theme-asignaturas" onclick="location.href='/asignaturas'">
-                        <img src="/images/menu/asignaturas.png" alt="asignaturas" width="20%"/>
-                        <span>Asignaturas</span>
-                    </div>
-                </div>
-                <div class="col-md-4">
-                    <div class="menu-item theme-profesores" onclick="location.href='/profesores'">
-                        <img src="/images/menu/profesor.png" alt="profesores" width="20%"/>
-                        <span>Profesores</span>
-                    </div>
-                </div>
-                <div class="col-md-4">
-                    <div class="menu-item theme-tutores" onclick="location.href='/profesores/tutores'">
-                        <img src="/images/menu/tutor.png" alt="tutores" width="20%"/>
-                        <span>Tutores</span>
-                    </div>
-                </div>
-                <div class="col-md-4">
-                    <div class="menu-item theme-espacios" onclick="location.href='/espacios'">
-                        <img src="/images/menu/aula.png" alt="espacios" width="20%"/>
-                        <span>Espacios</span>
-                    </div>
-                </div>
-                <div class="col-md-4">
-                    <div class="menu-item theme-guardias" onclick="location.href='/guardias'">
-                        <img src="/images/menu/guardia.png" alt="guardias" width="20%"/>
-                        <span>Guardias</span>
-                    </div>
-                </div>
-                <div class="col-md-4">
-                    <div class="menu-item theme-horarios" onclick="location.href='/horarios'">
-                        <img src="/images/menu/horario.png" alt="guardias" width="20%"/>
-                        <span>Horarios</span>
-                    </div>
+        <div class="my-3">
+            <div class="d-flex flex-wrap justify-content-center">
+                <div th:each="t : ${task}" class="post-it"
+                     th:style="'background: ' + ${colores[(T(java.lang.Math).random()* colores.size())]} + '; transform: rotate(' + ${T(java.lang.Math).random() * 10 - 5} + 'deg);'">
+                    <h6 class="mb-3"><b th:text="${t.dia + ' ' + t.hora}"></b></h6>
+                    <p th:text="${t.asignatura + ' ' +  t.curso}">Acción pendiente.</p>
+                    <p th:text="${t.espacio}">Aula.</p>
+                    <p th:text="${t.observaciones}">Observaciones.</p>
                 </div>
             </div>
-        </div>
-        <div class="card-footer text-muted bg-white">
-            <small th:text="${fecha}"></small>
         </div>
     </div>
 </div>
+
+<div th:replace="~{fragments/links.html}"></div>
 </body>
 </html>

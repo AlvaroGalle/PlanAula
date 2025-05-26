@@ -2,6 +2,7 @@ package com.example.planaula.Dto;
 
 public class GuardiasDTO {
     private int id;
+    private String codigo;
     private String dia;
     private String hora;
     private String nombre;
@@ -10,7 +11,7 @@ public class GuardiasDTO {
     public GuardiasDTO() {
     }
 
-    public GuardiasDTO(int id, String dia, String hora, String nombre, String apellidos) {
+    public GuardiasDTO(int id, String codigo, String dia, String hora, String nombre, String apellidos) {
         this.id = id;
         this.dia = dia;
         this.hora = hora;
@@ -24,6 +25,14 @@ public class GuardiasDTO {
 
     public void setId(int id) {
         this.id = id;
+    }
+
+    public String getCodigo() {
+        return codigo;
+    }
+
+    public void setCodigo(String id) {
+        this.codigo = codigo;
     }
 
     public String getDia() {

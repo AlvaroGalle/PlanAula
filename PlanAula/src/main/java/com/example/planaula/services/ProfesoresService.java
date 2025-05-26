@@ -1,5 +1,6 @@
 package com.example.planaula.services;
 
+import com.example.planaula.Dto.GuardiasDTO;
 import com.example.planaula.Dto.ProfesorDTO;
 import com.example.planaula.Dto.TutorDTO;
 import jakarta.persistence.EntityManager;
@@ -255,5 +256,27 @@ public class ProfesoresService {
         }
     }*/
 
+    public List<GuardiasDTO> findTaskById(Integer id_profesor){
+        String sql = "SELECT 'G' AS tipo, g.id AS id_guardia, d.dia, ho.hora FROM guardias g JOIN dias d ON g.id_dia = d.id JOIN horas ho ON g.id_hora = ho.id WHERE g.id_profesor = :id_profesor UNION ALL SELECT 'L' AS tipo, l.id AS id_libranza, d.dia, ho.hora FROM libranzas l JOIN dias d ON l.id_dia = d.id JOIN horas ho ON l.id_hora = ho.id WHERE l.id_profesor = :id_profesor UNION ALL SELECT 'R' AS tipo, r.id AS id_recreo, d.dia, ho.hora FROM recreos r JOIN dias d ON r.id_dia = d.id JOIN horas ho ON r.id_hora = ho.id WHERE r.id_profesor = :id_profesor;";
+
+        List<Object[]> resultados = entityManager.createNativeQuery(sql)
+                .setParameter("id_profesor", id_profesor)
+                .getResultList();
+
+        if (resultados == null || resultados.isEmpty()) {
+            return Collections.emptyList();
+        }
+
+        return resultados.stream()
+                .map(resultado -> new GuardiasDTO(
+                        ((Number) resultado[1]).intValue(),
+                        (String) resultado[0] + resultado[1],
+                        (String) resultado[2],
+                        (String) resultado[3],
+                        null,
+                        null
+                ))
+                .collect(Collectors.toList());
+    }
 
 }

@@ -262,9 +262,7 @@ VALUES (1, 1, 1, 1, 1, 1, 'Clase de matematicas'),
        (5, 5, 5, 5, 5, 5, 'Clase de ingles'),
        (6, 6, 6, 6, 1, 1, 'Clase de fisica'),
        (7, 7, 7, 7, 2, 2, 'Clase de quimica'),
-       (8, 8, 8, 8, 3, 3, 'Clase de biologia'),
-       (9, 9, 9, 9, 4, 4, 'Clase de geografia'),
-       (10, 10, 10, 10, 5, 5, 'Clase de educacion fisica');
+       (8, 8, 8, 8, 3, 3, 'Clase de biologia');
 
 INSERT INTO alumnos (nombre, apellidos, id_curso) VALUES
                                                       ('Laura', 'Domínguez', 1),
@@ -282,3 +280,9 @@ UPDATE usuarios SET id_profesor = 2 WHERE username = 'ana_g';
 INSERT INTO usuarios (username, password, role, id_alumno) VALUES
                                                                ('laurad',  'hash_seguro_de_laurad',  'alumno', 1),
                                                                ('miguelr', 'hash_seguro_de_miguelr','alumno', 2);
+
+
+SELECT 'Guardia' AS tipo, g.id AS id_guardia, d.dia, ho.hora FROM guardias g JOIN dias d ON g.id_dia = d.id JOIN horas ho ON g.id_hora = ho.id WHERE g.id_profesor = 1 UNION ALL SELECT 'Libranza' AS tipo, l.id AS id_libranza, d.dia, ho.hora FROM libranzas l JOIN dias d ON l.id_dia = d.id JOIN horas ho ON l.id_hora = ho.id WHERE l.id_profesor = 1 UNION ALL SELECT 'Recreo' AS tipo, r.id AS id_recreo, d.dia, ho.hora FROM recreos r JOIN dias d ON r.id_dia = d.id JOIN horas ho ON r.id_hora = ho.id WHERE r.id_profesor = 1;
+
+
+SELECT h.id, d.dia, ho.hora, c.curso, asig.asignatura, p.nombre, a.aula, h.observaciones FROM horarios h JOIN cursos c ON h.id_curso = c.id JOIN profesores p ON h.id_profesor = p.id JOIN asignaturas asig ON h.id_asignatura = asig.id JOIN aulas a ON h.id_aula = a.id JOIN dias d ON h.id_dia = d.id JOIN horas ho ON h.id_hora = ho.id WHERE (0 IS NULL OR 0 = 0 OR d.id = 0) AND (0 IS NULL OR 0 = 0 OR ho.id = 0) AND (0 IS NULL OR 0 = 0 OR c.id = 0) AND (0 IS NULL OR 0 = 0 OR asig.id = 0) AND (1 IS NULL OR 1 = 0 OR p.id = 1) AND (0 IS NULL OR 0 = 0 OR a.id = 0)

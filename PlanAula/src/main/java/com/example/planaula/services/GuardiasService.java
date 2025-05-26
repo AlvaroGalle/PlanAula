@@ -49,6 +49,7 @@ public class GuardiasService {
         return resultados.stream()
                 .map(resultado -> new GuardiasDTO(
                         ((Number) resultado[0]).intValue(),
+                        (String) "L" + resultado[0],
                         (String) resultado[1],
                         (String) resultado[2],
                         (String) resultado[3],
@@ -82,6 +83,7 @@ public class GuardiasService {
         return resultados.stream()
                 .map(resultado -> new GuardiasDTO(
                         ((Number) resultado[0]).intValue(),
+                        (String) "L" + resultado[0],
                         (String) resultado[1],
                         (String) resultado[2],
                         (String) resultado[3],
@@ -115,6 +117,7 @@ public class GuardiasService {
         return resultados.stream()
                 .map(resultado -> new GuardiasDTO(
                         ((Number) resultado[0]).intValue(),
+                        (String) "G" + resultado[0],
                         (String) resultado[1],
                         (String) resultado[2],
                         (String) resultado[3],
@@ -165,6 +168,7 @@ public class GuardiasService {
         return resultados.stream()
                 .map(resultado -> new GuardiasDTO(
                         ((Number) resultado[0]).intValue(),
+                        (String) "X" + resultado[0],
                         (String) resultado[1],
                         (String) resultado[2],
                         (String) resultado[3],
@@ -202,6 +206,7 @@ public class GuardiasService {
         entityManager.close();
         return new GuardiasDTO(
                         ((Number) resultado[0]).intValue(),
+                (String) "X" + resultado[0],
                         (String) resultado[1],
                         (String) resultado[2],
                         (String) resultado[3],
