@@ -1,5 +1,5 @@
 <label for="sizeFilter" class="form-label">Resultados:</label>
-<select class="form-control" id="sizeFilter" name="size" onchange="$('#filtrosForm').submit()">
+<select class="form-select" id="sizeFilter" name="size" onchange="$('#filtrosForm').submit()">
     <option value="5" th:selected="${page.size} == '5'">5</option>
     <option value="10" th:selected="${page.size} == '10'">10</option>
     <option value="15" th:selected="${page.size} == '15'">15</option>

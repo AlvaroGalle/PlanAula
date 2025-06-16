@@ -1,5 +1,5 @@
 <label for="aulaFilter" class="form-label">Filtrar por Aula:</label>
-<select class="form-control" id="aulaFilter" name="aula" onchange="$('#filtrosForm').submit()">
+<select class="form-select" id="aulaFilter" name="aula" onchange="$('#filtrosForm').submit()">
     <option value="0">Todas las aulas</option>
     <option th:each=" aula : ${aulas}" th:value="${aula.id}" th:text="${aula.nombre}" th:selected="${aulaFiltro == aula.id}"></option>
 </select>

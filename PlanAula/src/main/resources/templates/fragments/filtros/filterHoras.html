@@ -1,5 +1,5 @@
 <label for="horaFilter" class="form-label">Filtrar por Hora:</label>
-<select class="form-control" id="horaFilter" name="hora" onchange="$('#filtrosForm').submit()">
+<select class="form-select" id="horaFilter" name="hora" onchange="$('#filtrosForm').submit()">
     <option value="0">Todas las horas</option>
     <option th:each=" hora: ${horas}" th:value="${hora.id}" th:text="${hora.nombre}" th:selected="${horaFiltro == hora.id}"></option>
 </select>

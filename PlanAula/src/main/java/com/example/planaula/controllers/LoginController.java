@@ -1,18 +1,37 @@
 package com.example.planaula.controllers;
 
+import com.example.planaula.Dto.UsuarioDTO;
+import com.example.planaula.services.UserService;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.*;
 
 @Controller
 @RequestMapping("/")
 public class LoginController {
 
-    public LoginController(){
+    private final UserService userService;
+
+    public LoginController(UserService userService){
+        this.userService = userService;
     }
 
     @GetMapping("/login")
-    public String login() {
-        return "/login";
+    public String login(Model model) {
+        model.addAttribute("newUser", new UsuarioDTO());
+        return "login";
+    }
+
+    @PostMapping("/register")
+    public String register(@ModelAttribute UsuarioDTO usuarioDTO) {
+        String sts = "";
+        try{
+            userService.createUser(usuarioDTO);
+            sts = "Success";
+        }catch (Exception e){
+            System.out.println(e.getMessage());
+            sts = "Error";
+        }
+        return "redirect:/login?sts=" + sts;
     }
 }

@@ -22,7 +22,7 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
                 .authorizeHttpRequests(authorize -> authorize
-                        .requestMatchers("/", "/login", "/usuario/**", "/css/**", "/images/**", "/videos/**", "/fragments/**", "/js/**").permitAll()
+                        .requestMatchers("/", "/login", "/register", "/usuario/**", "/css/**", "/images/**", "/videos/**", "/fragments/**", "/js/**").permitAll()
                         .requestMatchers("/admin/**").hasRole("ADMIN")
                         .requestMatchers("/profesor/**").hasRole("PROFESOR")
                         .requestMatchers("/alumno/**").hasRole("ALUMNO")
@@ -46,16 +46,9 @@ public class SecurityConfig {
     }
 
     @Bean
-    public InMemoryUserDetailsManager userDetailsService() {
-        UserDetails user = User.builder()
-                .username("admin")
-                .password(passwordEncoder().encode("admin"))
-                .roles("ADMIN")
-                .build();
-
-        return new InMemoryUserDetailsManager(user);
+    public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {
+        return authenticationConfiguration.getAuthenticationManager();
     }
-
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();

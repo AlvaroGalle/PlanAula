@@ -142,6 +142,17 @@ CREATE TABLE usuarios
         )
 );
 
+CREATE TABLE usuarios (
+                          id SERIAL PRIMARY KEY,
+                          username VARCHAR(100) UNIQUE NOT NULL,
+                          password VARCHAR(255),
+                          rol VARCHAR(20) NOT NULL,
+                          enabled BOOLEAN DEFAULT TRUE,
+                          profesor_id INTEGER,
+                          FOREIGN KEY (profesor_id) REFERENCES profesores(id) ON DELETE SET NULL
+);
+
+
 INSERT INTO asignaturas (asignatura)
 VALUES ('Matematicas'),
        ('Lengua'),

@@ -243,7 +243,7 @@
                             <thead class="thead-dark">
                             <tr>
                                 <th scope="col">
-                                    <select class="form-control" id="tableCurso" name="curso"
+                                    <select class="form-select" id="tableCurso" name="curso"
                                             onchange="$('#cursoFilter').val(this.value); $('#filtrosForm').submit()">
                                         <option th:each="curso : ${cursos}" th:value="${curso.id}"
                                                 th:text="${curso.nombre}"
@@ -263,11 +263,11 @@
                                              class="accordion" th:id="'acordeon' + ${item.id}">
                                             <div th:if="${item.espacio != null}" class="accordion-item">
                                                 <h2 class="accordion-header">
-                                                    <button th:text="${item.espacio}" class="accordion-button"
+                                                    <button th:text="${item.asignatura}" class="accordion-button"
                                                             type="button"
                                                             data-bs-toggle="collapse"
                                                             th:data-bs-target="'#collapse' + ${item.id}"
-                                                            aria-expanded="true"
+                                                            aria-expanded="false"
                                                             aria-controls="collapseOne">
                                                     </button>
                                                 </h2>
@@ -275,7 +275,7 @@
                                                      class="accordion-collapse collapse"
                                                      th:data-bs-parent="'#acordeon' + ${item.id}">
                                                     <div class="accordion-body">
-                                                        <p th:text="${item.asignatura + ' - ' + item.profesor}"></p>
+                                                        <p th:text="${item.profesor + ' - ' + item.espacio}"></p>
                                                         <p th:text=""></p>
                                                     </div>
                                                 </div>
