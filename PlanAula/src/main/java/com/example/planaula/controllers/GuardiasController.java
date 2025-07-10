@@ -34,11 +34,11 @@ public class GuardiasController {
     }
 
     @GetMapping("")
-    public String findAllGuardias(@RequestParam(required = false, defaultValue = "0") int dia,
-                                  @RequestParam(required = false, defaultValue = "0") int hora,
-                                  @RequestParam(required = false, defaultValue = "0") String turno,
-                                  @RequestParam(required = false, defaultValue = "0") int profesor,
-                                  @RequestParam(required = false, defaultValue = "0") String id,
+    public String findAllGuardias(@RequestParam(name="dia", required = false, defaultValue = "0") int dia,
+                                  @RequestParam(name="hora", required = false, defaultValue = "0") int hora,
+                                  @RequestParam(name="turno", required = false, defaultValue = "0") String turno,
+                                  @RequestParam(name="profesor", required = false, defaultValue = "0") int profesor,
+                                  @RequestParam(name="id", required = false, defaultValue = "0") String id,
                                   Model model) {
     	model.addAttribute("id", id);
     	
@@ -84,7 +84,7 @@ public class GuardiasController {
     }
 
     @GetMapping("{id}")
-    public String findGuardiaById(@PathVariable int id, Model model) {
+    public String findGuardiaById(@PathVariable(name="id") int id, Model model) {
         try {
             GuardiasDTO guardiasDTO = guardiasService.findGuardiaById(id);
             model.addAttribute("guardia", guardiasDTO);
@@ -101,10 +101,10 @@ public class GuardiasController {
     }
 
     @GetMapping("accion")
-    public String accionesGuardias(@RequestParam String accion,
-                                   @RequestParam String turno,
-                                   @RequestParam Integer profesor,
-                                   @RequestParam Integer id) {
+    public String accionesGuardias(@RequestParam(name="accion") String accion,
+                                   @RequestParam(name="turno") String turno,
+                                   @RequestParam(name="profesor") Integer profesor,
+                                   @RequestParam(name="id") Integer id) {
         try {
             Map<String, String> mapeoTurnos = Map.of(
                     "G1", "guardia 1",

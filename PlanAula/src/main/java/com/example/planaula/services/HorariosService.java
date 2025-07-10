@@ -3,7 +3,11 @@ package com.example.planaula.services;
 import com.example.planaula.Dto.GuardiasDTO;
 import com.example.planaula.Dto.HoraDTO;
 import com.example.planaula.Dto.HorarioDTO;
+import com.example.planaula.Dto.UsuarioDTO;
+
 import jakarta.persistence.EntityManager;
+import jakarta.persistence.NoResultException;
+import jakarta.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -105,5 +109,89 @@ public class HorariosService {
         } else {
             return false;
         }
+    }
+    
+    public HorarioDTO findHorarioById(int id) {
+        String sql = """
+            SELECT id, id_dia, id_hora, id_curso, id_asignatura, id_profesor, id_aula, observaciones
+            FROM horarios
+            WHERE id = :id
+        """;
+
+        try {
+            Object[] row = (Object[]) entityManager.createNativeQuery(sql)
+                    .setParameter("id", id)
+                    .getSingleResult();
+
+            return new HorarioDTO(
+                    (Integer) row[0],                    
+                    String.valueOf(row[1]),              
+                    String.valueOf(row[2]),              
+                    String.valueOf(row[3]),             
+                    String.valueOf(row[4]),             
+                    String.valueOf(row[5]),             
+                    String.valueOf(row[6]),             
+                    row[7] != null ? row[7].toString() : null
+            );
+
+        } catch (NoResultException e) {
+        	e.printStackTrace();
+            return new HorarioDTO();
+        }
+    }
+    
+    @Transactional
+    public void anadirHorario(HorarioDTO horarioDTO) {
+    	String sql = """
+    		    INSERT INTO horarios (id_dia, id_hora, id_curso, id_asignatura, id_profesor, id_aula, observaciones)
+    		    VALUES (:dia, :hora, :curso, :asignatura, :profesor, :aula, :observaciones)
+    		""";
+
+    		entityManager.createNativeQuery(sql)
+    		        .setParameter("dia", Integer.parseInt(horarioDTO.getDia()))
+    		        .setParameter("hora", Integer.parseInt(horarioDTO.getHora()))
+    		        .setParameter("curso", Integer.parseInt(horarioDTO.getCurso()))
+    		        .setParameter("asignatura", Integer.parseInt(horarioDTO.getAsignatura()))
+    		        .setParameter("profesor", Integer.parseInt(horarioDTO.getProfesor()))
+    		        .setParameter("aula", Integer.parseInt(horarioDTO.getEspacio()))
+    		        .setParameter("observaciones", horarioDTO.getObservaciones())
+    		        .executeUpdate();
+
+        }
+    
+    @Transactional
+    public void editarHorario(HorarioDTO horarioDTO) {
+    	String sql = """
+    		    UPDATE horarios
+    		    SET id_dia = :dia,
+    		        id_hora = :hora,
+    		        id_curso = :curso,
+    		        id_asignatura = :asignatura,
+    		        id_profesor = :profesor,
+    		        id_aula = :aula,
+    		        observaciones = :observaciones
+    		    WHERE id = :id
+    		""";
+
+    		entityManager.createNativeQuery(sql)
+    		    .setParameter("dia", Integer.parseInt(horarioDTO.getDia()))
+    		    .setParameter("hora", Integer.parseInt(horarioDTO.getHora()))
+    		    .setParameter("curso", Integer.parseInt(horarioDTO.getCurso()))
+    		    .setParameter("asignatura", Integer.parseInt(horarioDTO.getAsignatura()))
+    		    .setParameter("profesor", Integer.parseInt(horarioDTO.getProfesor()))
+    		    .setParameter("aula", Integer.parseInt(horarioDTO.getEspacio()))
+    		    .setParameter("observaciones", horarioDTO.getObservaciones())
+    		    .setParameter("id", horarioDTO.getId())
+    		    .executeUpdate();
+
+    }
+    
+    @Transactional
+    public void eliminarHorario(int id) {
+    	String sql = "DELETE FROM horarios WHERE id = :id";
+
+    	entityManager.createNativeQuery(sql)
+    	    .setParameter("id", id)
+    	    .executeUpdate();
     }
 }

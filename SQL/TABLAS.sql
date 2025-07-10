@@ -1,4 +1,4 @@
-TABLAS
+#TABLAS
 
 CREATE TABLE asignaturas (
     id SERIAL PRIMARY KEY,

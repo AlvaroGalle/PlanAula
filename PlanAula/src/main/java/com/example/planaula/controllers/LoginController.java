@@ -2,6 +2,9 @@ package com.example.planaula.controllers;
 
 import com.example.planaula.Dto.UsuarioDTO;
 import com.example.planaula.services.UserService;
+
+import java.time.LocalDate;
+
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -19,6 +22,8 @@ public class LoginController {
     @GetMapping("/login")
     public String login(Model model) {
         model.addAttribute("newUser", new UsuarioDTO());
+        LocalDate localDate = LocalDate.now();
+        model.addAttribute("anio", localDate.getYear());
         return "login";
     }
 

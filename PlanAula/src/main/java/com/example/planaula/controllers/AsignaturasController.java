@@ -21,9 +21,9 @@ public class AsignaturasController {
         this.asignaturasService = asignaturasService;
     }
 
-    @GetMapping
-    public String findAllAsignaturas(@RequestParam(required = false, defaultValue = "0") int page,
-                                     @RequestParam(required = false, defaultValue = "15") int size,
+    @GetMapping("")
+    public String findAllAsignaturas(@RequestParam(name="page", required = false, defaultValue = "0") int page,
+                                     @RequestParam(name="size", required = false, defaultValue = "15") int size,
                                      Model model) {
         Page<AsignaturaDTO> asignaturaDTOS = asignaturasService.findPageAsignaturas(PageRequest.of(page, size));
         model.addAttribute("page", asignaturaDTOS);

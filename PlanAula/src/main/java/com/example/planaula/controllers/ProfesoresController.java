@@ -27,8 +27,8 @@ public class ProfesoresController {
     }
 
     @GetMapping("")
-    public String findAllProfesores(@RequestParam(required = false, defaultValue = "0") int page,
-                                    @RequestParam(required = false, defaultValue = "15") int size,
+    public String findAllProfesores(@RequestParam(name="page", required = false, defaultValue = "0") int page,
+                                    @RequestParam(name="size", required = false, defaultValue = "15") int size,
                                     Model model) {
         Page<ProfesorDTO> profesorDTOList = profesoresService.findPageProfesores(PageRequest.of(page, size));
         model.addAttribute("page", profesorDTOList);
@@ -37,7 +37,8 @@ public class ProfesoresController {
     }
 
     @PostMapping("")
-    public String accionProfesores(@ModelAttribute ProfesorDTO profesorDTO, @RequestParam(required = false, defaultValue = "A") String accion) {
+    public String accionProfesores(@ModelAttribute ProfesorDTO profesorDTO,
+    							   @RequestParam(name="accion", required = false, defaultValue = "A") String accion) {
         switch (accion) {
             case "A":
                 profesoresService.anadirProfesor(profesorDTO);
@@ -59,10 +60,10 @@ public class ProfesoresController {
     }
 
     @GetMapping("/tutores")
-    public String findAllTutores(@RequestParam(required = false, defaultValue = "0") int curso,
-                                 @RequestParam(required = false, defaultValue = "0") int profesor,
-                                 @RequestParam(required = false, defaultValue = "0") int page,
-                                 @RequestParam(required = false, defaultValue = "15") int size,
+    public String findAllTutores(@RequestParam(name="curso", required = false, defaultValue = "0") int curso,
+                                 @RequestParam(name="profesor", required = false, defaultValue = "0") int profesor,
+                                 @RequestParam(name="page", required = false, defaultValue = "0") int page,
+                                 @RequestParam(name="size", required = false, defaultValue = "15") int size,
                                  Model model) {
         model.addAttribute("cursoFiltro", curso);
         model.addAttribute("profesorFiltro", profesor);

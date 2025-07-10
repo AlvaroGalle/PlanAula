@@ -46,6 +46,70 @@
         })
     }
 
+	function validarHorario(){
+		document.querySelectorAll(".is-invalid").forEach(e=>{
+			e.classList.remove("is-invalid");
+		})
+		const ids = ["Curso", "Aula", "Asignatura", "Dia", "Hora", "Profesor"]; 
+		ids.forEach(id => {
+		  const e = $("#add" + id);
+		  if (e.length && e.val() === "0") {
+		    e.addClass("is-invalid");
+		  }
+		});
+		if(document.querySelectorAll(".is-invalid").length === 0){$("#addHorario").submit()} 
+	}
+	
+	function accionHorarios(accion, boton) {
+	       let td = boton.closest("td");
+	       let id = td.dataset.id;
+	       $('#idHorario').val(id);
+	       let url = "/horarios/" + id;
+	       $.ajax({
+	           url: url,
+	           type: "GET",
+	           success: function (data) {
+	               switch (accion) {
+	                   case "M" :
+					      $("#addHorario_bt").addClass("disabled");
+						  $("#anadirHorario").addClass("show");
+					   	  $("#cancelEdit_bt").removeClass("d-none");
+	                      $("#addCurso").val(data.curso);
+						  $("#addAula").val(data.espacio);
+						  $("#addAsignatura").val(data.asignatura);
+						  $("#addDia").val(data.dia);
+						  $("#addHora").val(data.hora);
+						  $("#addProfesor").val(data.profesor);
+	                      break;
+	                   case "E" :
+						   $("#idElimnado").val(id);				   
+	                       $('#nombreAEliminar').text("¿Está seguro de eliminar la clase?");
+	                       $('#eliminarHorario-modal').modal('show');
+	                       break;
+	               }
+	           },
+	           error: function (xhr, status, error) {
+	               console.error("Error al obtener horario : ", error);
+	           }
+	       });
+	   }
+	   
+	   function cancelarEdicionHorario(){
+		$('#idHorario').val(0);
+		$("#addHorario_bt").removeClass("disabled");
+		$("#anadirHorario").removeClass("show");
+		$("#cancelEdit_bt").addClass("d-none");
+		const ids = ["Curso", "Aula", "Asignatura", "Dia", "Hora", "Profesor"]; 
+				ids.forEach(id => {
+				  $("#add" + id).val(0);
+				 });
+	   }
+	  
+	   $(document).ready(function() {
+			$("#searchAcciones").val(window.location.search);
+			$("#searchEliminar").val(window.location.search);
+	   });
+	
 </script>
 <body>
 <div class="container mt-5">
@@ -203,6 +267,78 @@
                         </div>
                     </div>-->
                     <div class="card-body bg-light">
+						<div class="row">
+							<div class="col-3 mb-2">
+								<p>
+									<button id="addHorario_bt" onclick="$('#idHorario').val(0)" class="btn btn-primary" type="button" data-bs-toggle="collapse" data-bs-target="#anadirHorario" aria-expanded="false" aria-controls="anadirHorario">
+									      Añadir horario
+									    </button>
+								</p>
+								</div>
+								<div class="row">
+															<div class="col mb-2">
+								<div class="collapse" id="anadirHorario">
+								  <div class="card card-body">
+									
+									<form id="addHorario" th:action="@{/horarios/accion}" th:object="${accionesHorario}" method="post">
+										<input type="hidden" name="id" id="idHorario" value="0">
+										<input type="hidden" name="search" id="searchAcciones">
+										<div class="row">
+										<div class="col-md-4 mb-3">
+											<select class="form-select" id="addAsignatura" name="asignatura">
+																					    <option value="0">Seleccione asignatura</option>
+																					    <option th:each=" asignatura : ${asignaturas}" th:value="${asignatura.id}" th:text="${asignatura.nombre}" th:selected="${asignaturaFiltro == asignatura.id}"></option>
+																					</select>
+										</div>
+										<div class="col-md-4 mb-3">
+										<select class="form-select" id="addAula" name="espacio">
+										    <option value="0">Seleccione aula</option>
+										    <option th:each=" aula : ${aulas}" th:value="${aula.id}" th:text="${aula.nombre}" th:selected="${aulaFiltro == aula.id}"></option>
+										</select>
+										</div>
+										<div class="col-md-4 mb-3">
+										<select class="form-select" id="addCurso" name="curso">
+										    <option value="0">Seleccione cursos</option>
+										    <option th:each=" curso : ${cursos}" th:value="${curso.id}" th:text="${curso.nombre}" th:selected="${cursoFiltro == curso.id}"></option>
+										</select>
+										</div>
+																				<div class="col-md-4 mb-3">
+										<select class="form-select" id="addDia" name="dia" >
+										    <option value="0">Seleccione días</option>
+										    <option th:each=" dia : ${dias}" th:value="${dia.id}" th:text="${dia.nombre}" th:selected="${diaFiltro == dia.id}"></option>
+										</select>
+										</div>
+																				<div class="col-md-4 mb-3">
+										<select class="form-select" id="addHora" name="hora">
+										    <option value="0">Seleccione hora</option>
+										    <option th:each=" hora: ${horas}" th:value="${hora.id}" th:text="${hora.nombre}" th:selected="${horaFiltro == hora.id}"></option>
+										</select>
+										</div>
+																				<div class="col-md-4 mb-3">
+										<select class="form-select" id="addProfesor" name="profesor">
+										    <option value="0">Seleccione profesor</option>
+										    <option th:each=" profesor : ${profesores}" th:value="${profesor.id}" th:text="${profesor.nombre}" th:selected="${profesorFiltro == profesor.id}"></option>
+										</select>
+										</div>
+										</div>
+										<div class="row">
+											<div class="col d-flex d-flex justify-content-end gap-2">
+												<button id="cancelEdit_bt" class="btn btn-secondary d-none" type="button" onclick="cancelarEdicionHorario()">
+																																  Cancelar
+																																    </button>
+																				<button class="btn btn-success" type="button" onclick="validarHorario()">
+																				  Aceptar
+																				    </button>
+																			</div>
+											</div>
+								    </form>
+								  
+								  </div>
+								</div>
+								</div>
+								</div>
+							
+						</div>
                         <div th:if="${#lists.size(page) > 0}" class="row">
                             <div class="table-responsive">
                                 <table class="table table-hover">
@@ -216,6 +352,7 @@
                                         <th>Profesor</th>
                                         <th>Espacio</th>
                                         <th>Observaciones</th>
+										<th>Acciones</th>
                                     </tr>
                                     </thead>
                                     <tbody>
@@ -228,6 +365,26 @@
                                         <td th:text="${horario.profesor}"></td>
                                         <td th:text="${horario.espacio}"></td>
                                         <td th:text="${horario.observaciones}"></td>
+										<td th:data-id="${horario.id}">
+										                       <ul class="list-inline hstack mb-0">
+										                           <li class="list-inline-item">
+										                               <a href="#" class="text-info cursor-pointer" onclick="accionHorarios('M', this)">
+										                                   <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+										                                        class="bi bi-pencil" viewBox="0 0 16 16">
+										                                       <path d="M12.146.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1 0 .708l-10 10a.5.5 0 0 1-.168.11l-5 2a.5.5 0 0 1-.65-.65l2-5a.5.5 0 0 1 .11-.168zM11.207 2.5 13.5 4.793 14.793 3.5 12.5 1.207zm1.586 3L10.5 3.207 4 9.707V10h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.293zm-9.761 5.175-.106.106-1.528 3.821 3.821-1.528.106-.106A.5.5 0 0 1 5 12.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.468-.325"/>
+										                                   </svg>
+										                               </a>
+										                           </li>
+										                           <li class="list-inline-item">
+										                               <a href="#" class="text-danger cursor-pointer" onclick="accionHorarios('E', this)">
+										                                   <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+										                                        class="bi bi-trash3" viewBox="0 0 16 16">
+										                                       <path d="M6.5 1h3a.5.5 0 0 1 .5.5v1H6v-1a.5.5 0 0 1 .5-.5M11 2.5v-1A1.5 1.5 0 0 0 9.5 0h-3A1.5 1.5 0 0 0 5 1.5v1H1.5a.5.5 0 0 0 0 1h.538l.853 10.66A2 2 0 0 0 4.885 16h6.23a2 2 0 0 0 1.994-1.84l.853-10.66h.538a.5.5 0 0 0 0-1zm1.958 1-.846 10.58a1 1 0 0 1-.997.92h-6.23a1 1 0 0 1-.997-.92L3.042 3.5zm-7.487 1a.5.5 0 0 1 .528.47l.5 8.5a.5.5 0 0 1-.998.06L5 5.03a.5.5 0 0 1 .47-.53Zm5.058 0a.5.5 0 0 1 .47.53l-.5 8.5a.5.5 0 1 1-.998-.06l.5-8.5a.5.5 0 0 1 .528-.47M8 4.5a.5.5 0 0 1 .5.5v8.5a.5.5 0 0 1-1 0V5a.5.5 0 0 1 .5-.5"/>
+										                                   </svg>
+										                               </a>
+										                           </li>
+										                       </ul>
+										                   </td>
                                     </tr>
                                     </tbody>
                                 </table>
@@ -257,7 +414,7 @@
                             <tr th:each="hora : ${horas}">
                                 <td th:text="${hora.nombre}"></td>
                                 <td th:each="dia : ${dias}" th:id="${hora.id} + '-' + ${dia.id}">
-                                    <div th:each="item : ${horarioCurso}"
+                                    <div th:each="item : ${horarioCurso}" class="mb-2"
                                          th:if="${item.dia == dia.nombre && item.hora == hora.nombre}">
                                         <div th:unless="${item.espacio == null}"
                                              class="accordion" th:id="'acordeon' + ${item.id}">
@@ -268,7 +425,7 @@
                                                             data-bs-toggle="collapse"
                                                             th:data-bs-target="'#collapse' + ${item.id}"
                                                             aria-expanded="false"
-                                                            aria-controls="collapseOne">
+                                                            aria-controls="'${item.id}">
                                                     </button>
                                                 </h2>
                                                 <div th:id="'collapse' + ${item.id}"
@@ -276,7 +433,7 @@
                                                      th:data-bs-parent="'#acordeon' + ${item.id}">
                                                     <div class="accordion-body">
                                                         <p th:text="${item.profesor + ' - ' + item.espacio}"></p>
-                                                        <p th:text=""></p>
+                                                        <p></p>
                                                     </div>
                                                 </div>
                                             </div>
@@ -295,6 +452,32 @@
             </div>
             <div class="card-footer text-muted bg-white d-flex justify-content-end">
                 <button type="button" class="btn btn-dark" onclick="location.href='/menu'">Volver</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<form id="eliminarHorarioForm" action="/horarios/eliminar" method="post">
+	<input type="hidden" name="id" id="idElimnado">
+	<input type="hidden" name="search" id="searchElimnar">
+</form>
+
+<div class="modal fade show" id="eliminarHorario-modal" tabindex="-1" role="dialog"
+     aria-labelledby="eliminarHorario-modal"
+     aria-hidden="true" style="display: none">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Eliminar horario</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <p id="nombreAEliminar"></p>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button onclick="$('#eliminarHorarioForm').submit()" class="btn btn-danger">Sí, eliminar</button>
             </div>
         </div>
     </div>

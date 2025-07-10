@@ -1,12 +1,22 @@
+
 package com.example.planaula.controllers;
 
 import com.example.planaula.Dto.*;
 import com.example.planaula.services.*;
+
+import jakarta.transaction.TransactionalException;
+
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestAttribute;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.lang.reflect.Field;
 import java.util.List;
@@ -39,14 +49,14 @@ public class HorariosController {
     }
 
     @GetMapping("")
-    public String findHorarios(@RequestParam(required = false, defaultValue = "0") int dia,
-                                         @RequestParam(required = false, defaultValue = "0") int hora,
-                                         @RequestParam(required = false, defaultValue = "0") String turno,
-                                         @RequestParam(required = false, defaultValue = "0") int curso,
-                                         @RequestParam(required = false, defaultValue = "0") int asignatura,
-                                         @RequestParam(required = false, defaultValue = "0") int profesor,
-                                         @RequestParam(required = false, defaultValue = "0") int aula,
-                                         @RequestParam(required = false, defaultValue = "lista") String tab,
+    public String findHorarios(@RequestParam(name="dia", required = false, defaultValue = "0") int dia,
+    						   @RequestParam(name="hora", required = false, defaultValue = "0") int hora,
+                               @RequestParam(name="turno", required = false, defaultValue = "0") String turno,
+                               @RequestParam(name="curso", required = false, defaultValue = "0") int curso,
+                               @RequestParam(name="asignatura", required = false, defaultValue = "0") int asignatura,
+                               @RequestParam(name="profesor", required = false, defaultValue = "0") int profesor,
+                               @RequestParam(name="aula", required = false, defaultValue = "0") int aula,
+                               @RequestParam(name="tab", required = false, defaultValue = "lista") String tab,
                                          Model model) {
         model.addAttribute("tab", tab);
 
@@ -100,7 +110,40 @@ public class HorariosController {
         int tableCurso = curso != 0 ? curso : 1;
         List<HorarioDTO> horariosCursoDTOlist = horariosService.findAllHorariosByDiaAndHoraAndCurso(0, 0, tableCurso, 0, 0, 0);
         model.addAttribute("tableCurso", tableCurso);
-        model.addAttribute("horarioCurso", horariosCursoDTOlist );
+        model.addAttribute("horarioCurso", horariosCursoDTOlist);
+        model.addAttribute("accionesHorario", new HorarioDTO());
         return "horarios";
+    }
+    
+    @GetMapping("/{id}")
+    @ResponseBody
+    public HorarioDTO findHorarioById(@PathVariable(name="id") int id) {
+    	return horariosService.findHorarioById(id);
+    }
+    
+    @PostMapping("/accion")
+    public String accionHorario(@RequestParam(name="search") String search,
+    							@ModelAttribute HorarioDTO accionesHorario) {
+    	try{
+    		if(accionesHorario.getId() == 0) {
+        		horariosService.anadirHorario(accionesHorario);
+        	}else {
+        		horariosService.editarHorario(accionesHorario);
+        	}	
+    	}catch(TransactionalException e){
+    		e.printStackTrace();
+    	}
+    	return "redirect:/horarios" + search;
+    }
+    
+    @PostMapping("/eliminar")
+    public String eliminarHorario(@RequestParam(name="id") int id,
+    							  @RequestParam(name="search") String search) {
+	try {
+		horariosService.eliminarHorario(id);	
+    }catch(TransactionalException e){
+		e.printStackTrace();
+	}
+    	return "redirect:/horarios" + search;
     }
 }

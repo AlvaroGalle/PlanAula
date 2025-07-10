@@ -30,23 +30,21 @@ public class UserService implements UserDetailsService {
         String passwordEncriptada = passwordEncoder.encode(usuarioDTO.getPassword());
 
             String sql = """
-        INSERT INTO usuarios (username, password, rol, enabled, profesor_id)
-        VALUES (:username, :password, :rol, :enabled, :profesorId)
+        INSERT INTO usuarios (username, password, role)
+        VALUES (:username, :password, :role)
     """;
 
             entityManager.createNativeQuery(sql)
                     .setParameter("username", usuarioDTO.getUsername())
                     .setParameter("password", passwordEncriptada)
-                    .setParameter("rol", "ALUMNO")
-                    .setParameter("enabled", true)
-                    .setParameter("profesorId", null)
+                    .setParameter("role", "admin")
                     .executeUpdate();
         }
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         String sql = """
-            SELECT username, password, rol, enabled
+            SELECT id, username, password, role, id_profesor, id_alumno
             FROM usuarios
             WHERE username = :username
         """;
@@ -56,16 +54,15 @@ public class UserService implements UserDetailsService {
                     .setParameter("username", username)
                     .getSingleResult();
 
-            String nombre = (String) result[0];
-            String pass = (String) result[1];
-            String rol = (String) result[2];
-            boolean enabled = (Boolean) result[3];
+            Integer id = (Integer) result[0];
+            String nombre = (String) result[1];
+            String pass = (String) result[2];
+            String rol = (String) result[3];
 
             return User.builder()
                     .username(nombre)
                     .password(pass)
-                    .roles(rol) // Spring espera "ROLE_PROFESOR", etc.
-                    .disabled(!enabled)
+                    .roles(rol)
                     .build();
 
         } catch (NoResultException e) {

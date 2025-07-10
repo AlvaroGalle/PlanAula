@@ -36,11 +36,11 @@ public class EspaciosController {
     }
 
     @GetMapping("")
-    public String findAllEspacios(@RequestParam(required = false, defaultValue = "0") int dia,
-                                  @RequestParam(required = false, defaultValue = "0") int hora,
-                                  @RequestParam(required = false, defaultValue = "0") int aula,
-                                  @RequestParam(required = false, defaultValue = "0") int asignatura,
-                                  @RequestParam(required = false, defaultValue = "0") String id,
+    public String findAllEspacios(@RequestParam(name = "dia", required = false, defaultValue = "0") int dia,
+            					  @RequestParam(name = "hora", required = false, defaultValue = "0") int hora,
+            					  @RequestParam(name = "aula", required = false, defaultValue = "0") int aula,
+            					  @RequestParam(name = "asignatura", required = false, defaultValue = "0") int asignatura,
+            					  @RequestParam(name = "id", required = false, defaultValue = "0") String id,
                                   Model model) {
     	model.addAttribute("id", id);
     	
@@ -77,7 +77,7 @@ public class EspaciosController {
     }
     
     @GetMapping("{id}")
-    public String findEspacioaById(@PathVariable int id, Model model) {
+    public String findEspacioaById(@PathVariable(name="id") int id, Model model) {
         try {
             EspacioDTO espacioDTO = espaciosService.findEspacioById(id);
             model.addAttribute("espacio", espacioDTO);
