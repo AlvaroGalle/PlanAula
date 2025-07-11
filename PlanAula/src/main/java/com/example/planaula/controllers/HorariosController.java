@@ -106,10 +106,7 @@ public class HorariosController {
 
         List<HorarioDTO> horarioDTOList = horariosService.findAllHorariosByDiaAndHoraAndCurso(dia, hora, curso, asignatura, profesor, aula);
         model.addAttribute("page",horarioDTOList);
-        
-        int tableCurso = curso != 0 ? curso : 1;
-        List<HorarioDTO> horariosCursoDTOlist = horariosService.findAllHorariosByDiaAndHoraAndCurso(0, 0, tableCurso, 0, 0, 0);
-        model.addAttribute("tableCurso", tableCurso);
+        List<HorarioDTO> horariosCursoDTOlist = horariosService.findAllHorariosByDiaAndHoraAndCurso(0, 0, curso, 0, profesor, 0);
         model.addAttribute("horarioCurso", horariosCursoDTOlist);
         model.addAttribute("accionesHorario", new HorarioDTO());
         return "horarios";
@@ -118,7 +115,8 @@ public class HorariosController {
     @GetMapping("/{id}")
     @ResponseBody
     public HorarioDTO findHorarioById(@PathVariable(name="id") int id) {
-    	return horariosService.findHorarioById(id);
+    	/*return horariosService.findHorarioById(id);*/
+    	return new HorarioDTO();
     }
     
     @PostMapping("/accion")

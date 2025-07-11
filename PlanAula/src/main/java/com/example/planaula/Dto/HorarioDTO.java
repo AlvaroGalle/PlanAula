@@ -8,12 +8,12 @@ public class HorarioDTO {
     private String asignatura;
     private String profesor;
     private String espacio;
-
     private String observaciones;
+    private String tipo;
 
     public HorarioDTO() {}
 
-    public HorarioDTO(int id, String dia, String hora, String curso, String asignatura, String profesor, String espacio, String observaciones) {
+    public HorarioDTO(int id, String dia, String hora, String curso, String asignatura, String profesor, String espacio, String observaciones, String tipo) {
         this.id = id;
         this.dia = dia;
         this.hora = hora;
@@ -22,6 +22,7 @@ public class HorarioDTO {
         this.profesor = profesor;
         this.espacio = espacio;
         this.observaciones = observaciones;
+        this.tipo = tipo;
     }
 
     public int getId() {
@@ -87,4 +88,13 @@ public class HorarioDTO {
     public void setObservaciones(String observaciones) {
         this.observaciones = observaciones;
     }
+    
+    public String getTipo() {
+        return tipo;
+    }
+
+    public void setTipo(String tipo) {
+        this.tipo = tipo;
+    }
 }
+

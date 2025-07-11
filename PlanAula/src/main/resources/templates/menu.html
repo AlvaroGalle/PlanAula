@@ -1,108 +1,101 @@
 <!DOCTYPE html>
-<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Agenda de [[${user}]]</title>
-
     <div th:replace="~{fragments/head.html}"></div>
-    <link th:href="@{/css/custom.css}" rel="stylesheet">
-
-    <style>
-        body {
-            overflow-x: hidden;
-        }
-        .sidebar {
-            width: 240px;
-            position: fixed;
-            top: 0;
-            bottom: 0;
-            left: 0;
-            padding: 1rem;
-            background-color: #f8f9fa;
-        }
-        .sidebar .nav-link {
-            color: #333;
-            margin-bottom: 0.5rem;
-            border-radius: 0.25rem;
-        }
-        .sidebar .nav-link.active {
-            background-color: #0d6efd;
-            color: #fff;
-        }
-        .menu-item {
-            border-radius: 5px;
-            text-align: center;
-            cursor: pointer;
-            transition: transform 0.2s, box-shadow 0.2s;
-            color: white;
-            padding: 15px;
-            margin-bottom: 10px;
-            font-weight: bold;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            height: 150px;
-        }
-        .menu-item:hover {
-            transform: translateY(-4px);
-            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
-        }
-        .menu-item img {
-            font-size: 2em;
-            margin-bottom: 8px;
-        }
-        .content {
-            margin-left: 10%;
-            margin-right: 10%;
-            padding: 2rem;
-        }
-
-        .post-it {
-            background: #fffb8f;
-            width: 17%;
-            min-height: 200px;
-            padding: 1rem;
-            margin: 1rem;
-            box-shadow: 2px 2px 6px rgba(0,0,0,0.2);
-            position: relative;
-            transform: rotate(-2deg);
-            font-family: 'Comic Sans MS', cursive, sans-serif;
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-        }
-        .post-it::before {
-            content: '';
-            position: absolute;
-            top: -10px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 30px;
-            height: 10px;
-            background: #d4d4d4;
-            border-radius: 2px;
-        }
-        .post-it:hover {
-            transform: rotate(-2deg) translateY(-10px) scale(1.05);
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
-        }
-
-        #video_background {
-            position: fixed;
-            top: 0; left: 0;
-            width: 100vw;
-            height: 100vh;
-            object-fit: cover;
-            z-index: -1;
-            pointer-events: none;
-        }
-    </style>
 </head>
+<div th:replace="~{fragments/links.html}"></div>
+<style>
+       body {
+           overflow-x: hidden;
+       }
+       .sidebar {
+           width: 240px;
+           position: fixed;
+           top: 0;
+           bottom: 0;
+           left: 0;
+           padding: 1rem;
+           background-color: #f8f9fa;
+       }
+       .sidebar .nav-link {
+           color: #333;
+           margin-bottom: 0.5rem;
+           border-radius: 0.25rem;
+       }
+       .sidebar .nav-link.active {
+           background-color: #0d6efd;
+           color: #fff;
+       }
+       .menu-item {
+           border-radius: 5px;
+           text-align: center;
+           cursor: pointer;
+           transition: transform 0.2s, box-shadow 0.2s;
+           color: white;
+           padding: 15px;
+           margin-bottom: 10px;
+           font-weight: bold;
+           display: flex;
+           flex-direction: column;
+           align-items: center;
+           justify-content: center;
+           height: 150px;
+       }
+       .menu-item:hover {
+           transform: translateY(-4px);
+           box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+       }
+       .menu-item img {
+           font-size: 2em;
+           margin-bottom: 8px;
+       }
+       .content {
+           margin-left: 10%;
+           margin-right: 10%;
+           padding: 2rem;
+       }
 
+       .post-it {
+           background: #fffb8f;
+           width: 17%;
+           min-height: 200px;
+           padding: 1rem;
+           margin: 1rem;
+           box-shadow: 2px 2px 6px rgba(0,0,0,0.2);
+           position: relative;
+           transform: rotate(-2deg);
+           font-family: 'Comic Sans MS', cursive, sans-serif;
+           transition: transform 0.3s ease, box-shadow 0.3s ease;
+       }
+       .post-it::before {
+           content: '';
+           position: absolute;
+           top: -10px;
+           left: 50%;
+           transform: translateX(-50%);
+           width: 30px;
+           height: 10px;
+           background: #d4d4d4;
+           border-radius: 2px;
+       }
+       .post-it:hover {
+           transform: rotate(-2deg) translateY(-10px) scale(1.05);
+           box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+       }
+
+       #video_background {
+           position: fixed;
+           top: 0; left: 0;
+           width: 100vw;
+           height: 100vh;
+           object-fit: cover;
+           z-index: -1;
+           pointer-events: none;
+       }
+   </style>
 <body class="d-flex flex-column min-vh-100">
-    <th:block th:replace="~{fragments/links.html}"></th:block>
 
-    <video autoplay muted loop id="video_background">
+   <video autoplay muted loop id="video_background">
         <source src="/videos/ondasAzules.mp4" type="video/mp4">
     </video>
 
@@ -114,7 +107,7 @@
                         <div class="d-flex justify-content-center align-items-center theme-asignaturas rounded-circle mx-auto mb-3" style="width: 80px; height: 80px; font-size: 2rem;">
                             <img src="/images/menu/asignaturas.png" alt="asignaturas" width="50%" />
                         </div>
-                        <h6 class="card-title fw-bold">Asignaturas</h6>
+                        <h6 class="card-title text-dark fw-bold">Asignaturas</h6>
                     </div>
                 </div>
             </div>
@@ -125,7 +118,7 @@
                         <div class="d-flex justify-content-center align-items-center theme-profesores rounded-circle mx-auto mb-3" style="width: 80px; height: 80px; font-size: 2rem;">
                             <img src="/images/menu/profesor.png" alt="profesores" width="50%" />
                         </div>
-                        <h6 class="card-title fw-bold">Profesores</h6>
+                        <h6 class="card-title text-dark fw-bold">Profesores</h6>
                     </div>
                 </div>
             </div>
@@ -136,7 +129,7 @@
                         <div class="d-flex justify-content-center align-items-center theme-espacios rounded-circle mx-auto mb-3" style="width: 80px; height: 80px; font-size: 2rem;">
                             <img src="/images/menu/aula.png" alt="espacios" width="50%" />
                         </div>
-                        <h6 class="card-title fw-bold">Espacios</h6>
+                        <h6 class="card-title text-dark fw-bold">Espacios</h6>
                     </div>
                 </div>
             </div>
@@ -147,7 +140,7 @@
                         <div class="d-flex justify-content-center align-items-center theme-guardias rounded-circle mx-auto mb-3" style="width: 80px; height: 80px; font-size: 2rem;">
                             <img src="/images/menu/guardia.png" alt="guardias" width="50%" />
                         </div>
-                        <h6 class="card-title fw-bold">Guardias</h6>
+                        <h6 class="card-title text-dark fw-bold">Guardias</h6>
                     </div>
                 </div>
             </div>
@@ -155,8 +148,11 @@
     </section>
 
 	<main class="container mb-4">
+		                                       
 		<div class="card">
-			<div th:replace="~{fragments/tableHorario.html}"></div>
+			<form id="filtrosForm" method="get" th:action="@{'/menu'}">
+				<div th:replace="~{fragments/tableHorario.html}"></div>
+			</form>
 		</div>
 		</main>
 		
@@ -166,14 +162,15 @@
 				<div class="col-6 text-start">
 					<small>&copy; 2025 PlanAula — Todos los derechos reservados</small>
 					</div>
-					<div class="col-6 text-end">
+					<div class="col-6 text-end" >
+						<a href="/logout" class="text-black">
 						<small>Desconectar</small>
+						</a>
 						</div>
 			
         </div>
 		</div>
     </footer>
 
-    <div th:replace="~{fragments/links.html}"></div>
 </body>
 </html>

@@ -104,10 +104,11 @@ public class MenuController {
         List<AsignaturaDTO> asignaturaDTOList =  asignaturasService.findAllAsignaturas();
         model.addAttribute("asignaturas", asignaturaDTOList);
         
-        int tableCurso = curso != 0 ? curso : 1;
-        List<HorarioDTO> horariosCursoDTOlist = horariosService.findAllHorariosByDiaAndHoraAndCurso(0, 0, tableCurso, 0, 0, 0);
-        model.addAttribute("tableCurso", tableCurso);
+        List<HorarioDTO> horariosCursoDTOlist = horariosService.findAllHorariosByDiaAndHoraAndCurso(0, 0, curso, profesor, 0, 0);
         model.addAttribute("horarioCurso", horariosCursoDTOlist);
+        
+        model.addAttribute("cursoFiltro", curso);
+        model.addAttribute("profesorFiltro", profesor);
         return "menu";
     }
 }

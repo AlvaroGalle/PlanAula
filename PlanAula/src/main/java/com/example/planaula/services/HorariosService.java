@@ -36,20 +36,61 @@ public class HorariosService {
     private EntityManager entityManager;
 
     public List<HorarioDTO> findAllHorariosByDiaAndHoraAndCurso(Integer dia, Integer hora, Integer curso, Integer asignatura, Integer profesor, Integer aula) {
-        String sql = "SELECT h.id, d.dia, ho.hora, c.curso, asig.asignatura, p.nombre, a.aula, h.observaciones "
-                + "FROM horarios h "
-                + "JOIN cursos c ON h.id_curso = c.id "
-                + "JOIN profesores p ON h.id_profesor = p.id "
-                + "JOIN asignaturas asig ON h.id_asignatura = asig.id "
-                + "JOIN aulas a ON h.id_aula = a.id "
-                + "JOIN dias d ON h.id_dia = d.id "
-                + "JOIN horas ho ON h.id_hora = ho.id "
-                + "WHERE (:dia IS NULL OR :dia = 0 OR d.id = :dia) "
-                + "AND (:hora IS NULL OR :hora = 0 OR ho.id = :hora) "
-                + "AND (:curso IS NULL OR :curso = 0 OR c.id = :curso) "
-                + "AND (:asignatura IS NULL OR :asignatura = 0 OR asig.id = :asignatura) "
-                + "AND (:profesor IS NULL OR :profesor = 0 OR p.id = :profesor) "
-                + "AND (:aula IS NULL OR :aula = 0 OR a.id = :aula)";
+    	String sql = 
+    		    "SELECT h.id, d.dia, ho.hora, c.curso, asig.asignatura, p.nombre AS profesor, a.aula, h.observaciones, "
+    		  + "'clase' AS tipo, 'horarios' AS origen "
+    		  + "FROM horarios h "
+    		  + "JOIN cursos c ON h.id_curso = c.id "
+    		  + "JOIN profesores p ON h.id_profesor = p.id "
+    		  + "JOIN asignaturas asig ON h.id_asignatura = asig.id "
+    		  + "JOIN aulas a ON h.id_aula = a.id "
+    		  + "JOIN dias d ON h.id_dia = d.id "
+    		  + "JOIN horas ho ON h.id_hora = ho.id "
+    		  + "WHERE (:dia IS NULL OR :dia = 0 OR d.id = :dia) "
+    		  + "AND (:hora IS NULL OR :hora = 0 OR ho.id = :hora) "
+    		  + "AND (:curso IS NULL OR :curso = 0 OR c.id = :curso) "
+    		  + "AND (:asignatura IS NULL OR :asignatura = 0 OR asig.id = :asignatura) "
+    		  + "AND (:profesor IS NULL OR :profesor = 0 OR p.id = :profesor) "
+    		  + "AND (:aula IS NULL OR :aula = 0 OR a.id = :aula) "
+
+    		  + "UNION ALL "
+
+    		  + "SELECT g.id, d.dia, ho.hora, NULL AS curso, NULL AS asignatura, p.nombre AS profesor, "
+    		  + "NULL AS aula, NULL AS observaciones, 'guardia' AS tipo, 'guardias' AS origen "
+    		  + "FROM guardias g "
+    		  + "JOIN profesores p ON g.id_profesor = p.id "
+    		  + "JOIN dias d ON g.id_dia = d.id "
+    		  + "JOIN horas ho ON g.id_hora = ho.id "
+    		  + "WHERE (:dia IS NULL OR :dia = 0 OR d.id = :dia) "
+    		  + "AND (:hora IS NULL OR :hora = 0 OR ho.id = :hora) "
+    		  + "AND (:profesor IS NULL OR :profesor = 0 OR p.id = :profesor) "
+
+    		  + "UNION ALL "
+
+    		  + "SELECT r.id, d.dia, ho.hora, NULL AS curso, NULL AS asignatura, p.nombre AS profesor, "
+    		  + "NULL AS aula, NULL AS observaciones, 'recreo' AS tipo, 'recreo' AS origen "
+    		  + "FROM recreos r "
+    		  + "JOIN profesores p ON r.id_profesor = p.id "
+    		  + "JOIN dias d ON r.id_dia = d.id "
+    		  + "JOIN horas ho ON r.id_hora = ho.id "
+    		  + "WHERE (:dia IS NULL OR :dia = 0 OR d.id = :dia) "
+    		  + "AND (:hora IS NULL OR :hora = 0 OR ho.id = :hora) "
+    		  + "AND (:profesor IS NULL OR :profesor = 0 OR p.id = :profesor) "
+
+    		  + "UNION ALL "
+
+    		  + "SELECT l.id, d.dia, ho.hora, NULL AS curso, NULL AS asignatura, p.nombre AS profesor, "
+    		  + "NULL AS aula, NULL AS observaciones, 'libranza' AS tipo, 'libranza' AS origen "
+    		  + "FROM libranzas l "
+    		  + "JOIN profesores p ON l.id_profesor = p.id "
+    		  + "JOIN dias d ON l.id_dia = d.id "
+    		  + "JOIN horas ho ON l.id_hora = ho.id "
+    		  + "WHERE (:dia IS NULL OR :dia = 0 OR d.id = :dia) "
+    		  + "AND (:hora IS NULL OR :hora = 0 OR ho.id = :hora) "
+    		  + "AND (:profesor IS NULL OR :profesor = 0 OR p.id = :profesor) "
+
+    		  + "ORDER BY dia, hora";
+
 
         List<Object[]> resultados = entityManager.createNativeQuery(sql)
                 .setParameter("dia", dia)
@@ -63,7 +104,6 @@ public class HorariosService {
         if (resultados == null || resultados.isEmpty()) {
             return Collections.emptyList();
         }
-
         return resultados.stream()
                 .map(resultado -> new HorarioDTO(
                         ((Number) resultado[0]).intValue(),
@@ -73,7 +113,8 @@ public class HorariosService {
                         (String) resultado[4],
                         (String) resultado[5],
                         (String) resultado[6],
-                        (String) resultado[7]
+                        (String) resultado[7],
+                        (String) resultado[8]
                 ))
                 .collect(Collectors.toList());
     }
@@ -111,7 +152,7 @@ public class HorariosService {
         }
     }
     
-    public HorarioDTO findHorarioById(int id) {
+   /* public HorarioDTO findHorarioById(int id) {
         String sql = """
             SELECT id, id_dia, id_hora, id_curso, id_asignatura, id_profesor, id_aula, observaciones
             FROM horarios
@@ -138,7 +179,7 @@ public class HorariosService {
         	e.printStackTrace();
             return new HorarioDTO();
         }
-    }
+    }*/
     
     @Transactional
     public void anadirHorario(HorarioDTO horarioDTO) {

@@ -1,19 +1,33 @@
+<script>
+	function changeHorario(select){
+		const element = $('#' + select.name + 'Filter');
+		if (element.length) {
+		    element.val(select.value);
+		}
+		const resetId = select.name === "curso" ? "#profesorHorario" : "#cursoHorario";
+		$(resetId).val(0);
+
+		$('#filtrosForm').submit()	
+	}
+</script>
 <div class="card-body">
+	<div class="table-responsive">
                         <table class="table table-bordered table-striped">
-                            <thead class="thead-dark">
+                            <thead class="thead-dark">								
 								<tr>
 								  <th scope="col" colspan="1">
 								    <div class="d-flex gap-2">
-								      <select class="form-select form-select-sm w-50" name="curso"
-								              onchange="$('#cursoFilter').val(this.value); $('#filtrosForm').submit()">
+								      <select class="form-select form-select-sm w-50" name="curso" id="cursoHorario"
+								              onchange="changeHorario(this)">
+											  <option value="0">Curso</option>
 								        <option th:each="curso : ${cursos}" th:value="${curso.id}"
-								                th:text="${curso.nombre}" th:selected="${tableCurso == curso.id}"></option>
+								                th:text="${curso.nombre}" th:selected="${cursoFiltro == curso.id}"></option>
 								      </select>
-									  <select class="form-select form-select-sm w-50" name="curso"
-									  								              onchange="$('#cursoFilter').val(this.value); $('#filtrosForm').submit()">
-									  								        <option th:each="curso : ${cursos}" th:value="${curso.id}"
-									  								                th:text="${curso.nombre}" th:selected="${tableCurso == curso.id}"></option>
-									  								      </select>
+									  <select class="form-select form-select-sm w-50" id="profesorHorario" name="profesor" onchange="changeHorario(this)">
+									      <option value="0">Profesor</option>
+									      <option th:each=" profesor : ${profesores}" th:value="${profesor.id}" 
+										  th:text="${profesor.nombre}" th:selected="${profesorFiltro == profesor.id}"></option>
+									  </select>
 								    </div>
 								  </th>
 								  <th scope="col" th:each="dia : ${dias}" th:text="${dia.nombre}"></th>
@@ -25,26 +39,42 @@
                                 <td th:each="dia : ${dias}" th:id="${hora.id} + '-' + ${dia.id}">
                                     <div th:each="item : ${horarioCurso}" class="mb-2"
                                          th:if="${item.dia == dia.nombre && item.hora == hora.nombre}">
-                                        <div th:unless="${item.espacio == null}"
-                                             class="accordion" th:id="'acordeon' + ${item.id}">
-                                            <div th:if="${item.espacio != null}" class="accordion-item">
-                                                <h2 class="accordion-header">
-                                                    <button th:text="${item.asignatura}" class="accordion-button"
-                                                            type="button"
-                                                            data-bs-toggle="collapse"
-                                                            th:data-bs-target="'#collapse' + ${item.id}"
-                                                            aria-expanded="false"
-                                                            aria-controls="'${item.id}">
-                                                    </button>
-                                                </h2>
-                                                <div th:id="'collapse' + ${item.id}"
-                                                     class="accordion-collapse collapse"
-                                                     th:data-bs-parent="'#acordeon' + ${item.id}">
-                                                    <div class="accordion-body">
-                                                        <p th:text="${item.profesor + ' - ' + item.espacio}"></p>
-                                                        <p></p>
-                                                    </div>
-                                                </div>
+										 <div th:if="${item.espacio != null && (cursoFiltro != 0 || profesorFiltro != 0)}" class="accordion" th:id="'acordeon' + ${item.id}">
+										     <div class="accordion-item">
+										         <h2 class="accordion-header">
+										             <button th:if="${cursoFiltro != 0}" class="accordion-button collapsed"
+										                     type="button"
+										                     data-bs-toggle="collapse"
+										                     th:data-bs-target="'#collapse' + ${item.id}"
+										                     aria-expanded="false"
+										                     th:aria-controls="'collapse' + ${item.id}">
+										                 <span th:text="${item.asignatura}"></span>
+										             </button>
+													 <button th:if="${profesorFiltro != 0}" class="accordion-button collapsed"
+													 										                     type="button"
+													 										                     data-bs-toggle="collapse"
+													 										                     th:data-bs-target="'#collapse' + ${item.id}"
+													 										                     aria-expanded="false"
+													 										                     th:aria-controls="'collapse' + ${item.id}">
+													 										                 <span th:text="${item.curso}"></span>
+													 										             </button>
+										         </h2>
+										         <div th:if="${cursoFiltro != 0}" 
+												 	  th:id="'collapse' + ${item.id}"
+										              class="accordion-collapse collapse">
+										             <div class="accordion-body">
+										                 <p th:text="${item.profesor + ' - ' + item.espacio}"></p>
+										             </div>
+										         </div>
+												 <div th:if="${profesorFiltro != 0}" 
+												 												 	  th:id="'collapse' + ${item.id}"
+												 										              class="accordion-collapse collapse">
+												 										             <div class="accordion-body">
+												 										                 <p th:text="${item.asignatura + ' - ' + item.espacio}"></p>
+												 										             </div>
+												 										         </div>
+										     </div>
+										 </div>
                                             </div>
                                         </div>
                                         <!--<div th:if="${item.espacio == null}"
@@ -58,4 +88,5 @@
                         </table>
                     </div>
                 </div>
+				</div>
             </div>
