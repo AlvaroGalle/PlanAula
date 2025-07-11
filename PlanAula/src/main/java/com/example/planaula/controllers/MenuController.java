@@ -58,7 +58,7 @@ public class MenuController {
     public String menu(@RequestParam(name="curso", required = false, defaultValue = "0") int curso,
             		   @RequestParam(name="profesor", required = false, defaultValue = "0") int profesor, 
             		   Model model) {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+    	/*Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String username = authentication.getName();
         model.addAttribute("user", username);
         model.addAttribute("idUser", 1);
@@ -72,7 +72,7 @@ public class MenuController {
         model.addAttribute("task", tenTask);
 
         List<String> colores = Arrays.asList("#ffeb99", "#ffe584", "#D3F8E2", "#ADD8E6", "#FFB6C1");
-        model.addAttribute("colores", colores);
+        model.addAttribute("colores", colores);*/
 
         LocalDate fechaActual = LocalDate.now();
         String diaSemana = fechaActual.getDayOfWeek().getDisplayName(TextStyle.FULL, new Locale("es", "ES")).toUpperCase();
@@ -104,7 +104,7 @@ public class MenuController {
         List<AsignaturaDTO> asignaturaDTOList =  asignaturasService.findAllAsignaturas();
         model.addAttribute("asignaturas", asignaturaDTOList);
         
-        List<HorarioDTO> horariosCursoDTOlist = horariosService.findAllHorariosByDiaAndHoraAndCurso(0, 0, curso, profesor, 0, 0);
+        List<HorarioDTO> horariosCursoDTOlist = horariosService.findAllHorariosByDiaAndHoraAndCurso(0, 0, curso, 0, profesor, 0);
         model.addAttribute("horarioCurso", horariosCursoDTOlist);
         
         model.addAttribute("cursoFiltro", curso);

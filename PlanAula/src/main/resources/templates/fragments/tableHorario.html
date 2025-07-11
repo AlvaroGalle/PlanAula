@@ -12,7 +12,7 @@
 </script>
 <div class="card-body">
 	<div class="table-responsive">
-                        <table class="table table-bordered table-striped">
+		<table class="table table-bordered table-striped table-sm text-center align-middle w-100" style="table-layout: fixed;">
                             <thead class="thead-dark">								
 								<tr>
 								  <th scope="col" colspan="1">
@@ -37,37 +37,37 @@
                             <tr th:each="hora : ${horas}">
                                 <td th:text="${hora.nombre}"></td>
                                 <td th:each="dia : ${dias}" th:id="${hora.id} + '-' + ${dia.id}">
-                                    <div th:each="item : ${horarioCurso}" class="mb-2"
+                                    <div th:each="item : ${horarioCurso}"
                                          th:if="${item.dia == dia.nombre && item.hora == hora.nombre}">
-										 <div th:if="${item.espacio != null && (cursoFiltro != 0 || profesorFiltro != 0)}" class="accordion" th:id="'acordeon' + ${item.id}">
+										 <div th:if="${(item.espacio != null || item.tipo != null) && (cursoFiltro != 0 || profesorFiltro != 0)}" class="accordion" th:id="'acordeon' + ${item.id} + '_' + ${item.tipo}">
 										     <div class="accordion-item">
 										         <h2 class="accordion-header">
 										             <button th:if="${cursoFiltro != 0}" class="accordion-button collapsed"
 										                     type="button"
 										                     data-bs-toggle="collapse"
-										                     th:data-bs-target="'#collapse' + ${item.id}"
+										                     th:data-bs-target="'#collapse' + ${item.id} + '_' + ${item.tipo}"
 										                     aria-expanded="false"
-										                     th:aria-controls="'collapse' + ${item.id}">
+										                     th:aria-controls="'collapse' + ${item.id} + '_' + ${item.tipo}">
 										                 <span th:text="${item.asignatura}"></span>
 										             </button>
 													 <button th:if="${profesorFiltro != 0}" class="accordion-button collapsed"
 													 										                     type="button"
 													 										                     data-bs-toggle="collapse"
-													 										                     th:data-bs-target="'#collapse' + ${item.id}"
+													 										                     th:data-bs-target="'#collapse' + ${item.id} + '_' + ${item.tipo}"
 													 										                     aria-expanded="false"
-													 										                     th:aria-controls="'collapse' + ${item.id}">
-													 										                 <span th:text="${item.curso}"></span>
+													 										                     th:aria-controls="'collapse' + ${item.id} + '_' + ${item.tipo}">
+													 										                 <span th:text="${item.curso != null ? item.curso : item.tipo.toUpperCase()}"></span>
 													 										             </button>
 										         </h2>
 										         <div th:if="${cursoFiltro != 0}" 
-												 	  th:id="'collapse' + ${item.id}"
+												 	  th:id="'collapse' + ${item.id} + '_' + ${item.tipo}"
 										              class="accordion-collapse collapse">
 										             <div class="accordion-body">
 										                 <p th:text="${item.profesor + ' - ' + item.espacio}"></p>
 										             </div>
 										         </div>
 												 <div th:if="${profesorFiltro != 0}" 
-												 												 	  th:id="'collapse' + ${item.id}"
+												 												 	  th:id="'collapse' + ${item.id} + '_' + ${item.tipo}"
 												 										              class="accordion-collapse collapse">
 												 										             <div class="accordion-body">
 												 										                 <p th:text="${item.asignatura + ' - ' + item.espacio}"></p>
@@ -77,14 +77,34 @@
 										 </div>
                                             </div>
                                         </div>
-                                        <!--<div th:if="${item.espacio == null}"
-                                             class="alert alert-info" role="alert">
-                                            Hora libre
-                                        </div>-->
                                     </div>
                                 </td>
                             </tr>
                             </tbody>
+							<tfoot>
+								<tr>
+									<td scope="col" th:colspan="${#lists.size(dias) + 1}" class="text-start">
+										<div class="d-flex justify-content-center flex-wrap gap-3 py-2">
+										       <div class="d-flex align-items-center gap-2">
+										          <div class="rounded-circle" style="width: 16px; height: 16px; background-color: #007bff;"></div>
+										          <span class="small">Clases</span>
+												  </div>
+												<div class="d-flex align-items-center gap-2">
+										          <div class="rounded-circle" style="width: 16px; height: 16px; background-color: #ffc107;"></div>
+										          <span class="small">Guardias</span>
+												  </div>
+												<div class="d-flex align-items-center gap-2">
+										          <div class="rounded-circle" style="width: 16px; height: 16px; background-color: #28a745;"></div>
+										          <span class="small">Recreo</span>
+												  </div>
+												<div class="d-flex align-items-center gap-2">
+										          <div class="rounded-circle" style="width: 16px; height: 16px; background-color: #dc3545;"></div>
+										          <span class="small">Libranza</span>
+										      </div>
+											  </div>
+									</td>
+									</tr>
+							</tfoot>
                         </table>
                     </div>
                 </div>
