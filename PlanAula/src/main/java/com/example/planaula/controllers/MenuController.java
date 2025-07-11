@@ -1,8 +1,19 @@
 package com.example.planaula.controllers;
 
+import com.example.planaula.Dto.AsignaturaDTO;
+import com.example.planaula.Dto.AulaDTO;
+import com.example.planaula.Dto.CursoDTO;
+import com.example.planaula.Dto.DiaDTO;
+import com.example.planaula.Dto.HoraDTO;
 import com.example.planaula.Dto.HorarioDTO;
+import com.example.planaula.Dto.ProfesorDTO;
+import com.example.planaula.services.AsignaturasService;
+import com.example.planaula.services.AulasService;
+import com.example.planaula.services.CursosService;
+import com.example.planaula.services.DiasService;
 import com.example.planaula.services.HorariosService;
 import com.example.planaula.services.HorasService;
+import com.example.planaula.services.ProfesoresService;
 import com.example.planaula.services.UserService;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -10,6 +21,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.time.LocalDate;
 import java.time.format.TextStyle;
@@ -23,18 +35,31 @@ import java.util.Locale;
 public class MenuController {
 
     public final UserService userService;
-    public final HorariosService horariosService;
+    private final HorasService horasService;
+    private final DiasService diasService;
+    private final CursosService cursosService;
+    private final ProfesoresService profesoresService;
+    private final HorariosService horariosService;
+    private final AsignaturasService asignaturasService;
+    private final AulasService aulasService; 
 
-    public MenuController(UserService userService, HorariosService horariosService) {
+    public MenuController(UserService userService, HorasService horasService, DiasService diasService, CursosService cursosService, ProfesoresService profesoresService, HorariosService horariosService, AsignaturasService asignaturasService, AulasService aulasService) {
         this.userService = userService;
+        this.horasService = horasService;
+        this.diasService = diasService;
+        this.cursosService = cursosService;
+        this.profesoresService = profesoresService;
         this.horariosService = horariosService;
+        this.asignaturasService = asignaturasService;
+        this.aulasService = aulasService;
     }
 
     @GetMapping("")
-    public String menu(Model model) {
+    public String menu(@RequestParam(name="curso", required = false, defaultValue = "0") int curso,
+            		   @RequestParam(name="profesor", required = false, defaultValue = "0") int profesor, 
+            		   Model model) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String username = authentication.getName();
-        /*UserDto user = userService.findUserByName(username);*/
         model.addAttribute("user", username);
         model.addAttribute("idUser", 1);
 
@@ -60,6 +85,29 @@ public class MenuController {
 
         model.addAttribute("menuItems", new String[]{"Asignaturas", "Profesores", "Tutores", "Espacios", "Guardias", "Horarios"});
         model.addAttribute("fecha", fechaFormateada);
+        
+        List<DiaDTO> diaDTOList =  diasService.findAllDias();
+        model.addAttribute("dias", diaDTOList);
+
+        List<HoraDTO> horaDTOList =  horasService.findAllHoras();
+        model.addAttribute("horas", horaDTOList);
+
+        List<CursoDTO> cursoDTOList =  cursosService.findAllCursos();
+        model.addAttribute("cursos", cursoDTOList);
+
+        List<ProfesorDTO> profesorDTOList =  profesoresService.findAllProfesores();
+        model.addAttribute("profesores", profesorDTOList);
+
+        List<AulaDTO> aulaDTOList =  aulasService.findAllAulas();
+        model.addAttribute("aulas", aulaDTOList);
+
+        List<AsignaturaDTO> asignaturaDTOList =  asignaturasService.findAllAsignaturas();
+        model.addAttribute("asignaturas", asignaturaDTOList);
+        
+        int tableCurso = curso != 0 ? curso : 1;
+        List<HorarioDTO> horariosCursoDTOlist = horariosService.findAllHorariosByDiaAndHoraAndCurso(0, 0, tableCurso, 0, 0, 0);
+        model.addAttribute("tableCurso", tableCurso);
+        model.addAttribute("horarioCurso", horariosCursoDTOlist);
         return "menu";
     }
 }

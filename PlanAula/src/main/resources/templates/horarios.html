@@ -13,6 +13,8 @@
     $(document).ready(() => {
         activePanel([[${tab}]]);
         //tableHorario();
+		$("#searchAcciones").val(window.location.search);
+		$("#searchEliminar").val(window.location.search);
     });
 
     function editarTurno(id) {
@@ -104,11 +106,6 @@
 				  $("#add" + id).val(0);
 				 });
 	   }
-	  
-	   $(document).ready(function() {
-			$("#searchAcciones").val(window.location.search);
-			$("#searchEliminar").val(window.location.search);
-	   });
 	
 </script>
 <body>
@@ -395,59 +392,7 @@
                     </div>
                 </div>
                 <div class="tab-pane fade" id="cuadro-tab" role="tabpanel" onclick="$('#tab').val('cuadro')" aria-labelledby="cuadro-tab">
-                    <div class="card-body">
-                        <table class="table table-bordered table-striped">
-                            <thead class="thead-dark">
-                            <tr>
-                                <th scope="col">
-                                    <select class="form-select" id="tableCurso" name="curso"
-                                            onchange="$('#cursoFilter').val(this.value); $('#filtrosForm').submit()">
-                                        <option th:each="curso : ${cursos}" th:value="${curso.id}"
-                                                th:text="${curso.nombre}"
-                                                th:selected="${tableCurso == curso.id}"></option>
-                                    </select>
-                                </th>
-                                <th scope="col" th:each="dia : ${dias}" th:text="${dia.nombre}"></th>
-                            </tr>
-                            </thead>
-                            <tbody id="tableHorario">
-                            <tr th:each="hora : ${horas}">
-                                <td th:text="${hora.nombre}"></td>
-                                <td th:each="dia : ${dias}" th:id="${hora.id} + '-' + ${dia.id}">
-                                    <div th:each="item : ${horarioCurso}" class="mb-2"
-                                         th:if="${item.dia == dia.nombre && item.hora == hora.nombre}">
-                                        <div th:unless="${item.espacio == null}"
-                                             class="accordion" th:id="'acordeon' + ${item.id}">
-                                            <div th:if="${item.espacio != null}" class="accordion-item">
-                                                <h2 class="accordion-header">
-                                                    <button th:text="${item.asignatura}" class="accordion-button"
-                                                            type="button"
-                                                            data-bs-toggle="collapse"
-                                                            th:data-bs-target="'#collapse' + ${item.id}"
-                                                            aria-expanded="false"
-                                                            aria-controls="'${item.id}">
-                                                    </button>
-                                                </h2>
-                                                <div th:id="'collapse' + ${item.id}"
-                                                     class="accordion-collapse collapse"
-                                                     th:data-bs-parent="'#acordeon' + ${item.id}">
-                                                    <div class="accordion-body">
-                                                        <p th:text="${item.profesor + ' - ' + item.espacio}"></p>
-                                                        <p></p>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <!--<div th:if="${item.espacio == null}"
-                                             class="alert alert-info" role="alert">
-                                            Hora libre
-                                        </div>-->
-                                    </div>
-                                </td>
-                            </tr>
-                            </tbody>
-                        </table>
-                    </div>
+					<div th:replace="~{fragments/tableHorario.html}"></div>
                 </div>
             </div>
             <div class="card-footer text-muted bg-white d-flex justify-content-end">
