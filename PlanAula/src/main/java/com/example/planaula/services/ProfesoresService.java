@@ -83,10 +83,10 @@ public class ProfesoresService {
     @Transactional
     public void anadirProfesor(ProfesorDTO profesorDTO) {
         try {
-            String insertSql = "INSERT INTO profesores (nombre, es_tutor) VALUES (:nombre, :esTutor)"; // Ajuste de columnas
+            String insertSql = "INSERT INTO profesores (nombre, apellidos) VALUES (:nombre, :apellidos)";
             int filasInsertadas = entityManager.createNativeQuery(insertSql)
                     .setParameter("nombre", profesorDTO.getNombre())
-                    .setParameter("esTutor", profesorDTO.getApellidos())
+                    .setParameter("apellidos", profesorDTO.getApellidos())
                     .executeUpdate();
 
             if (filasInsertadas == 0) {
@@ -118,11 +118,11 @@ public class ProfesoresService {
     @Transactional
     public void modificarProfesor(ProfesorDTO profesorDTO) {
         try {
-            String updateSql = "UPDATE profesores SET nombre = :nombre, es_tutor = :esTutor WHERE id = :id"; // Ajuste de columna
+            String updateSql = "UPDATE profesores SET nombre = :nombre, apellidos = :apellidos WHERE id = :id";
             int filasActualizadas = entityManager.createNativeQuery(updateSql)
                     .setParameter("id", profesorDTO.getId())
                     .setParameter("nombre", profesorDTO.getNombre())
-                    .setParameter("esTutor", profesorDTO.isTutor())
+                    .setParameter("apellidos", profesorDTO.getApellidos())
                     .executeUpdate();
         } catch (Exception e) {
             System.out.println("Error en la consulta: " + e.getMessage());

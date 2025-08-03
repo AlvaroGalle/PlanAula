@@ -39,6 +39,11 @@ public class ProfesoresController {
     @PostMapping("")
     public String accionProfesores(@ModelAttribute ProfesorDTO profesorDTO,
     							   @RequestParam(name="accion", required = false, defaultValue = "A") String accion) {
+    	String[] apellidos = profesorDTO.getNombre().split(" ");
+    	profesorDTO.setNombre(apellidos[0]);
+    	for(int i = 1; i<apellidos.length; i++) {
+    		profesorDTO.setApellidos(profesorDTO.getApellidos() + apellidos[i] + " ");
+    	}
         switch (accion) {
             case "A":
                 profesoresService.anadirProfesor(profesorDTO);
@@ -55,7 +60,7 @@ public class ProfesoresController {
 
     @GetMapping("/{id}")
     @ResponseBody
-    public ProfesorDTO findProfesorById(@PathVariable Integer id) {
+    public ProfesorDTO findProfesorById(@PathVariable(name= "id") Integer id) {
         return profesoresService.findProfesorById(id);
     }
 

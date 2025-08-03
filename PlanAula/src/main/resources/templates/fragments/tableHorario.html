@@ -50,7 +50,12 @@
 										                     th:aria-controls="'collapse' + ${item.id} + '_' + ${item.tipo}">
 										                 <span th:text="${item.asignatura}"></span>
 										             </button>
-													 <button th:if="${profesorFiltro != 0}" class="accordion-button collapsed"
+													 <button th:if="${profesorFiltro != 0}" th:disabled="${item.tipo != 'clase'}"													 th:class="|accordion-button collapsed border 
+													   ${item.tipo == 'clase' ? 'border-primary text-primary' : 
+													     item.tipo == 'recreo' ? 'border-success text-success' : 
+													     item.tipo == 'libranza' ? 'border-secondary text-secondary' : 
+													     item.tipo == 'guardia' ? 'border-danger text-danger' : ''}|
+													 "
 													 										                     type="button"
 													 										                     data-bs-toggle="collapse"
 													 										                     th:data-bs-target="'#collapse' + ${item.id} + '_' + ${item.tipo}"
@@ -66,7 +71,7 @@
 										                 <p th:text="${item.profesor + ' - ' + item.espacio}"></p>
 										             </div>
 										         </div>
-												 <div th:if="${profesorFiltro != 0}" 
+												 <div th:if="${profesorFiltro != 0 && item.tipo == 'clase'}" 
 												 												 	  th:id="'collapse' + ${item.id} + '_' + ${item.tipo}"
 												 										              class="accordion-collapse collapse">
 												 										             <div class="accordion-body">
@@ -86,19 +91,19 @@
 									<td scope="col" th:colspan="${#lists.size(dias) + 1}" class="text-start">
 										<div class="d-flex justify-content-center flex-wrap gap-3 py-2">
 										       <div class="d-flex align-items-center gap-2">
-										          <div class="rounded-circle" style="width: 16px; height: 16px; background-color: #007bff;"></div>
+										          <div class="rounded-circle bg-primary" style="width: 16px; height: 16px; background-color: #007bff;"></div>
 										          <span class="small">Clases</span>
 												  </div>
 												<div class="d-flex align-items-center gap-2">
-										          <div class="rounded-circle" style="width: 16px; height: 16px; background-color: #ffc107;"></div>
+										          <div class="rounded-circle bg-danger" style="width: 16px; height: 16px; background-color: #ffc107;"></div>
 										          <span class="small">Guardias</span>
 												  </div>
 												<div class="d-flex align-items-center gap-2">
-										          <div class="rounded-circle" style="width: 16px; height: 16px; background-color: #28a745;"></div>
+										          <div class="rounded-circle bg-success" style="width: 16px; height: 16px; background-color: #28a745;"></div>
 										          <span class="small">Recreo</span>
 												  </div>
 												<div class="d-flex align-items-center gap-2">
-										          <div class="rounded-circle" style="width: 16px; height: 16px; background-color: #dc3545;"></div>
+										          <div class="rounded-circle bg-secondary" style="width: 16px; height: 16px;"></div>
 										          <span class="small">Libranza</span>
 										      </div>
 											  </div>

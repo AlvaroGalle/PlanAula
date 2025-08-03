@@ -9,7 +9,6 @@
         let id = "[[${id}]]";
         console.log(id)
         if (id !== "0") {
-            console.log(id + "2")
             zoomCards(id);
         }
     });
@@ -79,7 +78,7 @@
                                         <span th:text="${espacio.hora}"></span>
                                     </h5>
                                 </div>
-                                <div class="col-3 text-end cursor-pointer" th:data-id="${espacio.id}"
+                                <div class="col-3 text-end" role="button" th:data-id="${espacio.id}"
                                      onclick="zoomCards(this.dataset.id)">
                                     <img class="w-50" src="/images/editar.png" alt="editar card">
                                 </div>

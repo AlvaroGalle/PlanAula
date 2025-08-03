@@ -65,4 +65,27 @@ public class AsignaturasService {
             return new PageImpl<>(Collections.emptyList(), pageable, 0);
         }
     }
+
+    @Transactional
+    public void addAsignatura(String nombre) {
+    	String sql = """
+    		    INSERT INTO asignaturas (asignatura)
+    		    VALUES (:nombre)
+    		""";
+
+    		entityManager.createNativeQuery(sql)
+    		        .setParameter("nombre", nombre)
+    		        .executeUpdate();
+
+     }
+    
+    @Transactional
+    public void deleteAsignatura(int id) {
+    	String sql = "DELETE FROM asignaturas WHERE id = :id";
+    	
+    		entityManager.createNativeQuery(sql)
+    		        .setParameter("id", id)
+    		        .executeUpdate();
+
+     }
 }

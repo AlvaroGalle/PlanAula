@@ -9,7 +9,7 @@
         }
     }
 </script>
-<div class="modal fade show" id="cardEspacios-modal" tabindex="-1" role="dialog" aria-labelledby="cardEspacios-modal"
+<div class="modal fade" id="cardEspacios-modal" tabindex="-1" role="dialog" aria-labelledby="cardEspacios-modal"
      style="display: none">
     <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
@@ -18,8 +18,6 @@
                     <span th:text="${espacio.dia}"></span>
                     <span th:text="${espacio.hora}"></span>
                 </h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-
             </div>
             <div class="modal-body">
                 <div th:unless="${espacio.aula != null}"
@@ -36,20 +34,27 @@
                     </thead>
                     <tbody>
                     <tr th:if="${espacio.aula != null}" class="align-middle">
-                        <th>Aula 1A</th>
+						<td>
+						                            <select class="form-select" aria-label="select aulas" th:data-id="${espacio.id}"
+						                                    onchange="accionEspacio('M', this.value, this.value, this.dataset.id)">
+						                                <option th:each=" aula : ${aulas}" th:text="${aula.nombre}"
+						                                        th:value="${aula.id}"
+						                                        th:selected="${espacio.aula == aula.nombre}"></option>
+						                            </select>
+						                        </td>
                         <td>
-                            <select class="form-select" aria-label="select aulas" th:data-id="${espacio.id}"
+                            <select class="form-select" aria-label="select asignaturas" th:data-id="${espacio.id}"
                                     onchange="accionEspacio('M', 'aula1a', this.value, this.dataset.id )">
                                 <option th:each=" asignatura : ${asignaturas}" th:text="${asignatura.nombre}"
                                         th:value="${asignatura.id}"
                                         th:selected="${espacio.asignatura == asignatura.nombre}"></option>
                             </select>
                         </td>
-                        <td th:data-id="${espacio.id}" th:data-aula="${espacio.aula}"
+                        <td th:data-id="${espacio.id}" th:data-aula="${espacio.aula}" 
                             onclick="accionEspacio('E', 'aula1a', this.dataset.aula, this.dataset.id)"
                             class="text-danger text-center"
                             data-toggle="tooltip" data-placement="top" title="Eliminar">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" role="button"
                                  class="bi bi-x-lg" viewBox="0 0 16 16">
                                 <path d="M2.146 2.854a.5.5 0 1 1 .708-.708L8 7.293l5.146-5.147a.5.5 0 0 1 .708.708L8.707 8l5.147 5.146a.5.5 0 0 1-.708.708L8 8.707l-5.146 5.147a.5.5 0 0 1-.708-.708L7.293 8z"/>
                             </svg>
