@@ -31,12 +31,13 @@
     }
 </script>
 <body>
+<div th:replace="~{fragments/video_background.html}"></div>
 <div class="container mt-3">
     <div class="card shadow-sm">
         <div class="card-header theme-guardias text-white"><h5 class="card-title mb-0">Guardias</h5></div>
         <div class="card-body filter-section">
             <form id="filtrosForm" method="get" th:action="@{'/guardias'}">
-                <div class="accordion" id="acordeonFiltros">
+                <div class="accordion mb-3" id="acordeonFiltros">
                     <div class="accordion-item">
                         <h2 class="accordion-header">
                             <button class="accordion-button" type="button" data-bs-toggle="collapse"
@@ -65,22 +66,33 @@
                         </div>
                     </div>
                 </div>
+                <div class="row align-items-center">
+                    <div class="col-md-9">
+                        <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#addTurno-modal">
+                            Añadir turno
+                        </button>
+                    </div>
+                    <div class="col-md-3 mb-3">
+                        <div th:replace="~{fragments/filtros/filterPage.html}"></div>
+                    </div>
+                </div>
             </form>
         </div>
         <div class="card-body bg-light">
             <div class="row">
-                <div th:each="guardia : ${guardias}" class="col-md-6 col-lg-3 mb-3">
-                    <div class="card" th:data-id="${guardia.id}" ondblclick="zoomCards(this.dataset.id)">
-                        <div class="card-header theme-guardias text-white">
-                            <div class="row">
+                <div th:each="guardia : ${page}" class="col-md-6 col-lg-3 mb-3">
+                    <div class="card" th:data-id="${guardia.tipo + '-' + guardia.id}" ondblclick="zoomCards(this.dataset.id)">
+                        <div class="card-header text-white"
+                             th:classappend="${guardia.tipo == 'Guardia' ? 'bg-danger' : (guardia.tipo == 'Recreo' ? 'bg-success' : (guardia.tipo == 'Libranza' ? 'bg-secondary' : 'theme-guardias'))}">
+                        <div class="row">
                                 <div class="col-9">
                                     <h5 class="card-title mb-0">
                                         <span th:text="${guardia.dia}"></span>
                                         <span th:text="${guardia.hora}"></span>
                                     </h5>
                                 </div>
-                                <div class="col-3 text-end" th:data-id="${guardia.id}" onclick="zoomCards(this.dataset.id)">
-                                    <img class="w-50" src="/images/editar.png" alt="editar card">
+                                <div class="col-3 text-end" th:data-id="${guardia.tipo + '-' + guardia.id}" onclick="zoomCards(this.dataset.id)">
+                                    <img class="w-50" src="/images/editar.png" alt="editar card" style="filter:invert(100%)">
                                 </div>
                             </div>
                         </div>
@@ -95,97 +107,12 @@
                                 <thead>
                                 <tr>
                                     <th>Turno</th>
-                                    <th>Asignatura</th>
+                                    <th>Profesor</th>
                                 </tr>
                                 </thead>
                                 <tbody>
                                 <tr>
-                                    <th th:class="${turnoFiltro != null && turnoFiltro == 'Guardia' ? 'text-success' : ''}">
-                                        Guardia
-                                    </th>
-                                    <td th:text="${guardia.nombre}"
-                                        th:class="${profesor != null && profesor.nombre == guardia.nombre ? 'text-success' : ''}"></td>
-                                </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
-                <div th:each="guardia : ${libranzas}" class="col-md-6 col-lg-3 mb-3">
-                    <div class="card" th:data-id="${guardia.id}" ondblclick="zoomCards(this.dataset.id)">
-                        <div class="card-header theme-guardias text-white">
-                            <div class="row">
-                                <div class="col-9">
-                                    <h5 class="card-title mb-0">
-                                        <span th:text="${guardia.dia}"></span>
-                                        <span th:text="${guardia.hora}"></span>
-                                    </h5>
-                                </div>
-                                <div class="col-3 text-end" th:data-id="${guardia.id}" onclick="zoomCards(this.dataset.id)">
-                                    <img class="w-50" src="/images/editar.png" alt="editar card">
-                                </div>
-                            </div>
-                        </div>
-                        <div class="card-body">
-                            <div th:if="${guardia.nombre == null}"
-                                 class="alert alert-warning" role="alert">
-                                No hay turnos asignados
-                            </div>
-
-                            <table th:unless="${guardia.nombre == null}"
-                                   class="table table-sm">
-                                <thead>
-                                <tr>
-                                    <th>Turno</th>
-                                    <th>Asignatura</th>
-                                </tr>
-                                </thead>
-                                <tbody>
-                                <tr>
-                                    <th th:class="${turnoFiltro != null && turnoFiltro == 'Guardia' ? 'text-success' : ''}">
-                                        Guardia
-                                    </th>
-                                    <td th:text="${guardia.nombre}"
-                                        th:class="${profesor != null && profesor.nombre == guardia.nombre ? 'text-success' : ''}"></td>
-                                </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
-                <div th:each="guardia : ${recreos}" class="col-md-6 col-lg-3 mb-3">
-                    <div class="card" th:data-id="${guardia.id}" ondblclick="zoomCards(this.dataset.id)">
-                        <div class="card-header theme-guardias text-white">
-                            <div class="row">
-                                <div class="col-9">
-                                    <h5 class="card-title mb-0">
-                                        <span th:text="${guardia.dia}"></span>
-                                        <span th:text="${guardia.hora}"></span>
-                                    </h5>
-                                </div>
-                                <div class="col-3 text-end" th:data-id="${guardia.id}" onclick="zoomCards(this.dataset.id)">
-                                    <img class="w-50" src="/images/editar.png" alt="editar card">
-                                </div>
-                            </div>
-                        </div>
-                        <div class="card-body">
-                            <div th:if="${guardia.nombre == null}"
-                                 class="alert alert-warning" role="alert">
-                                No hay turnos asignados
-                            </div>
-
-                            <table th:unless="${guardia.nombre == null}"
-                                   class="table table-sm">
-                                <thead>
-                                <tr>
-                                    <th>Turno</th>
-                                    <th>Asignatura</th>
-                                </tr>
-                                </thead>
-                                <tbody>
-                                <tr>
-                                    <th th:class="${turnoFiltro != null && turnoFiltro == 'Guardia' ? 'text-success' : ''}">
-                                        Guardia
+                                    <th th:text="${guardia.tipo}">
                                     </th>
                                     <td th:text="${guardia.nombre}"
                                         th:class="${profesor != null && profesor.nombre == guardia.nombre ? 'text-success' : ''}"></td>
@@ -197,9 +124,61 @@
                 </div>
                 <div th:replace="~{fragments/noResultAlert.html}"></div>
             </div>
+            <div th:replace="~{fragments/pagination.html}"></div>
         </div>
         <div class="card-footer text-muted bg-white d-flex justify-content-end">
             <button type="button" class="btn btn-dark" onclick="location.href='/menu'">Volver</button>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="addTurno-modal" tabindex="-1" role="dialog" aria-labelledby="addTurno-modal"
+     style="display: none">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <form action="/guardias/anadir" method="post" id="nuevoTurnoForm" th:object="${turnoForm}">
+                <div class="modal-header theme-guardias text-white">
+                    <h5 class="modal-title mb-0">
+                        <span>Nuevo turno</span>
+                    </h5>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-6 mb-3">
+                            <label for="newTurnoTurno" class="form-label">Turno:</label>
+                            <select class="form-select" id="newTurnoTurno" name="tipo" required>
+                                <option value="">Seleccione turno</option>
+                                <option th:each=" turno : ${turnos}" th:value="${turno.key}" th:text="${turno.value}" th:selected="${turnoFiltro == turno.key}"></option>
+                            </select>
+                        </div>
+                        <div class="col-6 mb-3">
+                            <label for="newProfesorTurno" class="form-label">Profesor:</label>
+                            <select class="form-select" id="newProfesorTurno" name="nombre" required>
+                                <option value="">Seleccione profesor</option>
+                                <option th:each=" profesor : ${profesores}" th:value="${profesor.id}" th:text="${profesor.nombre}" th:selected="${profesorFiltro == profesor.id}"></option>
+                            </select>
+                        </div>
+                        <div class="col-6 mb-3">
+                            <label for="newDiaTurno" class="form-label">Día:</label>
+                            <select class="form-select" id="newDiaTurno" name="dia" required>
+                                <option value="">Seleccione día</option>
+                                <option th:each=" dia : ${dias}" th:value="${dia.id}" th:text="${dia.nombre}"></option>
+                            </select>
+                        </div>
+                        <div class="col-6 mb-3">
+                            <label for="newHoraTurno" class="form-label">Hora:</label>
+                            <select class="form-select" id="newHoraTurno" name="hora" required>
+                                <option value="">Seleccione hora</option>
+                                <option th:each=" hora: ${horas}" th:value="${hora.id}" th:text="${hora.nombre}"></option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                    <button type="submit" class="btn btn-danger">Añadir</button>
+                </div>
+            </form>
         </div>
     </div>
 </div>

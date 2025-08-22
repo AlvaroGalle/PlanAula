@@ -42,17 +42,17 @@
         </div>
         <div class="card-body filter-section">
             <div class="row align-items-center">
-                <div class="col-3">
+                <!--<div class="col-3">
                     <button type="button" class="btn btn-outline-success btn-sm"
                             onclick="location.href='/profesores/tutores'">Ver tutores
                     </button>
-                </div>
-                <div class="col-3">
+                </div>-->
+                <div class="col-9">
                     <button type="button" class="btn btn-primary" onclick="$('#nuevoProfesor-modal').modal('show')">
                         Añadir docente
                     </button>
                 </div>
-                <div class="col-6">
+                <div class="col-3">
                     <form id="filtrosForm" method="get" th:action="@{'/profesores'}">
                         <div class="form-group row justify-content-end mb-3">
                             <div th:replace="~{fragments/filtros/filterPage.html}"></div>

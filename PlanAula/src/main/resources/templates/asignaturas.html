@@ -5,10 +5,32 @@
 </head>
 <div th:replace="~{fragments/links.html}"></div>
 <script>
-	function eliminarAsignatura(id){
-		$("#idDelete").val(id);
-		$("#elimnarAsignatura-modal").modal("show");
-	}
+    function accionAsignatura(accion, boton) {
+        let td = boton.closest("td");
+        let id = td.dataset.id;
+        $('#id_asignatura').val(id);
+        $('#accion_asignatura').val(accion);
+        let url = "/asignaturas/" + id;
+        $.ajax({
+            url: url,
+            type: "GET",
+            success: function (data) {
+                switch (accion) {
+                    case "M" :
+                        $('#nombreAModificar').text(data.nombre);
+                        $('#modificarAsignatura-modal').modal('show');
+                        break;
+                    case "E" :
+                        $('#nombreAEliminar').text("¿Está seguro de eliminar a " + data.nombre + "?");
+                        $('#eliminarAsignatura-modal').modal('show');
+                        break;
+                }
+            },
+            error: function (xhr, status, error) {
+                console.error("Error al obtener asignatura: ", error);
+            }
+        });
+    }
 </script>
 <body>
 	<div th:replace="~{fragments/video_background.html}"></div>
@@ -17,18 +39,17 @@
 	    <div class="card shadow-sm w-100">
         <div class="card-header theme-asignaturas text-white">
             <div class="row">
-                <div class="col-1"><div th:replace="~{fragments/sideBar.html}"></div></div>
                 <div class="col"><h5 class="card-title text-start">Asignaturas</h5></div>
             </div>
         </div>
         <div class="card-body filter-section">
             <div class="row align-items-center">
-                <div class="col-6">
+                <div class="col-9">
                     <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#newAsignatura-modal">
                         Añadir asignatura
                     </button>
                 </div>
-                <div class="col-6">
+                <div class="col-3">
                     <form id="filtrosForm" method="get" th:action="@{'/asignaturas'}">
                         <div class="form-group row justify-content-end mb-3">
                             <div th:replace="~{fragments/filtros/filterPage.html}"></div>
@@ -52,10 +73,18 @@
                 <tr th:each="asignatura : ${page}" th:id="'tr_' + ${asignatura.id}">
                     <th scope="row" th:text="${asignatura.id}"></th>
                     <td th:text="${asignatura.nombre}"></td>
-					<td>
+					<td th:data-id="${asignatura.id}">
 					                        <ul class="list-inline hstack mb-0">
+                                                <li class="list-inline-item">
+                                                    <a class="text-success" role="button" onclick="accionAsignatura('M', this)">
+                                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                                                             class="bi bi-pencil" viewBox="0 0 16 16">
+                                                            <path d="M12.146.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1 0 .708l-10 10a.5.5 0 0 1-.168.11l-5 2a.5.5 0 0 1-.65-.65l2-5a.5.5 0 0 1 .11-.168zM11.207 2.5 13.5 4.793 14.793 3.5 12.5 1.207zm1.586 3L10.5 3.207 4 9.707V10h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.293zm-9.761 5.175-.106.106-1.528 3.821 3.821-1.528.106-.106A.5.5 0 0 1 5 12.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.468-.325"/>
+                                                        </svg>
+                                                    </a>
+                                                </li>
 					                            <li class="list-inline-item">
-					                                <a class="text-danger" role="button" th:data-id="${asignatura.id}" onclick="eliminarAsignatura(this.dataset.id)">
+					                                <a class="text-danger" role="button" onclick="accionAsignatura('E', this)">
 					                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
 					                                         class="bi bi-trash3" viewBox="0 0 16 16">
 					                                        <path d="M6.5 1h3a.5.5 0 0 1 .5.5v1H6v-1a.5.5 0 0 1 .5-.5M11 2.5v-1A1.5 1.5 0 0 0 9.5 0h-3A1.5 1.5 0 0 0 5 1.5v1H1.5a.5.5 0 0 0 0 1h.538l.853 10.66A2 2 0 0 0 4.885 16h6.23a2 2 0 0 0 1.994-1.84l.853-10.66h.538a.5.5 0 0 0 0-1zm1.958 1-.846 10.58a1 1 0 0 1-.997.92h-6.23a1 1 0 0 1-.997-.92L3.042 3.5zm-7.487 1a.5.5 0 0 1 .528.47l.5 8.5a.5.5 0 0 1-.998.06L5 5.03a.5.5 0 0 1 .47-.53Zm5.058 0a.5.5 0 0 1 .47.53l-.5 8.5a.5.5 0 1 1-.998-.06l.5-8.5a.5.5 0 0 1 .528-.47M8 4.5a.5.5 0 0 1 .5.5v8.5a.5.5 0 0 1-1 0V5a.5.5 0 0 1 .5-.5"/>
@@ -76,7 +105,13 @@
     </div>
 </div>
 
-<div class="modal fade" id="newAsignatura-modal" tabindex="-1" role="dialog" aria-labelledby="nuevoProfesor-modal"
+    <form action="/asignaturas" method="post" id="accionesAsignaturaForm" th:object="${asignaturaForm}">
+        <input type="hidden" id="accion_asignatura" name="accion">
+        <input type="hidden" id="id_asignatura" th:field="*{id}">
+        <input type="hidden" id="nombre_asignatura" th:field="*{nombre}">
+    </form>
+
+<div class="modal fade" id="newAsignatura-modal" tabindex="-1" role="dialog" aria-labelledby="nuevaAsignatura-modal"
      aria-hidden="true" style="display: none">
     <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
@@ -101,28 +136,51 @@
     </div>
 </div>
 
-<div class="modal fade" id="elimnarAsignatura-modal" tabindex="-1" role="dialog"
-     aria-labelledby="elimnarAsignatura-modal"
-     aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title">Eliminar asignatura</h5>
-            </div>
-            <div class="modal-body">
-                <p>Esta acción no puede echarse atrás. Eliminará toda la información relacionada con la asignatura</p>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
-                <form method="post" action="/asignaturas/eliminar">
-                    <input type="hidden" id="idDelete" name="id">
-                    <input type="hidden" id="params" th:value="${params}">
-                    <input type="submit" class="btn btn-danger" value="Eliminar">
-                </form>
+    <div class="modal fade" id="modificarAsignatura-modal" tabindex="-1" role="dialog"
+         aria-labelledby="modificarAsignatura-modal"
+         aria-hidden="true" style="display: none">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Modificar asignatura</h5>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label class="form-label" for="modificarAsignatura" id="nombreAModificar">Nombre:</label>
+                        <input type="text" class="form-control" id="modificarAsignatura"
+                               onchange="$('#nombre_asignatura').val(this.value)"
+                               placeholder="Escribe el nombre del docente">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                    <button onclick="$('#accionesAsignaturaForm').submit()" class="btn btn-primary">Modificar</button>
+                </div>
             </div>
         </div>
     </div>
-</div>
+
+    <div class="modal fade" id="eliminarAsignatura-modal" tabindex="-1" role="dialog"
+         aria-labelledby="eliminarAsignatura-modal"
+         aria-hidden="true" style="display: none">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Eliminar asignatura</h5>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <h4 id="nombreAEliminar">Nombre:</h4>
+                        <p>Esta acción no puede echarse atrás. Eliminará todo la información relacionada con la asignatura</p>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                    <button onclick="$('#accionesAsignaturaForm').submit()" class="btn btn-danger">Eliminar</button>
+                </div>
+            </div>
+        </div>
+    </div>
 
 </body>
 </html>

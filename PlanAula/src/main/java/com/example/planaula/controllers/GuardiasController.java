@@ -2,13 +2,13 @@ package com.example.planaula.controllers;
 
 import com.example.planaula.Dto.*;
 import com.example.planaula.services.*;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
+import java.awt.print.Pageable;
 import java.lang.reflect.Field;
 import java.util.List;
 import java.util.Map;
@@ -36,8 +36,10 @@ public class GuardiasController {
     @GetMapping("")
     public String findAllGuardias(@RequestParam(name="dia", required = false, defaultValue = "0") int dia,
                                   @RequestParam(name="hora", required = false, defaultValue = "0") int hora,
-                                  @RequestParam(name="turno", required = false, defaultValue = "0") String turno,
+                                  @RequestParam(name="turno", required = false, defaultValue = "T") String turno,
                                   @RequestParam(name="profesor", required = false, defaultValue = "0") int profesor,
+                                  @RequestParam(name="page", required = false, defaultValue = "0") int page,
+                                  @RequestParam(name="size", required = false, defaultValue = "15") int size,
                                   @RequestParam(name="id", required = false, defaultValue = "0") String id,
                                   Model model) {
     	model.addAttribute("id", id);
@@ -55,38 +57,21 @@ public class GuardiasController {
 
         List<ProfesorDTO> profesorDTOList = profesoresService.findAllProfesores();
         model.addAttribute("profesores", profesorDTOList);
-        for (ProfesorDTO p : profesorDTOList) {
-            /*if (p.getId() == profesor) {
-                model.addAttribute("profesor", p);
-            }*/
-        }
 
-        /*List<GuardiasDTO> guardiasDTOList = guardiasService.findAllGuardiasByDiaAndHoraAndProfesor(dia, hora, profesor);*/
-        List<GuardiasDTO> guardias = guardiasService.findAllGuardiasByDiaAndHoraAndProfesor(dia, hora, profesor);
-        List<GuardiasDTO> recreos = guardiasService.findAllRecreosByDiaAndHoraAndProfesor(dia, hora, profesor);
-        List<GuardiasDTO> libranza = guardiasService.findAllLibranzasByDiaAndHoraAndProfesor(dia, hora, profesor);
-        model.addAttribute("guardias", guardias);
-        model.addAttribute("recreos", recreos);
-        model.addAttribute("libranza", libranza);
+        model.addAttribute("turnos", mapaTurnos());
 
-/*        Map<String, String> mapaTurnos = this.mapaTurnos();
-        model.addAttribute("turnos", mapaTurnos);*/
-        
-/*        if (!guardiasDTOList.isEmpty() && !Objects.equals(turno, "0")) {
-            String campo = mapaTurnos.getOrDefault(turno, "");
+        Page<TurnoDTO> turnos = guardiasService.findAllTurnosByDiaHoraProfesor(dia, hora, profesor, turno, PageRequest.of(page, size));
+        model.addAttribute("page", turnos);
 
-            guardiasDTOList = guardiasDTOList.stream()
-                    .filter(guardia -> !estaVacio(obtenerValorCampoDinamico(guardia, campo)))
-                    .collect(Collectors.toList());
-        */
-        /*model.addAttribute("page", guardiasDTOList);*/
+        model.addAttribute("turnoForm", new TurnoDTO());
         return "guardias";
     }
 
     @GetMapping("{id}")
-    public String findGuardiaById(@PathVariable(name="id") int id, Model model) {
+    public String findGuardiaById(@PathVariable(name="id") String id, Model model) {
         try {
-            GuardiasDTO guardiasDTO = guardiasService.findGuardiaById(id);
+            String[] partes = id.split("-");
+            TurnoDTO guardiasDTO = guardiasService.findTurnoByTipoAndId(partes[0], Integer.parseInt(partes[1]));
             model.addAttribute("guardia", guardiasDTO);
 
             List<ProfesorDTO> profesorDTOList = profesoresService.findAllProfesores();
@@ -100,24 +85,20 @@ public class GuardiasController {
         }
     }
 
+    @PostMapping("/anadir")
+    public String addEspacio(@ModelAttribute TurnoDTO turnoDTO,
+                             @RequestParam(name="params", required= false) String params) {
+        guardiasService.anadirTurno(turnoDTO);
+        return "redirect:/guardias?" + params;
+    }
+
     @GetMapping("accion")
     public String accionesGuardias(@RequestParam(name="accion") String accion,
                                    @RequestParam(name="turno") String turno,
                                    @RequestParam(name="profesor") Integer profesor,
                                    @RequestParam(name="id") Integer id) {
         try {
-            Map<String, String> mapeoTurnos = Map.of(
-                    "G1", "guardia 1",
-                    "G2", "guardia 2",
-                    "G3", "guardia 3",
-                    "L1", "libranza 1",
-                    "L2", "libranza 2",
-                    "L3", "libranza 3",
-                    "R1", "recreo1",
-                    "R2", "recreo2",
-                    "R3", "recreo3"
-            );
-            guardiasService.accionGuardias(accion, mapeoTurnos.get(turno), profesor, id);
+            guardiasService.accionGuardias(accion, turno, profesor, id);
             return "redirect:/guardias?id=" + id;
         } catch (Exception e) {
             return e.getMessage();
@@ -125,16 +106,12 @@ public class GuardiasController {
     }
 
     private Map<String, String> mapaTurnos(){
-       return Map.of(
-               "G1", "guardia1", "G2", "guardia2", "G3", "guardia3",
-               "L1", "libranza1", "L2", "libranza2", "L3", "libranza3",
-               "R1", "recreo1", "R2", "recreo2", "R3", "recreo3"
-       );
+       return Map.of("G", "Guardia",  "L", "Libranza", "R", "Recreo");
     }
 
-    private String obtenerValorCampoDinamico(GuardiasDTO guardia, String nombreCampo) {
+    private String obtenerValorCampoDinamico(TurnoDTO guardia, String nombreCampo) {
         try {
-            Field campo = GuardiasDTO.class.getDeclaredField(nombreCampo);
+            Field campo = TurnoDTO.class.getDeclaredField(nombreCampo);
             campo.setAccessible(true);
             Object valor = campo.get(guardia);
             return valor != null ? valor.toString() : null;

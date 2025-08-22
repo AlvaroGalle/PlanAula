@@ -1,6 +1,7 @@
 package com.example.planaula.services;
 
 import com.example.planaula.Dto.AsignaturaDTO;
+import com.example.planaula.Dto.ProfesorDTO;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.Query;
 import jakarta.transaction.Transactional;
@@ -37,6 +38,16 @@ public class AsignaturasService {
                         (String) resultado[1]
                 ))
                 .collect(Collectors.toList());
+    }
+
+    public AsignaturaDTO findAsignaturaById(Integer id) {
+        String sql = "SELECT id, asignatura FROM asignaturas WHERE id = :id";
+        Object[] resultado = (Object[]) entityManager.createNativeQuery(sql)
+                .setParameter("id", id)
+                .getSingleResult();
+        return new AsignaturaDTO(
+                ((Number) resultado[0]).intValue(),
+                (String) resultado[1]);
     }
 
     public Page<AsignaturaDTO> findPageAsignaturas(Pageable pageable) {
@@ -78,7 +89,20 @@ public class AsignaturasService {
     		        .executeUpdate();
 
      }
-    
+
+    @Transactional
+    public void modifyAsignatura(AsignaturaDTO asignaturaDTO) {
+        try {
+            String updateSql = "UPDATE asignaturas SET asignatura = :nombre WHERE id = :id";
+            int filasActualizadas = entityManager.createNativeQuery(updateSql)
+                    .setParameter("id", asignaturaDTO.getId())
+                    .setParameter("nombre", asignaturaDTO.getNombre())
+                    .executeUpdate();
+        } catch (Exception e) {
+            System.out.println("Error en la consulta: " + e.getMessage());
+        }
+    }
+
     @Transactional
     public void deleteAsignatura(int id) {
     	String sql = "DELETE FROM asignaturas WHERE id = :id";

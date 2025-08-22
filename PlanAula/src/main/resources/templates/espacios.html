@@ -30,12 +30,15 @@
     }
 </script>
 <body>
+
+<div th:replace="~{fragments/video_background.html}"></div>
+
 <div class="container mt-3">
     <div class="card shadow-sm">
         <div class="card-header theme-espacios text-white"><h5 class="card-title mb-0">Espacios</h5></div>
         <div class="card-body filter-section">
             <form id="filtrosForm" method="get" th:action="@{'/espacios'}">
-                <div class="accordion" id="acordeonFiltros">
+                <div class="accordion mb-3" id="acordeonFiltros">
                     <div class="accordion-item">
                         <h2 class="accordion-header">
                             <button class="accordion-button" type="button" data-bs-toggle="collapse"
@@ -64,11 +67,21 @@
                         </div>
                     </div>
                 </div>
+                <div class="row align-items-center">
+                    <div class="col-md-9">
+                        <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#addHorario-modal">
+                            Añadir horario
+                        </button>
+                    </div>
+                    <div class="col-md-3 mb-3">
+                        <div th:replace="~{fragments/filtros/filterPage.html}"></div>
+                    </div>
+                </div>
             </form>
         </div>
         <div class="card-body bg-light">
             <div class="row">
-                <div th:each="espacio : ${espacios}" class="col-md-6 col-lg-3 mb-3">
+                <div th:each="espacio : ${page}" class="col-md-6 col-lg-3 mb-3">
                     <div class="card" th:data-id="${espacio.id}" ondblclick="zoomCards(this.dataset.id)">
                         <div class="card-header theme-espacios text-white">
                             <div class="row">
@@ -80,7 +93,7 @@
                                 </div>
                                 <div class="col-3 text-end" role="button" th:data-id="${espacio.id}"
                                      onclick="zoomCards(this.dataset.id)">
-                                    <img class="w-50" src="/images/editar.png" alt="editar card">
+                                    <img class="w-50" src="/images/editar.png" alt="editar card" style="filter:invert(100%)">
                                 </div>
                             </div>
                         </div>
@@ -92,16 +105,24 @@
 
                             <table th:if="${espacio.aula}"
                                    class="table table-sm">
-                                <thead>
-                                <tr>
-                                    <th>Aula</th>
-                                    <th>Asignatura</th>
-                                </tr>
-                                </thead>
                                 <tbody>
                                 <tr th:if="${espacio.aula != null}">
-                                    <th th:class="${aula != null && aula.nombre == espacio.aula ? 'text-success' : ''}"  th:text="${espacio.aula}">
-                                    </th>
+                                    <th>Aula</th>
+                                    <td th:class="${aula != null && aula.nombre == espacio.aula ? 'text-success' : ''}"  th:text="${espacio.aula}">
+                                    </td>
+                                </tr>
+                                <tr th:if="${espacio.nombre != null}">
+                                    <th>Profesor</th>
+                                    <td th:text="${espacio.nombre}"
+                                        th:class="${profesor != null && profesor.nombre == espacio.profesor ? 'text-success' : ''}"></td>
+                                </tr>
+                                <tr th:if="${espacio.curso != null}">
+                                    <th>Curso</th>
+                                    <td th:text="${espacio.curso}"
+                                        th:class="${curso != null && curso.nombre == espacio.curso ? 'text-success' : ''}"></td>
+                                </tr>
+                                <tr th:if="${espacio.asignatura != null}">
+                                    <th>Asignatura</th>
                                     <td th:text="${espacio.asignatura}"
                                         th:class="${asignatura != null && asignatura.nombre == espacio.asignatura ? 'text-success' : ''}"></td>
                                 </tr>
@@ -111,14 +132,82 @@
                     </div>
                 </div>
             </div>
-            <div th:unless="${#lists.size(espacios) > 0}" class="alert alert-danger" role="alert"> No existen espacios para los filtros ingresados
+            <div th:unless="${page.totalElements > 0}" class="alert alert-danger" role="alert"> No existen espacios para los filtros ingresados
             </div>
         </div>
+        <div th:replace="~{fragments/pagination.html}"></div>
         <div class="card-footer text-muted bg-white d-flex justify-content-end">
             <button type="button" class="btn btn-dark" onclick="location.href='/menu'">Volver</button>
         </div>
     </div>
 </div>
+
+<div class="modal fade" id="addHorario-modal" tabindex="-1" role="dialog" aria-labelledby="addHorario-modal"
+     style="display: none">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <form action="/espacios/anadir" method="post" id="nuevoEspacioForm" th:object="${espacioForm}">
+            <div class="modal-header theme-espacios text-white">
+                <h5 class="modal-title mb-0">
+                    <span>Nuevo horario</span>
+                </h5>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-6 mb-3">
+                        <label for="newProfesorHorario" class="form-label">Profesor:</label>
+                        <select class="form-select" id="newProfesorHorario" name="profesor" required>
+                            <option value="">Seleccione profesor</option>
+                            <option th:each=" profesor : ${profesores}" th:value="${profesor.id}" th:text="${profesor.nombre}" th:selected="${profesorFiltro == profesor.id}"></option>
+                        </select>
+                    </div>
+                        <div class="col-6 mb-3">
+                        <label for="newCursoHorario" class="form-label">Curso:</label>
+                        <select class="form-select" id="newCursoHorario" name="curso" required>
+                            <option value="">Todos los cursos</option>
+                            <option th:each=" curso : ${cursos}" th:value="${curso.id}" th:text="${curso.nombre}" th:selected="${cursoFiltro == curso.id}"></option>
+                        </select>
+                            </div>
+                        <div class="col-6 mb-3">
+                        <label for="newDiaHorario" class="form-label">Día:</label>
+                        <select class="form-select" id="newDiaHorario" name="dia" required>
+                            <option value="">Seleccione día</option>
+                            <option th:each=" dia : ${dias}" th:value="${dia.id}" th:text="${dia.nombre}"></option>
+                        </select>
+                    </div>
+
+                    <div class="col-6 mb-3">
+                        <label for="newHoraHorario" class="form-label">Hora:</label>
+                        <select class="form-select" id="newHoraHorario" name="hora" required>
+                            <option value="">Seleccione hora</option>
+                            <option th:each=" hora: ${horas}" th:value="${hora.id}" th:text="${hora.nombre}"></option>
+                        </select>
+                    </div>
+                    <div class="col-6 mb-3">
+                        <label for="newAulaHorario" class="form-label">Aula:</label>
+                        <select class="form-select" id="newAulaHorario" name="espacio" required>
+                            <option value="">Seleccione aula</option>
+                            <option th:each=" aula : ${aulas}" th:value="${aula.id}" th:text="${aula.nombre}"></option>
+                        </select>
+                    </div>
+                    <div class="col-6 mb-3">
+                        <label for="newAsignaturaHorario" class="form-label">Asignatura:</label>
+                        <select class="form-select" id="newAsignaturaHorario" name="asignatura" required>
+                            <option value="">Seleccione asignatura</option>
+                            <option th:each=" asignatura : ${asignaturas}" th:value="${asignatura.id}" th:text="${asignatura.nombre}"></option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                <button type="submit" class="btn btn-success">Añadir</button>
+            </div>
+            </form>
+        </div>
+    </div>
+</div>
+
 <div id="zoomCardModal">
 </div>
 </body>

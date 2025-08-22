@@ -2,12 +2,11 @@ package com.example.planaula.controllers;
 
 import com.example.planaula.Dto.*;
 import com.example.planaula.services.*;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
@@ -26,13 +25,19 @@ public class EspaciosController {
     private final HorasService horasService;
     private final DiasService diasService;
     private final AulasService aulasService;
+    private final ProfesoresService profesoresService;
+    private final CursosService cursosService;
+    private final HorariosService horariosService;
 
-    public EspaciosController(EspaciosService espaciosService, AsignaturasService asignaturasService, HorasService horasService, DiasService diasService, AulasService aulasService) {
+    public EspaciosController(EspaciosService espaciosService, AsignaturasService asignaturasService, HorasService horasService, DiasService diasService, AulasService aulasService, ProfesoresService profesoresService, CursosService cursosService, HorariosService horariosService) {
         this.espaciosService = espaciosService;
         this.asignaturasService = asignaturasService;
         this.horasService = horasService;
         this.diasService = diasService;
         this.aulasService = aulasService;
+        this.profesoresService = profesoresService;
+        this.cursosService = cursosService;
+        this.horariosService = horariosService;
     }
 
     @GetMapping("")
@@ -40,6 +45,8 @@ public class EspaciosController {
             					  @RequestParam(name = "hora", required = false, defaultValue = "0") int hora,
             					  @RequestParam(name = "aula", required = false, defaultValue = "0") int aula,
             					  @RequestParam(name = "asignatura", required = false, defaultValue = "0") int asignatura,
+                                  @RequestParam(name="page", required = false, defaultValue = "0") int page,
+                                  @RequestParam(name="size", required = false, defaultValue = "15") int size,
             					  @RequestParam(name = "id", required = false, defaultValue = "0") String id,
                                   Model model) {
     	model.addAttribute("id", id);
@@ -57,6 +64,13 @@ public class EspaciosController {
 
         List<AulaDTO> aulaDTOList =  aulasService.findAllAulas();
         model.addAttribute("aulas", aulaDTOList);
+
+        List<ProfesorDTO> profesorDTOList = profesoresService.findAllProfesores();
+        model.addAttribute("profesores", profesorDTOList);
+
+        List<CursoDTO> cursosDTOList = cursosService.findAllCursos();
+        model.addAttribute("cursos", cursosDTOList);
+
         for(AulaDTO a : aulaDTOList){
             if(a.getId() == aula){
                 model.addAttribute("aula", a);
@@ -71,8 +85,8 @@ public class EspaciosController {
             }
         }
 
-        List<EspacioDTO> espacioDTOList = espaciosService.findAllEspaciosByDiaAndHoraAndAulaAndAsignatura(dia,hora,asignatura,aula);
-        model.addAttribute("espacios", espacioDTOList);
+        Page<EspacioDTO> espacioDTOList = espaciosService.findAllEspaciosByDiaAndHoraAndAulaAndAsignatura(dia,hora,asignatura,aula, PageRequest.of(page, size));
+        model.addAttribute("page", espacioDTOList);
         return "espacios";
     }
     
@@ -92,5 +106,12 @@ public class EspaciosController {
         } catch (Exception e) {
             return e.getMessage();
         }
+    }
+
+    @PostMapping("/anadir")
+    public String addEspacio(@ModelAttribute HorarioDTO horarioDTO,
+                                @RequestParam(name="params", required= false) String params) {
+        horariosService.anadirHorario(horarioDTO);
+        return "redirect:/espacios?" + params;
     }
 }

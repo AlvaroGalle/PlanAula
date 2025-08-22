@@ -7,10 +7,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 @Controller
 @RequestMapping("/asignaturas")
@@ -28,8 +25,32 @@ public class AsignaturasController {
                                      Model model) {
         Page<AsignaturaDTO> asignaturaDTOS = asignaturasService.findPageAsignaturas(PageRequest.of(page, size));
         model.addAttribute("page", asignaturaDTOS);
+        model.addAttribute("asignaturaForm", new AsignaturaDTO());
         model.addAttribute("params", "page=" + page + "&size=" + size);
         return "asignaturas";
+    }
+
+    @GetMapping("/{id}")
+    @ResponseBody
+    public AsignaturaDTO findAsignaturaById(@PathVariable(name= "id") Integer id) {
+        return asignaturasService.findAsignaturaById(id);
+    }
+
+    @PostMapping("")
+    public String accionProfesores(@ModelAttribute AsignaturaDTO asignaturaDTO,
+                                   @RequestParam(name="accion", required = false, defaultValue = "A") String accion) {
+        switch (accion) {
+            case "A":
+                asignaturasService.addAsignatura(asignaturaDTO.getNombre());
+                break;
+            case "M":
+                asignaturasService.modifyAsignatura(asignaturaDTO);
+                break;
+            case "E":
+                asignaturasService.deleteAsignatura(asignaturaDTO.getId());
+                break;
+        }
+        return "redirect:/asignaturas";
     }
     
     @PostMapping("/anadir")

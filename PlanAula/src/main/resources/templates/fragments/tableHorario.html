@@ -1,117 +1,204 @@
+<style>
+	@keyframes zoomIn { from {transform: scale(.85); opacity:0;} to {transform: scale(1); opacity:1;} }
+	@keyframes zoomOut{ from {transform: scale(1);   opacity:1;} to {transform: scale(.85);opacity:0;} }
+	.zoom-in  { animation: zoomIn .25s ease-out both; }
+	.zoom-out { animation: zoomOut .2s ease-in both; }
+
+	.legend-disabled { opacity:.55; filter: grayscale(1); transition: opacity .15s ease; }
+	table.table { table-layout: fixed; }
+	td { vertical-align: top; }
+</style>
+
 <script>
 	function changeHorario(select){
 		const element = $('#' + select.name + 'Filter');
 		if (element.length) {
-		    element.val(select.value);
+			element.val(select.value);
 		}
 		const resetId = select.name === "curso" ? "#profesorHorario" : "#cursoHorario";
 		$(resetId).val(0);
-
-		$('#filtrosForm').submit()	
+		$('#filtrosForm').submit();
 	}
 </script>
-<div class="card-body">
-	<div class="table-responsive">
-		<table class="table table-bordered table-striped table-sm text-center align-middle w-100" style="table-layout: fixed;">
-                            <thead class="thead-dark">								
-								<tr>
-								  <th scope="col" colspan="1">
-								    <div class="d-flex gap-2">
-								      <select class="form-select form-select-sm w-50" name="curso" id="cursoHorario"
-								              onchange="changeHorario(this)">
-											  <option value="0">Curso</option>
-								        <option th:each="curso : ${cursos}" th:value="${curso.id}"
-								                th:text="${curso.nombre}" th:selected="${cursoFiltro == curso.id}"></option>
-								      </select>
-									  <select class="form-select form-select-sm w-50" id="profesorHorario" name="profesor" onchange="changeHorario(this)">
-									      <option value="0">Profesor</option>
-									      <option th:each=" profesor : ${profesores}" th:value="${profesor.id}" 
-										  th:text="${profesor.nombre}" th:selected="${profesorFiltro == profesor.id}"></option>
-									  </select>
-								    </div>
-								  </th>
-								  <th scope="col" th:each="dia : ${dias}" th:text="${dia.nombre}"></th>
-								</tr>
-                            </thead>
-                            <tbody id="tableHorario">
-                            <tr th:each="hora : ${horas}">
-                                <td th:text="${hora.nombre}"></td>
-                                <td th:each="dia : ${dias}" th:id="${hora.id} + '-' + ${dia.id}">
-                                    <div th:each="item : ${horarioCurso}"
-                                         th:if="${item.dia == dia.nombre && item.hora == hora.nombre}">
-										 <div th:if="${(item.espacio != null || item.tipo != null) && (cursoFiltro != 0 || profesorFiltro != 0)}" class="accordion" th:id="'acordeon' + ${item.id} + '_' + ${item.tipo}">
-										     <div class="accordion-item">
-										         <h2 class="accordion-header">
-										             <button th:if="${cursoFiltro != 0}" class="accordion-button collapsed"
-										                     type="button"
-										                     data-bs-toggle="collapse"
-										                     th:data-bs-target="'#collapse' + ${item.id} + '_' + ${item.tipo}"
-										                     aria-expanded="false"
-										                     th:aria-controls="'collapse' + ${item.id} + '_' + ${item.tipo}">
-										                 <span th:text="${item.asignatura}"></span>
-										             </button>
-													 <button th:if="${profesorFiltro != 0}" th:disabled="${item.tipo != 'clase'}"													 th:class="|accordion-button collapsed border 
-													   ${item.tipo == 'clase' ? 'border-primary text-primary' : 
-													     item.tipo == 'recreo' ? 'border-success text-success' : 
-													     item.tipo == 'libranza' ? 'border-secondary text-secondary' : 
-													     item.tipo == 'guardia' ? 'border-danger text-danger' : ''}|
-													 "
-													 										                     type="button"
-													 										                     data-bs-toggle="collapse"
-													 										                     th:data-bs-target="'#collapse' + ${item.id} + '_' + ${item.tipo}"
-													 										                     aria-expanded="false"
-													 										                     th:aria-controls="'collapse' + ${item.id} + '_' + ${item.tipo}">
-													 										                 <span th:text="${item.curso != null ? item.curso : item.tipo.toUpperCase()}"></span>
-													 										             </button>
-										         </h2>
-										         <div th:if="${cursoFiltro != 0}" 
-												 	  th:id="'collapse' + ${item.id} + '_' + ${item.tipo}"
-										              class="accordion-collapse collapse">
-										             <div class="accordion-body">
-										                 <p th:text="${item.profesor + ' - ' + item.espacio}"></p>
-										             </div>
-										         </div>
-												 <div th:if="${profesorFiltro != 0 && item.tipo == 'clase'}" 
-												 												 	  th:id="'collapse' + ${item.id} + '_' + ${item.tipo}"
-												 										              class="accordion-collapse collapse">
-												 										             <div class="accordion-body">
-												 										                 <p th:text="${item.asignatura + ' - ' + item.espacio}"></p>
-												 										             </div>
-												 										         </div>
-										     </div>
-										 </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </td>
-                            </tr>
-                            </tbody>
-							<tfoot>
-								<tr>
-									<td scope="col" th:colspan="${#lists.size(dias) + 1}" class="text-start">
-										<div class="d-flex justify-content-center flex-wrap gap-3 py-2">
-										       <div class="d-flex align-items-center gap-2">
-										          <div class="rounded-circle bg-primary" style="width: 16px; height: 16px; background-color: #007bff;"></div>
-										          <span class="small">Clases</span>
-												  </div>
-												<div class="d-flex align-items-center gap-2">
-										          <div class="rounded-circle bg-danger" style="width: 16px; height: 16px; background-color: #ffc107;"></div>
-										          <span class="small">Guardias</span>
-												  </div>
-												<div class="d-flex align-items-center gap-2">
-										          <div class="rounded-circle bg-success" style="width: 16px; height: 16px; background-color: #28a745;"></div>
-										          <span class="small">Recreo</span>
-												  </div>
-												<div class="d-flex align-items-center gap-2">
-										          <div class="rounded-circle bg-secondary" style="width: 16px; height: 16px;"></div>
-										          <span class="small">Libranza</span>
-										      </div>
-											  </div>
-									</td>
-									</tr>
-							</tfoot>
-                        </table>
-                    </div>
-                </div>
+
+	<form id="filtrosForm" method="get">
+			<div class="card-body">
+				<div class="table-responsive">
+					<table class="table table-bordered table-striped table-sm text-center align-middle w-100">
+						<thead class="thead-dark">
+						<tr>
+							<th scope="col" colspan="1">
+								<div class="d-flex gap-2">
+									<select class="form-select form-select-sm w-50" name="curso" id="cursoHorario"
+											onchange="changeHorario(this)">
+										<option value="0">Curso</option>
+										<option th:each="curso : ${cursos}" th:value="${curso.id}"
+												th:text="${curso.nombre}" th:selected="${cursoFiltro == curso.id}"></option>
+									</select>
+
+									<select class="form-select form-select-sm w-50" id="profesorHorario" name="profesor"
+											onchange="changeHorario(this)">
+										<option value="0">Profesor</option>
+										<option th:each=" profesor : ${profesores}" th:value="${profesor.id}"
+												th:text="${profesor.nombre}" th:selected="${profesorFiltro == profesor.id}"></option>
+									</select>
+								</div>
+							</th>
+							<th scope="col" th:each="dia : ${dias}" th:text="${dia.nombre}"></th>
+						</tr>
+						</thead>
+
+						<tbody id="tableHorario">
+						<tr th:each="hora : ${horas}">
+							<td th:text="${hora.nombre}"></td>
+							<td th:each="dia : ${dias}" th:id="${hora.id} + '-' + ${dia.id}">
+								<div th:each="item : ${horarioCurso}"
+									 th:if="${item.dia == dia.nombre && item.hora == hora.nombre}">
+									<!-- AÑADIDO: class 'horario-item' + data-tipo -->
+									<div th:if="${(item.espacio != null || item.tipo != null) && (cursoFiltro != 0 || profesorFiltro != 0)}"
+										 class="accordion horario-item"
+										 th:id="'acordeon' + ${item.id} + '_' + ${item.tipo}"
+										 th:attr="data-tipo=${item.tipo}">
+										<div class="accordion-item">
+											<h2 class="accordion-header">
+												<button th:if="${cursoFiltro != 0}" class="accordion-button collapsed"
+														type="button"
+														data-bs-toggle="collapse"
+														th:data-bs-target="'#collapse' + ${item.id} + '_' + ${item.tipo}"
+														aria-expanded="false"
+														th:aria-controls="'collapse' + ${item.id} + '_' + ${item.tipo}">
+													<span th:text="${item.asignatura}"></span>
+												</button>
+
+												<button th:if="${profesorFiltro != 0}"
+														th:disabled="${item.tipo != 'clase'}"
+														th:class="|accordion-button collapsed border
+                                    ${item.tipo == 'clase' ? 'border-primary text-primary' : 
+                                       item.tipo == 'recreo' ? 'border-success text-success' : 
+                                       item.tipo == 'libranza' ? 'border-secondary text-secondary' : 
+                                       item.tipo == 'guardia' ? 'border-danger text-danger' : ''}|
+                                  "
+														type="button"
+														data-bs-toggle="collapse"
+														th:data-bs-target="'#collapse' + ${item.id} + '_' + ${item.tipo}"
+														aria-expanded="false"
+														th:aria-controls="'collapse' + ${item.id} + '_' + ${item.tipo}">
+													<span th:text="${item.curso != null ? item.curso : item.tipo.toUpperCase()}"></span>
+												</button>
+											</h2>
+
+											<div th:if="${cursoFiltro != 0}"
+												 th:id="'collapse' + ${item.id} + '_' + ${item.tipo}"
+												 class="accordion-collapse collapse">
+												<div class="accordion-body">
+													<p th:text="${item.profesor + ' - ' + item.espacio}"></p>
+												</div>
+											</div>
+
+											<div th:if="${profesorFiltro != 0 && item.tipo == 'clase'}"
+												 th:id="'collapse' + ${item.id} + '_' + ${item.tipo}"
+												 class="accordion-collapse collapse">
+												<div class="accordion-body">
+													<p th:text="${item.asignatura + ' - ' + item.espacio}"></p>
+												</div>
+											</div>
+										</div>
+									</div>
+									<!-- /horario-item -->
+								</div>
+							</td>
+						</tr>
+						</tbody>
+
+						<tfoot>
+						<tr>
+							<td scope="col" th:colspan="${#lists.size(dias) + 1}" class="text-start">
+								<div class="d-flex justify-content-center flex-wrap gap-2 py-2">
+
+									<input class="btn-check legend-filter" id="f-clase" type="checkbox" checked data-tipo="clase" autocomplete="off">
+									<label class="d-flex align-items-center gap-2" for="f-clase" style="cursor: pointer;">
+										<div class="rounded-circle bg-primary" style="width: 16px; height: 16px;"></div>
+										<span class="small">Clases</span>
+									</label>
+
+									<input class="btn-check legend-filter" id="f-guardia" type="checkbox" checked data-tipo="guardia" autocomplete="off">
+									<label class="d-flex align-items-center gap-2" for="f-guardia" style="cursor: pointer;">
+										<div class="rounded-circle bg-danger" style="width: 16px; height: 16px;"></div>
+										<span class="small">Guardias</span>
+									</label>
+
+									<!-- Toggle: RECREO -->
+									<input class="btn-check legend-filter" id="f-recreo" type="checkbox" checked data-tipo="recreo" autocomplete="off">
+									<label class="d-flex align-items-center gap-2" for="f-recreo" style="cursor: pointer;">
+										<div class="rounded-circle bg-success" style="width: 16px; height: 16px;"></div>
+										<span class="small">Recreo</span>
+									</label>
+
+									<!-- Toggle: LIBRANZA -->
+									<input class="btn-check legend-filter" id="f-libranza" type="checkbox" checked data-tipo="libranza" autocomplete="off">
+									<label class="d-flex align-items-center gap-2" for="f-libranza" style="cursor: pointer;">
+										<div class="rounded-circle bg-secondary" style="width: 16px; height: 16px;"></div>
+										<span class="small">Libranza</span>
+									</label>
+
+									<div class="vr mx-1 d-none d-sm-block"></div>
+
+									<button id="show-all" class="btn btn-sm btn-outline-secondary" type="button">Mostrar todo</button>
+									<button id="hide-all" class="btn btn-sm btn-outline-secondary" type="button">Ocultar todo</button>
+								</div>
+							</td>
+						</tr>
+						</tfoot>
+
+					</table>
 				</div>
-            </div>
+			</div>
+
+		<input type="hidden" id="cursoFilter" name="cursoFilter" th:value="${cursoFiltro}">
+		<input type="hidden" id="profesorFilter" name="profesorFilter" th:value="${profesorFiltro}">
+	</form>
+
+<script>
+	const ANIM_HIDE_MS = 200;
+	const ANIM_SHOW_MS = 250;
+
+	function toggleTipo(tipo, show){
+		const $items = $('.horario-item[data-tipo="'+ tipo +'"]');
+		if (show){
+			$items.each(function(){
+				const $it = $(this);
+				if ($it.hasClass('d-none')){
+					$it.removeClass('d-none').addClass('zoom-in');
+					setTimeout(() => $it.removeClass('zoom-in'), ANIM_SHOW_MS + 50);
+				}
+			});
+		} else {
+			$items.each(function(){
+				const $it = $(this);
+				if ($it.hasClass('d-none')) return;
+				$it.addClass('zoom-out');
+				setTimeout(() => { $it.addClass('d-none').removeClass('zoom-out'); }, ANIM_HIDE_MS);
+			});
+		}
+	}
+
+	$(function(){
+		$('.legend-filter').on('change', function(){
+			const tipo = this.dataset.tipo;
+			const show = this.checked;
+			toggleTipo(tipo, show);
+			const $label = $('label[for="'+ this.id +'"]');
+			$label.toggleClass('legend-disabled', !show);
+		});
+		$('.legend-filter').each(function(){
+			const $label = $('label[for="'+ this.id +'"]');
+			$label.toggleClass('legend-disabled', !this.checked);
+		});
+		$('#show-all').on('click', function(){
+			$('.legend-filter').prop('checked', true).trigger('change');
+		});
+		$('#hide-all').on('click', function(){
+			$('.legend-filter').prop('checked', false).trigger('change');
+		});
+	});
+</script>

@@ -1,7 +1,7 @@
 package com.example.planaula.services;
 
-import com.example.planaula.Dto.GuardiasDTO;
 import com.example.planaula.Dto.ProfesorDTO;
+import com.example.planaula.Dto.TurnoDTO;
 import com.example.planaula.Dto.TutorDTO;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.Query;
@@ -13,10 +13,8 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -44,7 +42,7 @@ public class ProfesoresService {
     }
 
     public ProfesorDTO findProfesorById(Integer id) {
-        String sql = "SELECT id, nombre FROM profesores WHERE id = :id"; // Ajuste de columnas
+        String sql = "SELECT id, nombre FROM profesores WHERE id = :id";
         Object[] resultado = (Object[]) entityManager.createNativeQuery(sql)
                 .setParameter("id", id)
                 .getSingleResult();
@@ -254,9 +252,9 @@ public class ProfesoresService {
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
-    }*/
+    }
 
-    public List<GuardiasDTO> findTaskById(Integer id_profesor){
+    public List<TurnoDTO> findTaskById(Integer id_profesor){
         String sql = "SELECT 'G' AS tipo, g.id AS id_guardia, d.dia, ho.hora FROM guardias g JOIN dias d ON g.id_dia = d.id JOIN horas ho ON g.id_hora = ho.id WHERE g.id_profesor = :id_profesor UNION ALL SELECT 'L' AS tipo, l.id AS id_libranza, d.dia, ho.hora FROM libranzas l JOIN dias d ON l.id_dia = d.id JOIN horas ho ON l.id_hora = ho.id WHERE l.id_profesor = :id_profesor UNION ALL SELECT 'R' AS tipo, r.id AS id_recreo, d.dia, ho.hora FROM recreos r JOIN dias d ON r.id_dia = d.id JOIN horas ho ON r.id_hora = ho.id WHERE r.id_profesor = :id_profesor;";
 
         List<Object[]> resultados = entityManager.createNativeQuery(sql)
@@ -268,7 +266,7 @@ public class ProfesoresService {
         }
 
         return resultados.stream()
-                .map(resultado -> new GuardiasDTO(
+                .map(resultado -> new TurnoDTO(
                         ((Number) resultado[1]).intValue(),
                         (String) resultado[0] + resultado[1],
                         (String) resultado[2],
@@ -277,6 +275,6 @@ public class ProfesoresService {
                         null
                 ))
                 .collect(Collectors.toList());
-    }
+    }*/
 
 }

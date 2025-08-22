@@ -1,5 +1,5 @@
 <label for="turnoFilter" class="form-label">Filtrar por Turno:</label>
 <select class="form-select" id="turnoFilter" name="turno" onchange="$('#filtrosForm').submit()">
     <option value="0">Todos los turnos</option>
-    <option th:each=" turno : ${turnos}" th:value="${turno.key}" th:text="${turno.value.toUpperCase()}" th:selected="${turnoFiltro == turno.key}"></option>
+    <option th:each=" turno : ${turnos}" th:value="${turno.key}" th:text="${turno.value}" th:selected="${turnoFiltro == turno.key}"></option>
 </select>
