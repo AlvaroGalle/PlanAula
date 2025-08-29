@@ -6,10 +6,8 @@
 <div th:replace="~{fragments/links.html}"></div>
 <script>
 	$(document).ready(function() {
-		let id = "[[${id}]]";  
-		console.log(id)
+		let id = "[[${id}]]";
 	       if( id !== "0"){
-			console.log(id + "2")
 			zoomCards(id);
 		   }
 	   });
@@ -34,7 +32,7 @@
 <div th:replace="~{fragments/video_background.html}"></div>
 <div class="container mt-3">
     <div class="card shadow-sm">
-        <div class="card-header theme-guardias text-white"><h5 class="card-title mb-0">Guardias</h5></div>
+        <div class="card-header theme-guardias text-white"><h5 class="card-title mb-0">Turnos</h5></div>
         <div class="card-body filter-section">
             <form id="filtrosForm" method="get" th:action="@{'/guardias'}">
                 <div class="accordion mb-3" id="acordeonFiltros">
@@ -67,11 +65,11 @@
                     </div>
                 </div>
                 <div class="row align-items-center">
-                    <div class="col-md-9">
+                    <div class="col-md-9 mb-3">
                         <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#addTurno-modal">
                             Añadir turno
                         </button>
-                    </div>
+                        </div>
                     <div class="col-md-3 mb-3">
                         <div th:replace="~{fragments/filtros/filterPage.html}"></div>
                     </div>
@@ -101,8 +99,8 @@
                                  class="alert alert-warning" role="alert">
                                 No hay turnos asignados
                             </div>
-
-                            <table th:unless="${guardia.nombre == null}"
+                            <div class="table-responsive" th:unless="${guardia.nombre == null}">
+                            <table
                                    class="table table-sm">
                                 <thead>
                                 <tr>
@@ -119,6 +117,7 @@
                                 </tr>
                                 </tbody>
                             </table>
+                        </div>
                         </div>
                     </div>
                 </div>

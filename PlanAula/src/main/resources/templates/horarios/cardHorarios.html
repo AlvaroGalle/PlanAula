@@ -1,0 +1,133 @@
+<script>
+    function accionHorario(accion, id) {
+        if (accion !== 'A' || (($('#nuevo_aula').val() !== "0") && ($('#nuevo_asignatura').val() !== "0"))) {
+            $('#accion_horario').val(accion);
+            $('#id_horario').val(id);
+            ["dia", "hora", "aula", "profesor", "curso", "asignatura"].forEach((s)=>{
+                $('#' + s + '_horario').val($('#edit_' + s).val());
+            });
+            $('#search_horario').val(location.search);
+            $('#horariosForm').submit();
+        }
+    }
+</script>
+<div class="modal fade" id="cardHorarios-modal" tabindex="-1" role="dialog" aria-labelledby="cardHorarios-modal"
+     style="display: none">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header theme-espacios text-white">
+                <h5 class="modal-title mb-0">
+                    <span th:text="${espacio.dia}"></span>
+                    <span th:text="${espacio.hora}"></span>
+                </h5>
+                <a class="close text-danger" role="button" th:data-id="${espacio.id}" th:data-aula="${espacio.aula}"
+                        onclick="accionHorario('E', 'aula1a', this.dataset.aula, this.dataset.id)"
+                        data-toggle="tooltip" data-placement="top" title="Eliminar">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-trash3" viewBox="0 0 16 16">
+                        <path d="M6.5 1h3a.5.5 0 0 1 .5.5v1H6v-1a.5.5 0 0 1 .5-.5M11 2.5v-1A1.5 1.5 0 0 0 9.5 0h-3A1.5 1.5 0 0 0 5 1.5v1H1.5a.5.5 0 0 0 0 1h.538l.853 10.66A2 2 0 0 0 4.885 16h6.23a2 2 0 0 0 1.994-1.84l.853-10.66h.538a.5.5 0 0 0 0-1zm1.958 1-.846 10.58a1 1 0 0 1-.997.92h-6.23a1 1 0 0 1-.997-.92L3.042 3.5zm-7.487 1a.5.5 0 0 1 .528.47l.5 8.5a.5.5 0 0 1-.998.06L5 5.03a.5.5 0 0 1 .47-.53Zm5.058 0a.5.5 0 0 1 .47.53l-.5 8.5a.5.5 0 1 1-.998-.06l.5-8.5a.5.5 0 0 1 .528-.47M8 4.5a.5.5 0 0 1 .5.5v8.5a.5.5 0 0 1-1 0V5a.5.5 0 0 1 .5-.5"></path>
+                    </svg>
+                </a>
+            </div>
+            <div class="modal-body">
+                <div th:unless="${espacio.aula != null}"
+                     class="alert alert-warning" role="alert">
+                    No hay espacios asignados
+                </div>
+
+                <table th:if="${espacio.aula != null}" class="table table-sm">
+                    <thead>
+                    <tr>
+                        <th></th>
+                        <th></th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:if="${espacio.dia != null}" style="display: none">
+                        <th>Día</th>
+                        <td>
+                            <select class="form-select" aria-label="select dias" th:data-id="${espacio.id}" id="edit_dia"
+                                    onchange="accionHorario('M',  this.dataset.id)">
+                                <option th:each=" dia : ${dias}" th:text="${dia.nombre}"
+                                        th:value="${dia.id}"
+                                        th:selected="${espacio.dia == dia.nombre}"></option>
+                            </select>
+                        </td>
+                    </tr>
+                    <tr th:if="${espacio.hora != null}" style="display: none">
+                        <th>Hora</th>
+                        <td>
+                            <select class="form-select" aria-label="select horas" th:data-id="${espacio.id}" id="edit_hora"
+                                    onchange="accionHorario('M',  this.dataset.id)">
+                                <option th:each=" hora : ${horas}" th:text="${hora.nombre}"
+                                        th:value="${hora.id}"
+                                        th:selected="${espacio.hora == hora.nombre}"></option>
+                            </select>
+                        </td>
+                    </tr>
+                    <tr th:if="${espacio.aula != null}">
+                        <th>Aula</th>
+                        <td>
+                            <select class="form-select" aria-label="select aulas" th:data-id="${espacio.id}" id="edit_aula"
+                                    onchange="accionHorario('M',  this.dataset.id)">
+                                <option th:each=" aula : ${aulas}" th:text="${aula.nombre}"
+                                        th:value="${aula.id}"
+                                        th:selected="${espacio.aula == aula.nombre}"></option>
+                            </select>
+                        </td>
+                    </tr>
+                    <tr th:if="${espacio.nombre != null}">
+                        <th>Profesor</th>
+                        <td>
+                            <select class="form-select" aria-label="select profesor" th:data-id="${espacio.id}" id="edit_profesor"
+                                    onchange="accionHorario('M',  this.dataset.id)">
+                                <option th:each="profesor: ${profesores}" th:text="${profesor.nombre}"
+                                        th:value="${profesor.id}"
+                                        th:selected="${espacio.nombre == profesor.nombre}"></option>
+                            </select>
+                        </td>
+                    </tr>
+                    <tr th:if="${espacio.curso != null}">
+                        <th>Curso</th>
+                        <td>
+                            <select class="form-select" aria-label="select curso" th:data-id="${espacio.id}" id="edit_curso"
+                                    onchange="accionHorario('M',  this.dataset.id)">
+                                <option th:each=" curso : ${cursos}" th:text="${curso.nombre}"
+                                        th:value="${curso.id}"
+                                        th:selected="${espacio.curso == curso.nombre}"></option>
+                            </select>
+                        </td>
+                    </tr>
+                    <tr th:if="${espacio.asignatura != null}">
+                        <th>Asignatura</th>
+                        <td>
+                            <select class="form-select" aria-label="select asignaturas" th:data-id="${espacio.id}" id="edit_asignatura"
+                                    onchange="accionHorario('M',  this.dataset.id)">
+                                <option th:each=" asignatura : ${asignaturas}" th:text="${asignatura.nombre}"
+                                        th:value="${asignatura.id}"
+                                        th:selected="${espacio.asignatura == asignatura.nombre}"></option>
+                            </select>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<form id="horariosForm" action="/horarios/accion" th:object="${horarioForm}" method="post">
+    <input type="hidden" id="search_horario" name="search">
+    <input type="hidden" id="accion_horario" name="accion">
+    <input type="hidden" id="dia_horario" name="dia">
+    <input type="hidden" id="hora_horario" name="hora">
+    <input type="hidden" id="aula_horario" name="espacio">
+    <input type="hidden" id="profesor_horario" name="profesor">
+    <input type="hidden" id="curso_horario" name="curso">
+    <input type="hidden" id="asignatura_horario" name="asignatura">
+    <input type="hidden" id="id_horario" name="id">
+</form>

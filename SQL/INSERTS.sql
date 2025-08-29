@@ -1,123 +1,127 @@
-INSERTS
-
-INSERT INTO asignaturas (id, nombre) VALUES
-(1, 'MATEMATICAS'),
-(2, 'Ref MATEMÁTICAS'),
-(3, 'LENGUA'),
-(4, 'Ref LENGUA'),
-(5, 'BIOLOGÍA'),
-(6, 'FÍSICA Y QUÍMICA'),
-(7, 'FÍSICA'),
-(8, 'QUÍMICA'),
-(9, 'PROYECTO BIOLOGIA'),
-(10, 'PROYECTO INGLÉS'),
-(11, 'CULTURA CLÁSICA'),
-(12, 'GEOGRAFÍA E HISTORIA'),
-(13, 'HISTORIA DEL ARTE'),
-(14, 'HISTORIA DE ESPAÑA'),
-(15, 'FILOSOFÍA'),
-(16, 'RELIGIÓN'),
-(17, 'VALORES'),
-(18, 'ED PLÁSTICA'),
-(19, 'ED FÍSICA'),
-(20, 'INGLÉS'),
-(21, 'LITERATURA'),
-(22, 'FOPP'),
-(23, 'ECONOMÍA'),
-(24, 'TUTORÍA'),
-(25, 'DIGITALIZACIÓN'),
-(26, 'COMPUTERIZACIÓN'),
-(27, 'LIBRE'),
-(28, 'GUARDIA'),
-(29, 'FRANCÉS');
-
-
-INSERT INTO aulas (id, nombre) VALUES
-(3, 'Aula 1A'),
-(4, 'Aula 1B'),
-(5, 'Aula 2A'),
-(6, 'Aula 2B'),
-(7, 'Aula 3A'),
-(8, 'Aula 3B'),
-(9, 'Aula 4A'),
-(10, 'Aula 4B'),
-(11, 'Aula 1CC'),
-(12, 'Aula 1SS'),
-(13, 'Lab Idiomas'),
-(14, 'Lab Ciencias'),
-(15, 'Desdoble A'),
-(16, 'Desdoble B'),
-(17, 'Desdoble C'),
-(18, 'Biblioteca'),
-(19, 'Bajo Espejos'),
-(20, 'Bajo Patio'),
-(21, 'Aula Enlace');
-
-INSERT INTO horarios (id, codigo, dia, hora) VALUES
-(1, 'L1', 'LUNES', '08:30'),
-(2, 'L2', 'LUNES', '09:30'),
-(3, 'L3', 'LUNES', '10:30'),
-(4, 'L4', 'LUNES', '11:55'),
-(5, 'L5', 'LUNES', '12:50'),
-(6, 'L6', 'LUNES', '13:45'),
-(7, 'L7', 'LUNES', '14:40'),
-(8, 'M1', 'MARTES', '08:30'),
-(9, 'M2', 'MARTES', '09:30'),
-(10, 'M3', 'MARTES', '10:30'),
-(11, 'M4', 'MARTES', '11:55'),
-(12, 'M5', 'MARTES', '12:50'),
-(13, 'M6', 'MARTES', '13:45'),
-(14, 'M7', 'MARTES', '14:40'),
-(15, 'X1', 'MIÉRCOLES', '08:30'),
-(16, 'X2', 'MIÉRCOLES', '09:30'),
-(17, 'X3', 'MIÉRCOLES', '10:30'),
-(18, 'X4', 'MIÉRCOLES', '11:55'),
-(19, 'X5', 'MIÉRCOLES', '12:50'),
-(20, 'X6', 'MIÉRCOLES', '13:45'),
-(21, 'X7', 'MIÉRCOLES', '14:40'),
-(22, 'J1', 'JUEVES', '08:30'),
-(23, 'J2', 'JUEVES', '09:30'),
-(24, 'J3', 'JUEVES', '10:30'),
-(25, 'J4', 'JUEVES', '11:55'),
-(26, 'J5', 'JUEVES', '12:50'),
-(27, 'J6', 'JUEVES', '13:45'),
-(28, 'J7', 'JUEVES', '14:40'),
-(29, 'V1', 'VIERNES', '08:30'),
-(30, 'V2', 'VIERNES', '09:30'),
-(31, 'V3', 'VIERNES', '10:30'),
-(32, 'V4', 'VIERNES', '11:55'),
-(33, 'V5', 'VIERNES', '12:50'),
-(34, 'V6', 'VIERNES', '13:45'),
-(35, 'V7', 'VIERNES', '14:40'),
-(36, 'RL', 'LUNES', '11:25'),
-(37, 'RM', 'MARTES', '11:25'),
-(38, 'RX', 'MIÉRCOLES', '11:25'),
-(39, 'RJ', 'JUEVES', '11:25'),
-(40, 'RV', 'VIERNES', '11:25');
+INSERT INTO asignaturas (asignatura) VALUES ('AMPLIACIÓN MATEMATICAS 4º');
+INSERT INTO asignaturas (asignatura) VALUES ('AMPL.INGLÉS');
+INSERT INTO asignaturas (asignatura) VALUES ('ANTOMIA yFH');
+INSERT INTO asignaturas (asignatura) VALUES ('APOYO F Y Q');
+INSERT INTO asignaturas (asignatura) VALUES ('BIOLOGÍA BACHILLERATO');
+INSERT INTO asignaturas (asignatura) VALUES ('Biología ESO');
+INSERT INTO asignaturas (asignatura) VALUES ('CULTURA CLASICA 3º');
+INSERT INTO asignaturas (asignatura) VALUES ('CC.COMPUTACIÓN');
+INSERT INTO asignaturas (asignatura) VALUES ('COMPENSATORIA AREA CIENTIFICO TÉCNICA');
+INSERT INTO asignaturas (asignatura) VALUES ('COMPENSATORIA AREA LINGÜISTICA');
+INSERT INTO asignaturas (asignatura) VALUES ('CULTURA CIENTÍFICA');
+INSERT INTO asignaturas (asignatura) VALUES ('DIGITAL.IZACIÓN');
+INSERT INTO asignaturas (asignatura) VALUES ('ECONOMÍA BACHILLERATO');
+INSERT INTO asignaturas (asignatura) VALUES ('ECONOMIA ESO');
+INSERT INTO asignaturas (asignatura) VALUES ('Educación plástica, visual y audiovisual');
+INSERT INTO asignaturas (asignatura) VALUES ('EDUCACIÓN EN .VALORES');
+INSERT INTO asignaturas (asignatura) VALUES ('Educación Física');
+INSERT INTO asignaturas (asignatura) VALUES ('EDUCACIÓN FÍSICA BACHILLERATO');
+INSERT INTO asignaturas (asignatura) VALUES ('EDUCACIÓN PARA LA CIUDADANÍA');
+INSERT INTO asignaturas (asignatura) VALUES ('EMPRESA Y DISEÑO, MOD.NEGOCIO');
+INSERT INTO asignaturas (asignatura) VALUES ('INGLÉS BACHILLERATO');
+INSERT INTO asignaturas (asignatura) VALUES ('ENLACE');
+INSERT INTO asignaturas (asignatura) VALUES ('Ética');
+INSERT INTO asignaturas (asignatura) VALUES ('FILOSOF eso');
+INSERT INTO asignaturas (asignatura) VALUES ('FILOSOFIA BACHILLERATO');
+INSERT INTO asignaturas (asignatura) VALUES ('FÍSICA Y QUÍMICA BACHILLERATO');
+INSERT INTO asignaturas (asignatura) VALUES ('Físca y Química ESO');
+INSERT INTO asignaturas (asignatura) VALUES ('FÍSICA BACHILLERATO');
+INSERT INTO asignaturas (asignatura) VALUES ('FOPP');
+INSERT INTO asignaturas (asignatura) VALUES ('FRANCÉS');
+INSERT INTO asignaturas (asignatura) VALUES ('FUNDAMENTOS DE ADMINISTRACIÓN Y GESTIÓN');
+INSERT INTO asignaturas (asignatura) VALUES ('GEO. E HISTO');
+INSERT INTO asignaturas (asignatura) VALUES ('Sociales');
+INSERT INTO asignaturas (asignatura) VALUES ('GUARDIA');
+INSERT INTO asignaturas (asignatura) VALUES ('HISTORIA DEL ARTE BACHILLERATO');
+INSERT INTO asignaturas (asignatura) VALUES ('HISTORIA BACHILLERATO');
+INSERT INTO asignaturas (asignatura) VALUES ('INGLÉS ESO');
+INSERT INTO asignaturas (asignatura) VALUES ('INNOVACION');
+INSERT INTO asignaturas (asignatura) VALUES ('LENGUA Y LITERATURA');
+INSERT INTO asignaturas (asignatura) VALUES ('Lengua ESO');
+INSERT INTO asignaturas (asignatura) VALUES ('LENGUA C DESDOBLE');
+INSERT INTO asignaturas (asignatura) VALUES ('LITERATURA UNIVERSAL 1º bto');
+INSERT INTO asignaturas (asignatura) VALUES ('MATEMÁTICAS APLICADAS I');
+INSERT INTO asignaturas (asignatura) VALUES ('MATEMÁTICAS APLICADAS II');
+INSERT INTO asignaturas (asignatura) VALUES ('MATEMÁTICAS I');
+INSERT INTO asignaturas (asignatura) VALUES ('MATEMÁTICAS II');
+INSERT INTO asignaturas (asignatura) VALUES ('Matemáticas ESO');
+INSERT INTO asignaturas (asignatura) VALUES ('MATEMATICAS C DESDOBLE');
+INSERT INTO asignaturas (asignatura) VALUES ('Música');
+INSERT INTO asignaturas (asignatura) VALUES ('ORIENTACION 1º ESO');
+INSERT INTO asignaturas (asignatura) VALUES ('ORIENTACION 2º ESO');
+INSERT INTO asignaturas (asignatura) VALUES ('ORIENTACION 3º ESO');
+INSERT INTO asignaturas (asignatura) VALUES ('ORIENTACION 4º ESO');
+INSERT INTO asignaturas (asignatura) VALUES ('Pastoral');
+INSERT INTO asignaturas (asignatura) VALUES ('PROYECTO BIOLOGÍA. MEDIOAMBIENTE Y SALUD');
+INSERT INTO asignaturas (asignatura) VALUES ('QUÍMICA BACHILLERATO');
+INSERT INTO asignaturas (asignatura) VALUES ('RECUPERACIÓN DE LENGUA 1º Y 2º ESO');
+INSERT INTO asignaturas (asignatura) VALUES ('RECUPERACIÓN DE MATEMATICAS 1º Y 2º ESO');
+INSERT INTO asignaturas (asignatura) VALUES ('RECUPERACION MATEMATICAS 3º ESO');
+INSERT INTO asignaturas (asignatura) VALUES ('Religión');
+INSERT INTO asignaturas (asignatura) VALUES ('RELIGIÓN BACHILLERATO');
+INSERT INTO asignaturas (asignatura) VALUES ('Tecnología, Programación y Robótica');
+INSERT INTO asignaturas (asignatura) VALUES ('Tutoría ESO 1º 2º');
+INSERT INTO asignaturas (asignatura) VALUES ('TUTORIA 1BTO');
+INSERT INTO asignaturas (asignatura) VALUES ('TUTORÍA 2 BACHILLERATO');
+INSERT INTO asignaturas (asignatura) VALUES ('TUTORÍA 3º 4');
 
 
-INSERT INTO cursos (id, nombre) VALUES
-(1, '1º eso A'),
-(2, '1º eso B'),
-(3, '1º eso C'),
-(4, '2º eso A'),
-(5, '2º eso B'),
-(6, '2º eso C'),
-(7, '3º eso A'),
-(8, '3º eso B'),
-(9, '3º eso C'),
-(10, '4º eso A'),
-(11, '4º eso B'),
-(12, '4º eso C'),
-(13, '1º bach CC'),
-(14, '1º bach SS'),
-(15, '2º bch CC'),
-(16, '2º bch SS'),
-(17, 'A ENLACE'),
-(18, 'Jef Estudios'),
-(19, 'Dir. ESO-Bch'),
-(20, 'Dir. Gen.');
+INSERT INTO profesores (nombre, apellidos) VALUES ('Adela', '');
+INSERT INTO profesores (nombre, apellidos) VALUES ('Ana Belén', 'Gómez');
+INSERT INTO profesores (nombre, apellidos) VALUES ('Daniel', 'Hernández Martín');
+INSERT INTO profesores (nombre, apellidos) VALUES ('Elena', 'Gómez Gómez');
+INSERT INTO profesores (nombre, apellidos) VALUES ('Elisabeth', 'Ruiz Moraga');
+INSERT INTO profesores (nombre, apellidos) VALUES ('Eva Mª', 'Blanco García');
+INSERT INTO profesores (nombre, apellidos) VALUES ('Félix', 'Muñoz Jiménez');
+INSERT INTO profesores (nombre, apellidos) VALUES ('José Ignacio', 'Eguiguren Sánchez');
+INSERT INTO profesores (nombre, apellidos) VALUES ('Irene', 'Alcocer Amores');
+INSERT INTO profesores (nombre, apellidos) VALUES ('Javier', 'Utrilla Fernández');
+INSERT INTO profesores (nombre, apellidos) VALUES ('José Antonio', 'Moreno Rey');
+INSERT INTO profesores (nombre, apellidos) VALUES ('José Luis', 'Gallego Calvo');
+INSERT INTO profesores (nombre, apellidos) VALUES ('Pedro Julian', 'Arias Redondo');
+INSERT INTO profesores (nombre, apellidos) VALUES ('MªdelMar', 'Aguila Guerra');
+INSERT INTO profesores (nombre, apellidos) VALUES ('Mercedes A', 'Arana Amor');
+INSERT INTO profesores (nombre, apellidos) VALUES ('Mercedes C.', 'Comunión Pompa');
+INSERT INTO profesores (nombre, apellidos) VALUES ('Milagros', 'Romero Muñoz');
+INSERT INTO profesores (nombre, apellidos) VALUES ('Monica', 'Pareja García');
+INSERT INTO profesores (nombre, apellidos) VALUES ('Pilar', 'Molina Navarrete');
+INSERT INTO profesores (nombre, apellidos) VALUES ('Rosa', 'Fernández Santa');
+INSERT INTO profesores (nombre, apellidos) VALUES ('Santiago', 'Delgado Asenjo');
 
+
+INSERT INTO cursos (curso) VALUES ('1º BACH A');
+INSERT INTO cursos (curso) VALUES ('1º BACH B');
+INSERT INTO cursos (curso) VALUES ('1º C');
+INSERT INTO cursos (curso) VALUES ('1ºA');
+INSERT INTO cursos (curso) VALUES ('1ºB');
+INSERT INTO cursos (curso) VALUES ('2º BACH A');
+INSERT INTO cursos (curso) VALUES ('2º BACH B');
+INSERT INTO cursos (curso) VALUES ('2º C');
+INSERT INTO cursos (curso) VALUES ('2ºA');
+INSERT INTO cursos (curso) VALUES ('2ºB');
+INSERT INTO cursos (curso) VALUES ('3ºA');
+INSERT INTO cursos (curso) VALUES ('3ºB');
+INSERT INTO cursos (curso) VALUES ('3ºC');
+INSERT INTO cursos (curso) VALUES ('4ºA');
+INSERT INTO cursos (curso) VALUES ('4ºB');
+INSERT INTO cursos (curso) VALUES ('4ºC');
+INSERT INTO cursos (curso) VALUES ('Coordinacion');
+INSERT INTO cursos (curso) VALUES ('Enlace');
+
+
+INSERT INTO aulas (aula) VALUES ('APOYOESPEJOS');
+INSERT INTO aulas (aula) VALUES ('AULA DIVER_1');
+INSERT INTO aulas (aula) VALUES ('AULA DIVER_2');
+INSERT INTO aulas (aula) VALUES ('AULA ENLACE');
+INSERT INTO aulas (aula) VALUES ('BIBLIOTECA');
+INSERT INTO aulas (aula) VALUES ('COMPEN.');
+INSERT INTO aulas (aula) VALUES ('ESPEJOSPATIO');
+INSERT INTO aulas (aula) VALUES ('GIMNASIO');
+INSERT INTO aulas (aula) VALUES ('LAB.IDIOMAS');
+INSERT INTO aulas (aula) VALUES ('LAB CIENCIAS');
+INSERT INTO aulas (aula) VALUES ('MAFALDA');
+INSERT INTO aulas (aula) VALUES ('PATIO');
+INSERT INTO aulas (aula) VALUES ('APOYOPATIO');
 
 INSERT INTO dias (id, nombre) VALUES
 (1, 'LUNES'),
@@ -129,63 +133,10 @@ INSERT INTO dias (id, nombre) VALUES
 
 INSERT INTO horas (id, hora) VALUES
 (1, '08:30'),
-(2, '09:30'),
+(2, '09:35'),
 (3, '10:30'),
 (4, '11:25'),
 (5, '11:55'),
 (6, '12:50'),
 (7, '13:45'),
 (8, '14:40');
-
-
-INSERT INTO profesores (id, nombre) VALUES
-(2, 'MERCEDES Arana'),
-(3, 'JULIAN Arias'),
-(4, 'VANESSA Barrantes'),
-(5, 'EVA Mª Blanco'),
-(6, 'MERCEDES Comunión'),
-(7, 'SANTIAGO Delgado'),
-(8, 'IÑAKI Eguiguren'),
-(9, 'JOSÉ LUIS Gallego'),
-(10, 'DANIEL Hernández'),
-(11, 'CRISTINA Igualada'),
-(12, 'PILAR Molina'),
-(13, 'JOSÉ ANTONIO Montero'),
-(14, 'MILA Muñoz'),
-(15, 'FÉLIX Muñoz'),
-(16, 'MÓNICA Pareja'),
-(17, 'BELÉN Rollán'),
-(18, 'JAVIER Utrilla'),
-(19, 'Mº JOSÉ López'),
-(20, 'Juanito'),
-(24, 'anita'),
-(26, 'alvaro');
-
-
-INSERT INTO dias_codificados (dia, codigo) VALUES
-('LUNES', 'RL'),
-('MARTES', 'RM'),
-('MIÉRCOLES', 'RX'),
-('JUEVES', 'RJ'),
-('VIERNES', 'RV');
-
-
-INSERT INTO espacios (nombre) VALUES
-('Aula 1A'),
-('Aula 1B'),
-('Aula 2A'),
-('Aula 2B'),
-('Aula 3A'),
-('Aula 3B'),
-('Aula 4A'),
-('Aula 4B'),
-('Aula 1CC'),
-('Aula 1SS'),
-('Lab CC'),
-('Lab Id'),
-('Desdoble A'),
-('Desdoble B'),
-('Desdoble C'),
-('A ENLACE'),
-('Bajo Patio'),
-('Bajo Espejos');

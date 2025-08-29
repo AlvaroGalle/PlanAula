@@ -32,6 +32,13 @@
         });
     }
 </script>
+<style>
+    .btn-outline-primary:hover {
+        img{
+            filter: invert(100%);
+        }
+    }
+</style>
 <body>
 	<div th:replace="~{fragments/video_background.html}"></div>
 	
@@ -42,12 +49,12 @@
         </div>
         <div class="card-body filter-section">
             <div class="row align-items-center">
-                <!--<div class="col-3">
-                    <button type="button" class="btn btn-outline-success btn-sm"
-                            onclick="location.href='/profesores/tutores'">Ver tutores
-                    </button>
-                </div>-->
-                <div class="col-9">
+                <div class="col-md-1">
+                    <a class="btn btn-outline-primary" href="/profesores/suplencias" data-toggle="tooltip" data-placement="top" title="Gestionar sustituciones">
+                        <img src="/images/impresora.png" alt="Generar suplencias" style="max-width: 50%">
+                    </a>
+                </div>
+                <div class="col-8">
                     <button type="button" class="btn btn-primary" onclick="$('#nuevoProfesor-modal').modal('show')">
                         Añadir docente
                     </button>

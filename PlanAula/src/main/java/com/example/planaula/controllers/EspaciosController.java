@@ -101,6 +101,12 @@ public class EspaciosController {
             
             List<AsignaturaDTO> asignaturaDTOList =  asignaturasService.findAllAsignaturas();
             model.addAttribute("asignaturas", asignaturaDTOList);
+
+            List<ProfesorDTO> profesorDTOList = profesoresService.findAllProfesores();
+            model.addAttribute("profesores", profesorDTOList);
+
+            List<CursoDTO> cursosDTOList = cursosService.findAllCursos();
+            model.addAttribute("cursos", cursosDTOList);
             
             return RUTATEMPLATE + "cardEspacios";
         } catch (Exception e) {

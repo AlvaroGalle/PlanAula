@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <div th:replace="~{fragments/head.html}"></div>
+</head>
+<div th:replace="~{fragments/links.html}"></div>
+<script>
+    function generarPdfSuplencias(){
+        let trs = document.querySelectorAll("#tbody_horarios tr");
+        let horario = new Map();
+        trs.forEach((tr)=>{
+            let ths = tr.querySelectorAll("th");
+            let tds = tr.querySelectorAll("td");
+            const id = ths[1].textContent + "_" + tr.id.split("_")[1];
+            const tdSustituto = tds[3].querySelector("select").value;
+            horario.set(id, tdSustituto);
+        });
+
+        let h = Object.fromEntries(horario);
+        let url = "/profesores/suplencias/pdf?fecha=" + document.getElementById("fechaSuplencia").value + "&profesor=" + document.getElementById("profesorFilter").value;
+        fetch(url, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(h)
+        })
+            .then(response => response.blob())
+            .then(blob => {
+                const url = window.URL.createObjectURL(blob);
+                const a = document.createElement("a");
+                a.href = url;
+                a.download = "suplencias.pdf";
+                document.body.appendChild(a);
+                a.click();
+                a.remove();
+            })
+            .catch(error => console.error("Error:", error));
+    }
+</script>
+<body>
+<div th:replace="~{fragments/video_background.html}"></div>
+
+<div class="container min-vh-100 d-flex align-items-center justify-content-center">
+    <div class="card shadow-sm w-100">
+        <div class="card-header theme-profesores text-white">
+            <h5 class="card-title mb-0">Suplencias profesor</h5>
+        </div>
+        <div class="card-body filter-section">
+            <form action="/profesores/suplencias" method="get" id="filtrosForm">
+            <div class="row align-items-center">
+
+                <div class="col-md-6 mb-3">
+                    <label for="fechaSuplencia" class="form-label">Fecha de la suplencia:</label>
+                    <input type="date" id="fechaSuplencia" name="fecha" class="form-control" onchange="$('#filtrosForm').submit()" th:value="${fechaFiltro}">
+                </div>
+                <div class="col-md-6 mb-3">
+                    <div th:replace="~{fragments/filtros/filterProfesores.html}"></div>
+                </div>
+            </div>
+            </form>
+        </div>
+
+        <div class="card-body bg-light">
+            <b th:text="${dia}"></b>
+            <div class="table-responsive">
+                <table class="table table-bordered table-striped table-sm table-hover">
+                    <thead>
+                    <tr>
+                        <th scope="col">Hora</th>
+                        <th scope="col">Turno</th>
+                        <th scope="col">Curso</th>
+                        <th scope="col">Asignatura</th>
+                        <th scope="col">Espacio</th>
+                        <th scope="col">Sustituto</th>
+                    </tr>
+                    </thead>
+                    <tbody id="tbody_horarios">
+                    <tr th:each="horario : ${horarios}" th:id="'h_' + ${horario.id}">
+                        <th scope="row" th:text="${horario.hora}"></th>
+                        <th th:text="${horario.tipo}"></th>
+                        <td th:text="${horario.curso}"></td>
+                        <td th:text="${horario.asignatura}"></td>
+                        <td th:text="${horario.espacio}"></td>
+                        <td>
+                            <select class="form-select" name="profesor">
+                                <option value="0"></option>
+                                <option th:each=" profesor : ${profesores}" th:value="${profesor.id}" th:text="${profesor.nombre}" th:if="${profesorFiltro != profesor.id}"></option>
+                            </select>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div th:if="${horarios != null && #lists.size(horarios) == 0}" class="alert alert-danger" role="alert">
+                No existen resultados para los filtros ingresados
+            </div>
+            <div class="row d-flex justify-content-end">
+                <button type="button" class="btn btn-outline-danger" onclick="generarPdfSuplencias()">Generar PDF</button>
+            </div>
+        </div>
+        <div class="card-footer text-muted bg-white d-flex justify-content-end">
+            <button type="button" class="btn btn-dark" onclick="location.href='/profesores'">Volver</button>
+        </div>
+    </div>
+</div>
+</body>
+</html>

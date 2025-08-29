@@ -3,6 +3,7 @@ package com.example.planaula.services;
 import com.example.planaula.Dto.HorarioDTO;
 
 import jakarta.persistence.EntityManager;
+import jakarta.persistence.NoResultException;
 import jakarta.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -54,7 +55,7 @@ public class HorariosService {
     }
 
 
-   /* public HorarioDTO findHorarioById(int id) {
+    public HorarioDTO findIdsHorarioById(int id) {
         String sql = """
             SELECT id, id_dia, id_hora, id_curso, id_asignatura, id_profesor, id_aula, observaciones
             FROM horarios
@@ -62,27 +63,75 @@ public class HorariosService {
         """;
 
         try {
-            Object[] row = (Object[]) entityManager.createNativeQuery(sql)
+            Object[] resultado = (Object[]) entityManager.createNativeQuery(sql)
                     .setParameter("id", id)
                     .getSingleResult();
 
             return new HorarioDTO(
-                    (Integer) row[0],                    
-                    String.valueOf(row[1]),              
-                    String.valueOf(row[2]),              
-                    String.valueOf(row[3]),             
-                    String.valueOf(row[4]),             
-                    String.valueOf(row[5]),             
-                    String.valueOf(row[6]),             
-                    row[7] != null ? row[7].toString() : null
+					((Number) resultado[0]).intValue(),
+					(String) resultado[1],
+					(String) resultado[2],
+					(String) resultado[3],
+					(String) resultado[4],
+					(String) resultado[5],
+					(String) resultado[6],
+					(String) resultado[7],
+					(String) resultado[8]
             );
 
         } catch (NoResultException e) {
         	e.printStackTrace();
             return new HorarioDTO();
         }
-    }*/
-    
+    }
+
+	public HorarioDTO findHorarioById(int id) {
+		String sql = """
+            SELECT
+              h.id AS id_horario,
+              d.dia AS dia,
+              ho.hora AS hora,
+              c.curso AS curso,
+              asig.asignatura AS asignatura,
+              p.nombre AS profesor,
+              a.aula AS aula,
+              h.observaciones AS observaciones,
+              'clase' AS tipo,
+              'horarios' AS origen
+            FROM horarios h
+            LEFT JOIN cursos      c   ON h.id_curso     = c.id
+            LEFT JOIN profesores  p   ON h.id_profesor  = p.id
+            LEFT JOIN asignaturas asig ON h.id_asignatura = asig.id
+            LEFT JOIN aulas       a   ON h.id_aula      = a.id
+            LEFT JOIN dias        d   ON h.id_dia       = d.id
+            LEFT JOIN horas       ho  ON h.id_hora      = ho.id
+            WHERE h.id = :id;
+            
+        """;
+
+		try {
+			Object[] resultado = (Object[]) entityManager.createNativeQuery(sql)
+					.setParameter("id", id)
+					.getSingleResult();
+
+			return new HorarioDTO(
+					((Number) resultado[0]).intValue(),
+					(String) resultado[1],
+					(String) resultado[2],
+					(String) resultado[3],
+					(String) resultado[4],
+					(String) resultado[5],
+					(String) resultado[6],
+					(String) resultado[7],
+					(String) resultado[8]
+			);
+
+		} catch (NoResultException e) {
+			e.printStackTrace();
+			return new HorarioDTO();
+		}
+	}
+
     @Transactional
     public void anadirHorario(HorarioDTO horarioDTO) {
     	String sql = """
@@ -137,4 +186,31 @@ public class HorariosService {
     	    .setParameter("id", id)
     	    .executeUpdate();
     }
+
+	public List<HorarioDTO> findHorarioByProfesorAndDia(int profesor, int dia) {
+		String sql = "SELECT h.id, d.dia, ho.hora, c.curso, asig.asignatura, p.nombre AS profesor, a.aula, h.observaciones, 'Clase' AS tipo, 'horarios' AS origen FROM horarios h LEFT JOIN cursos c ON h.id_curso = c.id LEFT JOIN profesores p ON h.id_profesor = p.id LEFT JOIN asignaturas asig ON h.id_asignatura = asig.id LEFT JOIN aulas a ON h.id_aula = a.id LEFT JOIN dias d ON h.id_dia = d.id LEFT JOIN horas ho ON h.id_hora = ho.id WHERE (:dia IS NULL OR :dia = 0 OR h.id_dia = :dia) AND (:profesor IS NULL OR :profesor = 0 OR h.id_profesor = :profesor) UNION ALL SELECT g.id, d.dia, ho.hora, NULL AS curso, NULL AS asignatura, p.nombre AS profesor, NULL AS aula, NULL AS observaciones, 'guardia' AS tipo, 'guardias' AS origen FROM guardias g LEFT JOIN profesores p ON g.id_profesor = p.id LEFT JOIN dias d ON g.id_dia = d.id LEFT JOIN horas ho ON g.id_hora = ho.id WHERE (:dia IS NULL OR :dia = 0 OR g.id_dia = :dia) AND (:profesor IS NULL OR :profesor = 0 OR g.id_profesor = :profesor)" +
+				" UNION ALL SELECT r.id, d.dia, ho.hora, NULL AS curso, NULL AS asignatura, p.nombre AS profesor, NULL AS aula, NULL AS observaciones, 'Recreo' AS tipo, 'recreo' AS origen FROM recreos r LEFT JOIN profesores p ON r.id_profesor = p.id LEFT JOIN dias d ON r.id_dia = d.id LEFT JOIN horas ho ON r.id_hora = ho.id WHERE (:dia IS NULL OR :dia = 0 OR r.id_dia = :dia) AND (:profesor IS NULL OR :profesor = 0 OR r.id_profesor = :profesor) UNION ALL SELECT l.id, d.dia, ho.hora, NULL AS curso, NULL AS asignatura, p.nombre AS profesor, NULL AS aula, NULL AS observaciones, 'Libranza' AS tipo, 'libranza' AS origen FROM libranzas l LEFT JOIN profesores p ON l.id_profesor = p.id LEFT JOIN dias d ON l.id_dia = d.id LEFT JOIN horas ho ON l.id_hora = ho.id WHERE (:dia IS NULL OR :dia = 0 OR l.id_dia = :dia) AND (:profesor IS NULL OR :profesor = 0 OR l.id_profesor = :profesor) ORDER BY hora;";
+
+		List<Object[]> resultados = entityManager.createNativeQuery(sql)
+				.setParameter("dia", dia)
+				.setParameter("profesor", profesor)
+				.getResultList();
+
+		if (resultados == null || resultados.isEmpty()) {
+			return Collections.emptyList();
+		}
+		return resultados.stream()
+				.map(resultado -> new HorarioDTO(
+						((Number) resultado[0]).intValue(),
+						(String) resultado[1],
+						(String) resultado[2],
+						(String) resultado[3],
+						(String) resultado[4],
+						(String) resultado[5],
+						(String) resultado[6],
+						(String) resultado[7],
+						(String) resultado[8]
+				))
+				.collect(Collectors.toList());
+	}
 }

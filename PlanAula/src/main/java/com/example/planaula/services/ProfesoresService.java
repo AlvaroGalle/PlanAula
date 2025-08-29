@@ -25,7 +25,7 @@ public class ProfesoresService {
     private EntityManager entityManager;
 
     public List<ProfesorDTO> findAllProfesores() {
-        String sql = "SELECT id, nombre FROM profesores"; // Ajuste de columnas
+        String sql = "SELECT id, nombre FROM profesores";
 
         List<Object[]> resultados = entityManager.createNativeQuery(sql).getResultList();
 
