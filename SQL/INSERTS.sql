@@ -123,7 +123,7 @@ INSERT INTO aulas (aula) VALUES ('MAFALDA');
 INSERT INTO aulas (aula) VALUES ('PATIO');
 INSERT INTO aulas (aula) VALUES ('APOYOPATIO');
 
-INSERT INTO dias (id, nombre) VALUES
+INSERT INTO dias (id, dia) VALUES
 (1, 'LUNES'),
 (2, 'MARTES'),
 (3, 'MIÉRCOLES'),

@@ -95,10 +95,6 @@
                             </div>
                         </div>
                         <div class="card-body">
-                            <div th:if="${guardia.nombre == null}"
-                                 class="alert alert-warning" role="alert">
-                                No hay turnos asignados
-                            </div>
                             <div class="table-responsive" th:unless="${guardia.nombre == null}">
                             <table
                                    class="table table-sm">
@@ -117,14 +113,15 @@
                                 </tr>
                                 </tbody>
                             </table>
-                        </div>
+                        	</div>
                         </div>
                     </div>
                 </div>
-                <div th:replace="~{fragments/noResultAlert.html}"></div>
             </div>
-            <div th:replace="~{fragments/pagination.html}"></div>
+			<div th:unless="${page.totalElements > 0}" class="alert alert-danger" role="alert"> No existen espacios para los filtros ingresados
+																      </div>
         </div>
+		<div th:replace="~{fragments/pagination.html}"></div>
         <div class="card-footer text-muted bg-white d-flex justify-content-end">
             <button type="button" class="btn btn-dark" onclick="location.href='/menu'">Volver</button>
         </div>
