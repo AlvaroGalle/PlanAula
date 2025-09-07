@@ -19,7 +19,7 @@ public class DiasService {
     private EntityManager entityManager;
 
     public List<DiaDTO> findAllDias() {
-        String sql = "SELECT * FROM dias";
+        String sql = "SELECT * FROM dias order by id asc";
 
         List<Object[]> resultados = entityManager.createNativeQuery(sql).getResultList();
 

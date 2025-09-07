@@ -24,8 +24,31 @@ public class EspaciosService {
     @Autowired
     private EntityManager entityManager;
 
-    public Page<EspacioDTO> findAllEspaciosByDiaAndHoraAndAulaAndAsignatura(Integer dia, Integer hora, Integer asignatura, Integer aula, Pageable pageable) {
+    public Page<EspacioDTO> findAllEspaciosByDiaAndHoraAndAulaAndAsignatura(Integer dia, Integer hora, Integer asignatura, Integer aula, Integer profesor, Integer curso, Pageable pageable) {
         try {
+        	
+        	  String countSql = "SELECT COUNT(*) FROM horarios h\n"
+        	  		+ "JOIN cursos c ON h.id_curso = c.id\n"
+        	  		+ "JOIN profesores p ON h.id_profesor = p.id\n"
+        	  		+ "JOIN asignaturas asig ON h.id_asignatura = asig.id\n"
+        	  		+ "JOIN aulas a ON h.id_aula = a.id\n"
+        	  		+ "JOIN dias d ON h.id_dia = d.id\n"
+        	  		+ "JOIN horas ho ON h.id_hora = ho.id\n"
+        	  		+ "WHERE (:dia IS NULL OR :dia = 0 OR d.id = :dia)\n"
+        	  		+ "AND (:hora IS NULL OR :hora = 0 OR ho.id = :hora)\n"
+        	  		+ "AND (:aula IS NULL OR :aula = 0 OR a.id = :aula)\n"
+        	  		+ "AND (:profesor IS NULL OR :profesor = 0 OR p.id = :profesor)\n"
+        	  		+ "AND (:curso IS NULL OR :curso = 0 OR c.id = :curso)\n"
+        	  		+ "AND (:asignatura IS NULL OR :asignatura = 0 OR asig.id = :asignatura)";
+              Query countQuery = entityManager.createNativeQuery(countSql)
+                      .setParameter("dia", dia)
+                      .setParameter("hora", hora)
+                      .setParameter("aula", aula)
+                      .setParameter("asignatura", asignatura)
+                      .setParameter("profesor", profesor)
+                      .setParameter("curso", curso);
+              long total = ((Number) countQuery.getSingleResult()).longValue();
+              
             String sql = "SELECT h.id, d.dia, ho.hora, c.curso, asig.asignatura, p.nombre, a.aula, h.observaciones\n" +
                     "FROM horarios h\n" +
                     "JOIN cursos c ON h.id_curso = c.id\n" +
@@ -37,13 +60,17 @@ public class EspaciosService {
                     "WHERE (:dia IS NULL OR :dia = 0 OR d.id = :dia)\n" +
                     "AND (:hora IS NULL OR :hora = 0 OR ho.id = :hora)\n" +
                     "AND (:aula IS NULL OR :aula = 0 OR a.id = :aula)\n" +
-                    "AND (:asignatura IS NULL OR :asignatura = 0 OR asig.id = :asignatura)\n";
+                    "AND (:profesor IS NULL OR :profesor = 0 OR p.id = :profesor)\n" +
+                    "AND (:curso IS NULL OR :curso = 0 OR c.id = :curso)\n" +
+                    "AND (:asignatura IS NULL OR :asignatura = 0 OR asig.id = :asignatura) order by d.id, ho.hora, c.curso\n";
 
             Query query = entityManager.createNativeQuery(sql)
                     .setParameter("dia", dia)
                     .setParameter("hora", hora)
                     .setParameter("aula", aula)
                     .setParameter("asignatura", asignatura)
+                    .setParameter("profesor", profesor)
+                    .setParameter("curso", curso)
                     .setFirstResult((int) pageable.getOffset())
                     .setMaxResults(pageable.getPageSize());
 
@@ -61,7 +88,7 @@ public class EspaciosService {
                             (String) resultado[7]
                     )).collect(Collectors.toList());
 
-            return new PageImpl<>(espacios, pageable, espacios.size());
+            return new PageImpl<>(espacios, pageable, total);
         } catch (Exception e) {
             System.out.println(e.getMessage());
             return new PageImpl<>(Collections.emptyList(), pageable, 0);

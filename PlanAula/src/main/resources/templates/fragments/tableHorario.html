@@ -54,7 +54,6 @@
 							<td th:each="dia : ${dias}" th:id="${hora.id} + '-' + ${dia.id}">
 								<div th:each="item : ${horarioCurso}"
 									 th:if="${item.dia == dia.nombre && item.hora == hora.nombre}">
-									<!-- AÑADIDO: class 'horario-item' + data-tipo -->
 									<div th:if="${(item.espacio != null || item.tipo != null) && (cursoFiltro != 0 || profesorFiltro != 0)}"
 										 class="accordion horario-item"
 										 th:id="'acordeon' + ${item.id} + '_' + ${item.tipo}"
@@ -104,7 +103,6 @@
 											</div>
 										</div>
 									</div>
-									<!-- /horario-item -->
 								</div>
 							</td>
 						</tr>

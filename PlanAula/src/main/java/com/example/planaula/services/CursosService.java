@@ -19,7 +19,7 @@ public class CursosService {
     private EntityManager entityManager;
 
     public List<CursoDTO> findAllCursos() {
-        String sql = "SELECT * FROM cursos";
+        String sql = "SELECT * FROM cursos order by curso asc";
 
         List<Object[]> resultados = entityManager.createNativeQuery(sql).getResultList();
 

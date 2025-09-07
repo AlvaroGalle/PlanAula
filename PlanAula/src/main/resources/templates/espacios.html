@@ -113,7 +113,7 @@
                                 <tr th:if="${espacio.nombre != null}">
                                     <th>Profesor</th>
                                     <td th:text="${espacio.nombre}"
-                                        th:class="${profesor != null && profesor.nombre == espacio.profesor ? 'text-success' : ''}"></td>
+                                        th:class="${profesor != null && profesor.nombre == espacio.nombre ? 'text-success' : ''}"></td>
                                 </tr>
                                 <tr th:if="${espacio.curso != null}">
                                     <th>Curso</th>

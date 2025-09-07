@@ -24,7 +24,7 @@ public class AsignaturasService {
     private EntityManager entityManager;
 
     public List<AsignaturaDTO> findAllAsignaturas() {
-        String sqlfindAllAsignaturas = "SELECT * FROM asignaturas";
+        String sqlfindAllAsignaturas = "SELECT * FROM asignaturas order by asignatura asc";
 
         List<Object[]> resultados = entityManager.createNativeQuery(sqlfindAllAsignaturas).getResultList();
 
@@ -41,7 +41,7 @@ public class AsignaturasService {
     }
 
     public AsignaturaDTO findAsignaturaById(Integer id) {
-        String sql = "SELECT id, asignatura FROM asignaturas WHERE id = :id";
+        String sql = "SELECT id, asignatura FROM asignaturas WHERE id = :id order by asignatura";
         Object[] resultado = (Object[]) entityManager.createNativeQuery(sql)
                 .setParameter("id", id)
                 .getSingleResult();

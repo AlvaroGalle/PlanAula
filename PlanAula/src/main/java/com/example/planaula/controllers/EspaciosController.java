@@ -45,6 +45,8 @@ public class EspaciosController {
             					  @RequestParam(name = "hora", required = false, defaultValue = "0") int hora,
             					  @RequestParam(name = "aula", required = false, defaultValue = "0") int aula,
             					  @RequestParam(name = "asignatura", required = false, defaultValue = "0") int asignatura,
+            					  @RequestParam(name = "profesor", required = false, defaultValue = "0") int profesor,
+                                  @RequestParam(name = "curso", required = false, defaultValue = "0") int curso,
                                   @RequestParam(name="page", required = false, defaultValue = "0") int page,
                                   @RequestParam(name="size", required = false, defaultValue = "15") int size,
             					  @RequestParam(name = "id", required = false, defaultValue = "0") String id,
@@ -55,6 +57,8 @@ public class EspaciosController {
         model.addAttribute("horaFiltro", hora);
         model.addAttribute("aulaFiltro", aula);
         model.addAttribute("asignaturaFiltro", asignatura);
+        model.addAttribute("profesorFiltro", profesor);
+        model.addAttribute("cursoFiltro", curso);
 
         List<DiaDTO> diaDTOList =  diasService.findAllDias();
         model.addAttribute("dias", diaDTOList);
@@ -64,18 +68,28 @@ public class EspaciosController {
 
         List<AulaDTO> aulaDTOList =  aulasService.findAllAulas();
         model.addAttribute("aulas", aulaDTOList);
-
-        List<ProfesorDTO> profesorDTOList = profesoresService.findAllProfesores();
-        model.addAttribute("profesores", profesorDTOList);
-
-        List<CursoDTO> cursosDTOList = cursosService.findAllCursos();
-        model.addAttribute("cursos", cursosDTOList);
-
         for(AulaDTO a : aulaDTOList){
             if(a.getId() == aula){
                 model.addAttribute("aula", a);
             }
         }
+        
+        List<ProfesorDTO> profesorDTOList = profesoresService.findAllProfesores();
+        model.addAttribute("profesores", profesorDTOList);
+        for(ProfesorDTO p : profesorDTOList){
+            if(p.getId() == profesor){
+                model.addAttribute("profesor", p);
+            }
+        }
+        
+        List<CursoDTO> cursosDTOList = cursosService.findAllCursos();
+        model.addAttribute("cursos", cursosDTOList);
+        for(CursoDTO c : cursosDTOList){
+            if(c.getId() == curso){
+                model.addAttribute("curso", c);
+            }
+        }
+        
 
         List<AsignaturaDTO> asignaturaDTOList =  asignaturasService.findAllAsignaturas();
         model.addAttribute("asignaturas", asignaturaDTOList);
@@ -85,7 +99,7 @@ public class EspaciosController {
             }
         }
 
-        Page<EspacioDTO> espacioDTOList = espaciosService.findAllEspaciosByDiaAndHoraAndAulaAndAsignatura(dia,hora,asignatura,aula, PageRequest.of(page, size));
+        Page<EspacioDTO> espacioDTOList = espaciosService.findAllEspaciosByDiaAndHoraAndAulaAndAsignatura(dia,hora,asignatura,aula,profesor,curso, PageRequest.of(page, size));
         model.addAttribute("page", espacioDTOList);
         return "espacios";
     }

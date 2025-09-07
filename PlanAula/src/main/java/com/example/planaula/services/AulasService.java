@@ -18,7 +18,7 @@ public class AulasService {
     private EntityManager entityManager;
 
     public List<AulaDTO> findAllAulas() {
-        String sql = "SELECT * FROM aulas";
+        String sql = "SELECT * FROM aulas order by aula asc";
 
         List<Object[]> resultados = entityManager.createNativeQuery(sql).getResultList();
 
