@@ -18,6 +18,7 @@
                 switch (accion) {
                     case "M" :
                         $('#nombreAModificar').text(data.nombre);
+						$('#modificarProfesor').val(data.nombre);
                         $('#modificarProfesor-modal').modal('show');
                         break;
                     case "E" :
@@ -45,7 +46,18 @@
 	<div class="container min-vh-100 d-flex align-items-center justify-content-center">
     <div class="card shadow-sm w-100">
         <div class="card-header theme-profesores text-white">
-            <h5 class="card-title mb-0">Profesores</h5>
+			<div class="row">
+			<div class="col-1 text-center">
+													<a href="/menu">
+														<img src="/images/casa.png" alt="home" width="50%" style="filter:invert(100%)"/>
+													</a>
+												</div>
+											    <div class="col-11">
+			<h5 class="card-title mb-0">Profesores</h5>
+												</div>
+												</div>
+											
+			
         </div>
         <div class="card-body filter-section">
             <div class="row align-items-center">

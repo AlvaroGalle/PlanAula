@@ -44,7 +44,17 @@
 <div class="container min-vh-100 d-flex align-items-center justify-content-center">
     <div class="card shadow-sm w-100">
         <div class="card-header theme-profesores text-white">
-            <h5 class="card-title mb-0">Suplencias profesor</h5>
+			<div class="row">
+						<div class="col-1 text-center">
+																<a href="/menu">
+																	<img src="/images/casa.png" alt="home" width="50%" style="filter:invert(100%)"/>
+																</a>
+															</div>
+														    <div class="col-11">
+			<h5 class="card-title mb-0">Suplencias profesor</h5>
+															</div>
+															</div>
+            
         </div>
         <div class="card-body filter-section">
             <form action="/profesores/suplencias" method="get" id="filtrosForm">
@@ -68,26 +78,28 @@
                     <thead>
                     <tr>
                         <th scope="col">Hora</th>
-                        <th scope="col">Turno</th>
                         <th scope="col">Curso</th>
                         <th scope="col">Asignatura</th>
+						<th scope="col">Sustituto</th>
                         <th scope="col">Espacio</th>
-                        <th scope="col">Sustituto</th>
+						<th scope="col">Observaciones</th>
                     </tr>
                     </thead>
                     <tbody id="tbody_horarios">
-                    <tr th:each="horario : ${horarios}" th:id="'h_' + ${horario.id}">
+                    <tr th:each="horario : ${horarios}" th:id="'h_' + ${horario.id}" th:if="${horario.tipo == 'Clase'}" class="align-middle">
                         <th scope="row" th:text="${horario.hora}"></th>
-                        <th th:text="${horario.tipo}"></th>
                         <td th:text="${horario.curso}"></td>
                         <td th:text="${horario.asignatura}"></td>
-                        <td th:text="${horario.espacio}"></td>
                         <td>
                             <select class="form-select" name="profesor">
                                 <option value="0"></option>
                                 <option th:each=" profesor : ${profesores}" th:value="${profesor.id}" th:text="${profesor.nombre}" th:if="${profesorFiltro != profesor.id}"></option>
                             </select>
                         </td>
+						<td th:text="${horario.espacio}"></td>
+						<td>
+							<textarea class="form-control" rows="1"></textarea>
+						</td>
                     </tr>
                     </tbody>
                 </table>

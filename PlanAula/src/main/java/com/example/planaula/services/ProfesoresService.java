@@ -25,7 +25,7 @@ public class ProfesoresService {
     private EntityManager entityManager;
 
     public List<ProfesorDTO> findAllProfesores() {
-        String sql = "SELECT id, nombre FROM profesores";
+        String sql = "SELECT id, nombre FROM profesores order by nombre";
 
         List<Object[]> resultados = entityManager.createNativeQuery(sql).getResultList();
 
@@ -57,7 +57,7 @@ public class ProfesoresService {
             Query countQuery = entityManager.createNativeQuery(countSql);
             long total = ((Number) countQuery.getSingleResult()).longValue();
 
-            String sql = "SELECT id, nombre FROM profesores"; // Ajuste de columnas
+            String sql = "SELECT id, nombre FROM profesores order by nombre";
             Query query = entityManager.createNativeQuery(sql)
                     .setFirstResult((int) pageable.getOffset())
                     .setMaxResults(pageable.getPageSize());

@@ -18,6 +18,7 @@
                 switch (accion) {
                     case "M" :
                         $('#nombreAModificar').text(data.nombre);
+						$('#modificarAsignatura').val(data.nombre);
                         $('#modificarAsignatura-modal').modal('show');
                         break;
                     case "E" :
@@ -39,7 +40,12 @@
 	    <div class="card shadow-sm w-100">
         <div class="card-header theme-asignaturas text-white">
             <div class="row">
-                <div class="col"><h5 class="card-title text-start">Asignaturas</h5></div>
+				<div class="col-1 text-center">
+					<a href="/menu">
+						<img src="/images/casa.png" alt="home" width="50%" style="filter:invert(100%)"/>
+					</a>
+				</div>
+                <div class="col-11"><h5 class="card-title text-start">Asignaturas</h5></div>
             </div>
         </div>
         <div class="card-body filter-section">
@@ -117,7 +123,7 @@
         <div class="modal-content">
             <form action="/asignaturas/anadir" method="post" id="anadirasignaturaForm">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLongTitle">Añadir asignatura</h5>
+                    <h5 class="modal-title">Añadir asignatura</h5>
                 </div>
                 <div class="modal-body">
                     <div class="form-group">
@@ -149,7 +155,7 @@
                         <label class="form-label" for="modificarAsignatura" id="nombreAModificar">Nombre:</label>
                         <input type="text" class="form-control" id="modificarAsignatura"
                                onchange="$('#nombre_asignatura').val(this.value)"
-                               placeholder="Escribe el nombre del docente">
+                               placeholder="Escribe el nombre del asignatura">
                     </div>
                 </div>
                 <div class="modal-footer">

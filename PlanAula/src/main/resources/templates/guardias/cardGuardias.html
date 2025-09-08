@@ -13,7 +13,7 @@
     <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
             <div class="modal-header text-white"
-                 th:classappend="${guardia.tipo == 'Guardia' ? 'bg-danger' : (guardia.tipo == 'Recreo' ? 'bg-success' : (guardia.tipo == 'Libranza' ? 'bg-secondary' : 'theme-guardias'))}">
+                 th:classappend="${guardia.tipo == 'Guardia' ? 'bg-danger' : (guardia.tipo == 'Recreo' ? 'bg-secondary' : (guardia.tipo == 'Libranza' ? 'bg-success' : 'theme-guardias'))}">
                 <h5 class="modal-title mb-0">
                     <span th:text="${guardia.dia}"></span>
                     <span th:text="${guardia.hora}"></span>
@@ -38,12 +38,12 @@
                                     onchange="accionGuardia('M', this.dataset.tipo, this.value, this.dataset.id)">
                                 <option th:each=" profe : ${profesores}" th:text="${profe.nombre}"
                                         th:value="${profe.id}"
-                                        th:selected="${guardia.nombre == profe.id}"></option>
+                                        th:selected="${guardia.nombre.equals(profe.id.toString())}"></option>
                             </select>
                         </td>
                         <td th:data-id="${guardia.id}" th:data-tipo="${guardia.tipo}" th:data-profesor="${guardia.nombre}"
                             onclick="accionGuardia('E', this.dataset.tipo, this.dataset.profesor, this.dataset.id)"
-                            class="text-danger text-center"
+                            class="text-danger text-center" style="cursor:pointer"
                             data-toggle="tooltip" data-placement="top" title="Eliminar">
                             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
                                  class="bi bi-x-lg" viewBox="0 0 16 16">

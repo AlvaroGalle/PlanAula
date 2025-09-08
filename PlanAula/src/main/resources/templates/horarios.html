@@ -34,7 +34,18 @@
 
 <div class="container mt-3">
     <div class="card shadow-sm">
-        <div class="card-header theme-espacios text-white"><h5 class="card-title mb-0">Horarios</h5></div>
+        <div class="card-header theme-espacios text-white">
+			<div class="row">
+							<div class="col-1 text-center">
+								<a href="/menu">
+									<img src="/images/casa.png" alt="home" width="50%" style="filter:invert(100%)"/>
+								</a>
+							</div>
+						    <div class="col-11">
+					<h5 class="card-title mb-0">Horarios</h5>
+							</div>
+						</div>
+					</div>
         <div class="card-body filter-section">
             <form id="filtrosForm" method="get" th:action="@{'/horarios'}">
                 <div class="accordion mb-3" id="acordeonFiltros">

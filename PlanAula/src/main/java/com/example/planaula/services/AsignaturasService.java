@@ -56,7 +56,7 @@ public class AsignaturasService {
             Query countQuery = entityManager.createNativeQuery(countSql);
             long total = ((Number) countQuery.getSingleResult()).longValue();
 
-            String sql = "SELECT * FROM asignaturas";
+            String sql = "SELECT id, asignatura FROM asignaturas order by asignatura";
             Query query = entityManager.createNativeQuery(sql)
                     .setFirstResult((int) pageable.getOffset())
                     .setMaxResults(pageable.getPageSize());

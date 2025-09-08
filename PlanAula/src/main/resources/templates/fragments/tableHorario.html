@@ -61,6 +61,12 @@
 										<div class="accordion-item">
 											<h2 class="accordion-header">
 												<button th:if="${cursoFiltro != 0}" class="accordion-button collapsed"
+												th:class="|accordion-button collapsed border
+												                                ${item.tipo == 'clase' ? 'border-primary text-primary' : 
+												                                   item.tipo == 'recreo' ? 'border-secondary text-secondary' : 
+												                                   item.tipo == 'libranza' ? 'border-success text-success' : 
+												                                   item.tipo == 'guardia' ? 'border-danger text-danger' : ''}|
+												                              "
 														type="button"
 														data-bs-toggle="collapse"
 														th:data-bs-target="'#collapse' + ${item.id} + '_' + ${item.tipo}"
@@ -73,8 +79,8 @@
 														th:disabled="${item.tipo != 'clase'}"
 														th:class="|accordion-button collapsed border
                                     ${item.tipo == 'clase' ? 'border-primary text-primary' : 
-                                       item.tipo == 'recreo' ? 'border-success text-success' : 
-                                       item.tipo == 'libranza' ? 'border-secondary text-secondary' : 
+                                       item.tipo == 'recreo' ? 'border-secondary text-secondary' : 
+                                       item.tipo == 'libranza' ? 'border-success text-success' : 
                                        item.tipo == 'guardia' ? 'border-danger text-danger' : ''}|
                                   "
 														type="button"
@@ -125,18 +131,16 @@
 										<span class="small">Guardias</span>
 									</label>
 
-									<!-- Toggle: RECREO -->
-									<input class="btn-check legend-filter" id="f-recreo" type="checkbox" checked data-tipo="recreo" autocomplete="off">
-									<label class="d-flex align-items-center gap-2" for="f-recreo" style="cursor: pointer;">
-										<div class="rounded-circle bg-success" style="width: 16px; height: 16px;"></div>
-										<span class="small">Recreo</span>
-									</label>
-
-									<!-- Toggle: LIBRANZA -->
 									<input class="btn-check legend-filter" id="f-libranza" type="checkbox" checked data-tipo="libranza" autocomplete="off">
 									<label class="d-flex align-items-center gap-2" for="f-libranza" style="cursor: pointer;">
-										<div class="rounded-circle bg-secondary" style="width: 16px; height: 16px;"></div>
+										<div class="rounded-circle bg-success" style="width: 16px; height: 16px;"></div>
 										<span class="small">Libranza</span>
+									</label>
+									
+									<input class="btn-check legend-filter" id="f-recreo" type="checkbox" checked data-tipo="recreo" autocomplete="off">
+									<label class="d-flex align-items-center gap-2" for="f-recreo" style="cursor: pointer;">
+										<div class="rounded-circle bg-secondary" style="width: 16px; height: 16px;"></div>
+										<span class="small">Recreo</span>
 									</label>
 
 									<div class="vr mx-1 d-none d-sm-block"></div>
