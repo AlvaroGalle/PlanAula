@@ -5,10 +5,10 @@
 </head>
 <div th:replace="~{fragments/links.html}"></div>
 <script>
-    function generarPdfSuplencias(){
+    function generarPdfSuplencias() {
         let trs = document.querySelectorAll("#tbody_horarios tr");
         let horario = new Map();
-        trs.forEach((tr)=>{
+        trs.forEach((tr) => {
             let ths = tr.querySelectorAll("th");
             let tds = tr.querySelectorAll("td");
             const id = ths[1].textContent + "_" + tr.id.split("_")[1];
@@ -44,30 +44,31 @@
 <div class="container min-vh-100 d-flex align-items-center justify-content-center">
     <div class="card shadow-sm w-100">
         <div class="card-header theme-profesores text-white">
-			<div class="row">
-						<div class="col-1 text-center">
-																<a href="/menu">
-																	<img src="/images/casa.png" alt="home" width="50%" style="filter:invert(100%)"/>
-																</a>
-															</div>
-														    <div class="col-11">
-			<h5 class="card-title mb-0">Suplencias profesor</h5>
-															</div>
-															</div>
-            
+            <div class="row">
+                <div class="col-1 text-center">
+                    <a href="/menu">
+                        <img src="/images/casa.png" alt="home" width="50%" style="filter:invert(100%)"/>
+                    </a>
+                </div>
+                <div class="col-11">
+                    <h5 class="card-title mb-0">Suplencias profesor</h5>
+                </div>
+            </div>
+
         </div>
         <div class="card-body filter-section">
             <form action="/profesores/suplencias" method="get" id="filtrosForm">
-            <div class="row align-items-center">
+                <div class="row align-items-center">
 
-                <div class="col-md-6 mb-3">
-                    <label for="fechaSuplencia" class="form-label">Fecha de la suplencia:</label>
-                    <input type="date" id="fechaSuplencia" name="fecha" class="form-control" onchange="$('#filtrosForm').submit()" th:value="${fechaFiltro}">
+                    <div class="col-md-6 mb-3">
+                        <label for="fechaSuplencia" class="form-label">Fecha de la suplencia:</label>
+                        <input type="date" id="fechaSuplencia" name="fecha" class="form-control"
+                               onchange="$('#filtrosForm').submit()" th:value="${fechaFiltro}">
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <div th:replace="~{fragments/filtros/filterProfesores.html}"></div>
+                    </div>
                 </div>
-                <div class="col-md-6 mb-3">
-                    <div th:replace="~{fragments/filtros/filterProfesores.html}"></div>
-                </div>
-            </div>
             </form>
         </div>
 
@@ -80,26 +81,28 @@
                         <th scope="col">Hora</th>
                         <th scope="col">Curso</th>
                         <th scope="col">Asignatura</th>
-						<th scope="col">Sustituto</th>
+                        <th scope="col">Sustituto</th>
                         <th scope="col">Espacio</th>
-						<th scope="col">Observaciones</th>
+                        <th scope="col">Observaciones</th>
                     </tr>
                     </thead>
                     <tbody id="tbody_horarios">
-                    <tr th:each="horario : ${horarios}" th:id="'h_' + ${horario.id}" th:if="${horario.tipo == 'Clase'}" class="align-middle">
+                    <tr th:each="horario : ${horarios}" th:id="'h_' + ${horario.id}" th:if="${horario.tipo == 'Clase'}"
+                        class="align-middle">
                         <th scope="row" th:text="${horario.hora}"></th>
                         <td th:text="${horario.curso}"></td>
                         <td th:text="${horario.asignatura}"></td>
                         <td>
                             <select class="form-select" name="profesor">
                                 <option value="0"></option>
-                                <option th:each=" profesor : ${profesores}" th:value="${profesor.id}" th:text="${profesor.nombre}" th:if="${profesorFiltro != profesor.id}"></option>
+                                <option th:each=" profesor : ${profesores}" th:value="${profesor.id}"
+                                        th:text="${profesor.nombre}" th:if="${profesorFiltro != profesor.id}"></option>
                             </select>
                         </td>
-						<td th:text="${horario.espacio}"></td>
-						<td>
-							<textarea class="form-control" rows="1"></textarea>
-						</td>
+                        <td th:text="${horario.espacio}"></td>
+                        <td>
+                            <textarea class="form-control" rows="1"></textarea>
+                        </td>
                     </tr>
                     </tbody>
                 </table>
@@ -108,7 +111,8 @@
                 No existen resultados para los filtros ingresados
             </div>
             <div class="row d-flex justify-content-end">
-                <button type="button" class="btn btn-outline-danger" onclick="generarPdfSuplencias()">Generar PDF</button>
+                <button type="button" class="btn btn-outline-danger" onclick="generarPdfSuplencias()">Generar PDF
+                </button>
             </div>
         </div>
         <div class="card-footer text-muted bg-white d-flex justify-content-end">

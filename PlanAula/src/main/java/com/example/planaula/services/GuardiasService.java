@@ -2,6 +2,7 @@ package com.example.planaula.services;
 
 import com.example.planaula.Dto.TurnoDTO;
 import jakarta.persistence.EntityManager;
+import jakarta.persistence.Query;
 import jakarta.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,12 +28,15 @@ public class GuardiasService {
     @Autowired
     private JdbcTemplate jdbcTemplate;
 
-    public Page<TurnoDTO> findAllTurnosByDiaHoraProfesor(
+    public Page<TurnoDTO> findPageTurnosByDiaHoraProfesor(
             Integer dia, Integer hora, Integer profesor, String tipo, Pageable pageable) {
 
         if (tipo == null || tipo.equals("0") || tipo.isBlank()) {
             tipo = "T";
         }
+        if (tipo.equals("G")) tipo = "Guardia";
+        if (tipo.equals("R")) tipo = "Recreo";
+        if (tipo.equals("L")) tipo = "Libranza";
 
         String sql = """
         WITH u AS (
@@ -89,9 +93,72 @@ public class GuardiasService {
                         (String) r[4]
                 ))
                 .collect(Collectors.toList());
-        return new PageImpl<>(turnos, pageable, turnos.size());
+        return new PageImpl<>(turnos, pageable, countTurnos(dia, hora, profesor, tipo));
     }
 
+    public List<TurnoDTO> findAllTurnosByDiaHoraProfesor(
+            Integer dia, Integer hora, Integer profesor, String tipo) {
+
+        if (tipo == null || tipo.equals("0") || tipo.isBlank()) {
+            tipo = "T";
+        }
+        if (tipo.equals("G")) tipo = "Guardia";
+        if (tipo.equals("R")) tipo = "Recreo";
+        if (tipo.equals("L")) tipo = "Libranza";
+
+        String sql = """
+        WITH u AS (
+            SELECT 'Guardia' AS tipo, g.id, g.id_profesor, p.nombre, p.apellidos, d.dia, h.hora
+            FROM guardias g
+            JOIN profesores p ON g.id_profesor = p.id
+            JOIN dias d ON g.id_dia = d.id
+            JOIN horas h ON g.id_hora = h.id
+
+            UNION ALL
+
+            SELECT 'Recreo' AS tipo, r.id, r.id_profesor, p.nombre, p.apellidos, d.dia, h.hora
+            FROM recreos r
+            JOIN profesores p ON r.id_profesor = p.id
+            JOIN dias d ON r.id_dia = d.id
+            JOIN horas h ON r.id_hora = h.id
+
+            UNION ALL
+
+            SELECT 'Libranza' AS tipo, l.id, l.id_profesor, p.nombre, p.apellidos, d.dia, h.hora
+            FROM libranzas l
+            JOIN profesores p ON l.id_profesor = p.id
+            JOIN dias d ON l.id_dia = d.id
+            JOIN horas h ON l.id_hora = h.id
+        )
+        SELECT tipo, id, id_profesor, nombre, apellidos, dia, hora
+        FROM u
+        WHERE (:tipo = 'T' OR u.tipo = :tipo)
+          AND (:profesor = 0 OR u.id_profesor = :profesor)
+          AND (:dia = 0 OR u.dia = (SELECT dia FROM dias WHERE id = :dia))
+          AND (:hora = 0 OR u.hora = (SELECT hora FROM horas WHERE id = :hora))
+        ORDER BY u.dia, u.hora, u.tipo
+        """;
+
+        @SuppressWarnings("unchecked")
+        List<Object[]> filas = entityManager.createNativeQuery(sql)
+                .setParameter("tipo", tipo)
+                .setParameter("profesor", profesor)
+                .setParameter("dia", dia)
+                .setParameter("hora", hora)
+                .getResultList();
+
+
+        return filas.stream()
+                .map(r -> new TurnoDTO(
+                        ((String) r[0]),
+                        ((Number) r[1]).intValue(),
+                        (String) r[5],
+                        (String) r[6],
+                        (String) r[3],
+                        (String) r[4]
+                ))
+                .collect(Collectors.toList());
+    }
 
     public TurnoDTO findTurnoByTipoAndId(String tipo, Integer id) {
         String sql = """
@@ -143,6 +210,46 @@ public class GuardiasService {
         );
     }
 
+    public Long countTurnos(Integer dia, Integer hora, Integer profesor, String tipo) {
+        String countSql = """
+        WITH u AS (
+            SELECT 'Guardia' AS tipo, g.id, g.id_profesor, p.nombre, p.apellidos, d.dia, h.hora
+            FROM guardias g
+            JOIN profesores p ON g.id_profesor = p.id
+            JOIN dias d ON g.id_dia = d.id
+            JOIN horas h ON g.id_hora = h.id
+
+            UNION ALL
+
+            SELECT 'Recreo' AS tipo, r.id, r.id_profesor, p.nombre, p.apellidos, d.dia, h.hora
+            FROM recreos r
+            JOIN profesores p ON r.id_profesor = p.id
+            JOIN dias d ON r.id_dia = d.id
+            JOIN horas h ON r.id_hora = h.id
+
+            UNION ALL
+
+            SELECT 'Libranza' AS tipo, l.id, l.id_profesor, p.nombre, p.apellidos, d.dia, h.hora
+            FROM libranzas l
+            JOIN profesores p ON l.id_profesor = p.id
+            JOIN dias d ON l.id_dia = d.id
+            JOIN horas h ON l.id_hora = h.id
+        )
+        SELECT COUNT(*)
+        FROM u
+        WHERE (:tipo = 'T' OR u.tipo = :tipo)
+          AND (:profesor = 0 OR u.id_profesor = :profesor)
+          AND (:dia = 0 OR u.dia = (SELECT dia FROM dias WHERE id = :dia))
+          AND (:hora = 0 OR u.hora = (SELECT hora FROM horas WHERE id = :hora))
+        """;
+        @SuppressWarnings("unchecked")
+        Query countQuery = entityManager.createNativeQuery(countSql)
+                .setParameter("tipo", tipo)
+                .setParameter("profesor", profesor)
+                .setParameter("dia", dia)
+                .setParameter("hora", hora);
+        return ((Number) countQuery.getSingleResult()).longValue();
+    }
 
     @Transactional
     public void anadirTurno(TurnoDTO turno) {

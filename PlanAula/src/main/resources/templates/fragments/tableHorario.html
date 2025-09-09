@@ -28,20 +28,23 @@
 						<thead class="thead-dark">
 						<tr>
 							<th scope="col" colspan="1">
-								<div class="d-flex gap-2">
-									<select class="form-select form-select-sm w-50" name="curso" id="cursoHorario"
+								<div class="row align-center align-middle">
+								<div class="col-6">
+									<select class="form-select form-select-sm" name="curso" id="cursoHorario"
 											onchange="changeHorario(this)">
 										<option value="0">Curso</option>
 										<option th:each="curso : ${cursos}" th:value="${curso.id}"
 												th:text="${curso.nombre}" th:selected="${cursoFiltro == curso.id}"></option>
 									</select>
-
-									<select class="form-select form-select-sm w-50" id="profesorHorario" name="profesor"
-											onchange="changeHorario(this)">
-										<option value="0">Profesor</option>
-										<option th:each=" profesor : ${profesores}" th:value="${profesor.id}"
-												th:text="${profesor.nombre}" th:selected="${profesorFiltro == profesor.id}"></option>
-									</select>
+								</div>
+									<div class="col-6">
+										<select class="form-select form-select-sm" id="profesorHorario" name="profesor"
+												onchange="changeHorario(this)">
+											<option value="0">Profesor</option>
+											<option th:each=" profesor : ${profesores}" th:value="${profesor.id}"
+													th:text="${profesor.nombre}" th:selected="${profesorFiltro == profesor.id}"></option>
+										</select>
+									</div>
 								</div>
 							</th>
 							<th scope="col" th:each="dia : ${dias}" th:text="${dia.nombre}"></th>

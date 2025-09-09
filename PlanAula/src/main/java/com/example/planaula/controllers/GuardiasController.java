@@ -60,7 +60,7 @@ public class GuardiasController {
 
         model.addAttribute("turnos", mapaTurnos());
 
-        Page<TurnoDTO> turnos = guardiasService.findAllTurnosByDiaHoraProfesor(dia, hora, profesor, turno, PageRequest.of(page, size));
+        Page<TurnoDTO> turnos = guardiasService.findPageTurnosByDiaHoraProfesor(dia, hora, profesor, turno, PageRequest.of(page, size));
         model.addAttribute("page", turnos);
 
         model.addAttribute("turnoForm", new TurnoDTO());
