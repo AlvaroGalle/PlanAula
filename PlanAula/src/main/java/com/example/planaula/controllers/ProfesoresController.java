@@ -30,264 +30,268 @@ import java.util.*;
 @RequestMapping("/profesores")
 public class ProfesoresController {
 
-    private final ProfesoresService profesoresService;
-    private final CursosService cursosService;
-    private final HorariosService horariosService;
-    private final GuardiasService guardiasService;
+	private final ProfesoresService profesoresService;
+	private final CursosService cursosService;
+	private final HorariosService horariosService;
+	private final GuardiasService guardiasService;
 
-    public ProfesoresController(ProfesoresService profesoresService, CursosService cursosService, HorariosService horariosService, GuardiasService guardiasService) {
-        this.profesoresService = profesoresService;
-        this.cursosService = cursosService;
-        this.horariosService = horariosService;
-        this.guardiasService = guardiasService;
-    }
+	public ProfesoresController(ProfesoresService profesoresService, CursosService cursosService,
+			HorariosService horariosService, GuardiasService guardiasService) {
+		this.profesoresService = profesoresService;
+		this.cursosService = cursosService;
+		this.horariosService = horariosService;
+		this.guardiasService = guardiasService;
+	}
 
-    @GetMapping("")
-    public String findAllProfesores(@RequestParam(name="page", required = false, defaultValue = "0") int page,
-                                    @RequestParam(name="size", required = false, defaultValue = "15") int size,
-                                    Model model) {
-        Page<ProfesorDTO> profesorDTOList = profesoresService.findPageProfesores(PageRequest.of(page, size));
-        model.addAttribute("page", profesorDTOList);
-        model.addAttribute("profesorForm", new ProfesorDTO());
-        return "profesores";
-    }
+	@GetMapping("")
+	public String findAllProfesores(@RequestParam(name = "page", required = false, defaultValue = "0") int page,
+			@RequestParam(name = "size", required = false, defaultValue = "15") int size, Model model) {
+		Page<ProfesorDTO> profesorDTOList = profesoresService.findPageProfesores(PageRequest.of(page, size));
+		model.addAttribute("page", profesorDTOList);
+		model.addAttribute("profesorForm", new ProfesorDTO());
+		return "profesores";
+	}
 
-    @PostMapping("")
-    public String accionProfesores(@ModelAttribute ProfesorDTO profesorDTO,
-    							   @RequestParam(name="accion", required = false, defaultValue = "A") String accion) {
-    	String[] apellidos = profesorDTO.getNombre().split(" ");
-    	profesorDTO.setNombre(apellidos[0]);
-    	for(int i = 1; i<apellidos.length; i++) {
-    		profesorDTO.setApellidos(profesorDTO.getApellidos() + apellidos[i] + " ");
-    	}
-        switch (accion) {
-            case "A":
-                profesoresService.anadirProfesor(profesorDTO);
-                break;
-            case "M":
-                profesoresService.modificarProfesor(profesorDTO);
-                break;
-            case "E":
-                profesoresService.eliminarProfesorById(profesorDTO.getId());
-                break;
-        }
-        return "redirect:/profesores";
-    }
+	@PostMapping("")
+	public String accionProfesores(@ModelAttribute ProfesorDTO profesorDTO,
+			@RequestParam(name = "accion", required = false, defaultValue = "A") String accion) {
+		String[] apellidos = profesorDTO.getNombre().split(" ");
+		profesorDTO.setNombre(apellidos[0]);
+		for (int i = 1; i < apellidos.length; i++) {
+			profesorDTO.setApellidos(profesorDTO.getApellidos() + apellidos[i] + " ");
+		}
+		switch (accion) {
+		case "A":
+			profesoresService.anadirProfesor(profesorDTO);
+			break;
+		case "M":
+			profesoresService.modificarProfesor(profesorDTO);
+			break;
+		case "E":
+			profesoresService.eliminarProfesorById(profesorDTO.getId());
+			break;
+		}
+		return "redirect:/profesores";
+	}
 
-    @GetMapping("/{id}")
-    @ResponseBody
-    public ProfesorDTO findProfesorById(@PathVariable(name= "id") Integer id) {
-        return profesoresService.findProfesorById(id);
-    }
+	@GetMapping("/{id}")
+	@ResponseBody
+	public ProfesorDTO findProfesorById(@PathVariable(name = "id") Integer id) {
+		return profesoresService.findProfesorById(id);
+	}
 
-    @GetMapping("/tutores")
-    public String findAllTutores(@RequestParam(name="curso", required = false, defaultValue = "0") int curso,
-                                 @RequestParam(name="profesor", required = false, defaultValue = "0") int profesor,
-                                 @RequestParam(name="page", required = false, defaultValue = "0") int page,
-                                 @RequestParam(name="size", required = false, defaultValue = "15") int size,
-                                 Model model) {
-        model.addAttribute("cursoFiltro", curso);
-        model.addAttribute("profesorFiltro", profesor);
-        Page<TutorDTO> tutorDTOList;
-        tutorDTOList = profesoresService.findPageTutoresByCursoAndProfesor(curso, profesor, PageRequest.of(page, size));
-        model.addAttribute("page", tutorDTOList);
+	@GetMapping("/tutores")
+	public String findAllTutores(@RequestParam(name = "curso", required = false, defaultValue = "0") int curso,
+			@RequestParam(name = "profesor", required = false, defaultValue = "0") int profesor,
+			@RequestParam(name = "page", required = false, defaultValue = "0") int page,
+			@RequestParam(name = "size", required = false, defaultValue = "15") int size, Model model) {
+		model.addAttribute("cursoFiltro", curso);
+		model.addAttribute("profesorFiltro", profesor);
+		Page<TutorDTO> tutorDTOList;
+		tutorDTOList = profesoresService.findPageTutoresByCursoAndProfesor(curso, profesor, PageRequest.of(page, size));
+		model.addAttribute("page", tutorDTOList);
 
-        List<ProfesorDTO> profesorDTOList = profesoresService.findAllProfesores();
-        model.addAttribute("profesores", profesorDTOList);
+		List<ProfesorDTO> profesorDTOList = profesoresService.findAllProfesores();
+		model.addAttribute("profesores", profesorDTOList);
 
-        List<CursoDTO> cursoDTOList = cursosService.findAllCursos();
-        model.addAttribute("cursos", cursoDTOList);
-        return "tutores";
-    }
+		List<CursoDTO> cursoDTOList = cursosService.findAllCursos();
+		model.addAttribute("cursos", cursoDTOList);
+		return "tutores";
+	}
 
-    @GetMapping("/tutores/modificar/{id}")
-    @ResponseBody
-    public String modificarTutor(@PathVariable Integer id,
-                                 @RequestParam String curso,
-                                 @RequestParam String profesor) {
-        /*TutorDTO tutorDTO = new TutorDTO(id, null, Objects.equals(curso, "2425") ? profesor : null,  Objects.equals(curso, "2324") ? profesor : null);*/
-        /*profesoresService.modificarTutor(tutorDTO);*/
-        return "tutores";
-    }
+	@GetMapping("/tutores/modificar/{id}")
+	@ResponseBody
+	public String modificarTutor(@PathVariable Integer id, @RequestParam String curso, @RequestParam String profesor) {
+		/*
+		 * TutorDTO tutorDTO = new TutorDTO(id, null, Objects.equals(curso, "2425") ?
+		 * profesor : null, Objects.equals(curso, "2324") ? profesor : null);
+		 */
+		/* profesoresService.modificarTutor(tutorDTO); */
+		return "tutores";
+	}
 
-    @GetMapping("/suplencias")
-    public String suplenciaProfesor(@RequestParam(name="fecha", required = false, defaultValue = "") String fecha,
-                                    @RequestParam(name="profesor", required = false, defaultValue = "0") int profesor,
-                                    Model model) {
-        model.addAttribute("fechaFiltro", fecha);
-        model.addAttribute("profesorFiltro", profesor);
+	@GetMapping("/suplencias")
+	public String suplenciaProfesor(@RequestParam(name = "fecha", required = false, defaultValue = "") String fecha,
+			@RequestParam(name = "profesor", required = false, defaultValue = "0") int profesor, Model model) {
+		model.addAttribute("fechaFiltro", fecha);
+		model.addAttribute("profesorFiltro", profesor);
 
-        List<ProfesorDTO> profesorDTOList = profesoresService.findAllProfesores();
-        model.addAttribute("profesores", profesorDTOList);
+		List<ProfesorDTO> profesorDTOList = profesoresService.findAllProfesores();
+		model.addAttribute("profesores", profesorDTOList);
 
-        if (!fecha.isEmpty() && profesor != 0) {
-            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-            LocalDate date = LocalDate.parse(fecha , formatter);
-            model.addAttribute("dia", date.getDayOfWeek());
-            List<HorarioDTO> horarioDTO = horariosService.findHorarioByProfesorAndDia(profesor, date.getDayOfWeek().getValue());
-            model.addAttribute("horarios", horarioDTO);
+		if (!fecha.isEmpty() && profesor != 0) {
+			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+			LocalDate date = LocalDate.parse(fecha, formatter);
+			model.addAttribute("dia", date.getDayOfWeek());
+			List<HorarioDTO> horarioDTO = horariosService.findHorarioByProfesorAndDia(profesor,
+					date.getDayOfWeek().getValue());
+			model.addAttribute("horarios", horarioDTO);
+			List<TurnoDTO> turnoDTO = guardiasService.findAllTurnosByDiaHoraProfesor(date.getDayOfWeek().getValue(), 0,
+					0, "T");
+			model.addAttribute("turnos", turnoDTO);
 
-            List<TurnoDTO> turnoDTO = guardiasService.findAllTurnosByDiaHoraProfesor(date.getDayOfWeek().getValue(),0,profesor, "T");
-            model.addAttribute("turnos", turnoDTO);
-        }
-        return "suplencias";
-    }
+			Map<String, String> turnoMap = new HashMap<>();
+			for (TurnoDTO turno : turnoDTO) {
+				String key = turno.getHora() + "_" + turno.getNombre();
+				String tipo = turno.getTipo();
+				String cssClass = switch (tipo) {
+				case "Guardia" -> "text-danger";
+				case "Libranza" -> "text-success";
+				case "Recreo" -> "text-secondary";
+				default -> "";
+				};
+				turnoMap.put(key, cssClass);
+			}
+			model.addAttribute("turnoMap", turnoMap);
+		}
+		return "suplencias";
+	}
 
-    @PostMapping("/suplencias/pdf")
-    public ResponseEntity<byte[]> generarPdfHorario(@RequestParam(name="fecha") String fecha,
-                                                    @RequestParam(name="profesor") int id_profesor,
-                                                    @RequestBody Map<String, String> mapSuplencias,
-                                                    @RequestBody Map<String, String> mapObservacones) {
-        ProfesorDTO profesor = profesoresService.findProfesorById(id_profesor);
-        String titulo = "Suplencias " + profesor.getNombre() + " " + fecha;
+	@PostMapping("/suplencias/pdf")
+	public ResponseEntity<byte[]> generarPdfHorario(@RequestParam(name = "fecha") String fecha,
+			@RequestParam(name = "profesor") int id_profesor, @RequestBody Map<String, Map<String, String>> horario) {
+		ProfesorDTO profesor = profesoresService.findProfesorById(id_profesor);
+		String titulo = "Suplencias " + profesor.getNombre() + " " + fecha;
 
-        try (PDDocument doc = new PDDocument(); ByteArrayOutputStream baos = new ByteArrayOutputStream()) {
-            PDPage pagina = new PDPage(PDRectangle.A4);
-            doc.addPage(pagina);
+		try (PDDocument doc = new PDDocument(); ByteArrayOutputStream baos = new ByteArrayOutputStream()) {
+			PDPage pagina = new PDPage(PDRectangle.A4);
+			doc.addPage(pagina);
 
-            float pageWidth  = pagina.getMediaBox().getWidth();
-            float pageHeight = pagina.getMediaBox().getHeight();
-            float margin = 40f;
+			float pageWidth = pagina.getMediaBox().getWidth();
+			float pageHeight = pagina.getMediaBox().getHeight();
+			float margin = 40f;
 
-            try (PDPageContentStream cs = new PDPageContentStream(doc, pagina)) {
-                float gapEntreTablas = 40f;
+			try (PDPageContentStream cs = new PDPageContentStream(doc, pagina)) {
+				float gapEntreTablas = 40f;
 
-                float y = pageHeight - margin;
-                y = drawTable(cs, y, pageWidth, margin, titulo, mapSuplencias);
+				float y = pageHeight - margin;
+				y = drawTable(cs, y, pageWidth, margin, titulo, horario);
 
-                y -= gapEntreTablas;
+				y -= gapEntreTablas;
 
-                drawTable(cs, y, pageWidth, margin, titulo, mapSuplencias);
-            }
+				drawTable(cs, y, pageWidth, margin, titulo, horario);
+			}
 
-            doc.save(baos);
-            return ResponseEntity.ok()
-                    .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=suplencias.pdf")
-                    .contentType(MediaType.APPLICATION_PDF)
-                    .body(baos.toByteArray());
+			doc.save(baos);
+			return ResponseEntity.ok().header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=suplencias.pdf")
+					.contentType(MediaType.APPLICATION_PDF).body(baos.toByteArray());
 
-        } catch (Exception ex) {
-            return ResponseEntity.internalServerError()
-                    .body(("Error al generar PDF: " + ex.getMessage()).getBytes());
-        }
-    }
+		} catch (Exception ex) {
+			return ResponseEntity.internalServerError().body(("Error al generar PDF: " + ex.getMessage()).getBytes());
+		}
+	}
 
+	private float drawTable(PDPageContentStream cs, float y, float pageWidth, float margin, String titulo,
+			Map<String, Map<String, String>> mapSuplencias) throws IOException {
 
-    private float drawTable(PDPageContentStream cs,
-                            float y,
-                            float pageWidth,
-                            float margin,
-                            String titulo,
-                            Map<String,String> mapSuplencias) throws IOException {
+		cs.beginText();
+		cs.setFont(PDType1Font.HELVETICA_BOLD, 14);
+		cs.newLineAtOffset(margin, y);
+		cs.showText(titulo);
+		cs.endText();
+		y -= 20f;
 
-        cs.beginText();
-        cs.setFont(PDType1Font.HELVETICA_BOLD, 14);
-        cs.newLineAtOffset(margin, y);
-        cs.showText(titulo);
-        cs.endText();
-        y -= 20f;
+		String[] headers = { "Sustituto", "Curso", "Hora", "Asignatura", "Espacio", "Observaciones" };
+		float tableWidth = pageWidth - 2 * margin;
+		float[] colPerc = { 0.22f, 0.14f, 0.11f, 0.25f, 0.14f, 0.14f };
+		float[] colWidths = new float[headers.length];
+		for (int i = 0; i < headers.length; i++)
+			colWidths[i] = tableWidth * colPerc[i];
 
+		float rowHeight = 18f;
+		float headerHeight = 20f;
 
-        String[] headers = { "Sustituto", "Curso", "Hora", "Asignatura", "Espacio", "Observaciones" };
-        float tableWidth = pageWidth - 2 * margin;
-        float[] colPerc = { 0.22f, 0.14f, 0.11f, 0.25f, 0.14f, 0.14f };
-        float[] colWidths = new float[headers.length];
-        for (int i = 0; i < headers.length; i++) colWidths[i] = tableWidth * colPerc[i];
+		float x = margin;
+		drawRowBackground(cs, x, y - headerHeight, tableWidth, headerHeight);
+		cs.setFont(PDType1Font.HELVETICA_BOLD, 11);
+		float textYOffset = 5f;
 
-        float rowHeight = 18f;
-        float headerHeight = 20f;
+		float cellX = x;
+		for (int i = 0; i < headers.length; i++) {
+			drawCellBorders(cs, cellX, y - headerHeight, colWidths[i], headerHeight);
+			drawText(cs, headers[i], cellX + 2f, y - headerHeight + textYOffset, PDType1Font.HELVETICA_BOLD, 11);
+			cellX += colWidths[i];
+		}
+		y -= headerHeight;
 
+		cs.setFont(PDType1Font.HELVETICA, 11);
 
-        float x = margin;
-        drawRowBackground(cs, x, y - headerHeight, tableWidth, headerHeight);
-        cs.setFont(PDType1Font.HELVETICA_BOLD, 11);
-        float textYOffset = 5f;
+		for (Map.Entry<String, Map<String, String>> e : mapSuplencias.entrySet()) {
+			y = drawDataRow(cs, y, margin, tableWidth, rowHeight, colWidths, e);
+		}
 
-        float cellX = x;
-        for (int i = 0; i < headers.length; i++) {
-            drawCellBorders(cs, cellX, y - headerHeight, colWidths[i], headerHeight);
-            drawText(cs, headers[i], cellX + 2f, y - headerHeight + textYOffset, PDType1Font.HELVETICA_BOLD, 11);
-            cellX += colWidths[i];
-        }
-        y -= headerHeight;
+		return y - 10f;
+	}
 
-        cs.setFont(PDType1Font.HELVETICA, 11);
+	private float drawDataRow(PDPageContentStream cs, float y, float margin, float tableWidth, float rowHeight,
+			float[] colWidths, Map.Entry<String, Map<String, String>> e) throws IOException {
 
+		String[] key = e.getKey().split("_");
+		Map<String, String> value = e.getValue();
 
-        for (Map.Entry<String,String> e : mapSuplencias.entrySet()) {
-            y = drawDataRow(cs, y, margin, tableWidth, rowHeight, colWidths, e);
-        }
+		String idSustituto = value.get("idSustituto");
+		String observaciones = value.get("observaciones");
 
-        return y - 10f;
-    }
+		ProfesorDTO profSubs = null;
+		if (idSustituto != null && !"0".equals(idSustituto)) {
+			profSubs = profesoresService.findProfesorById(Integer.parseInt(idSustituto));
+		}
 
-    private float drawDataRow(PDPageContentStream cs,
-                              float y,
-                              float margin,
-                              float tableWidth,
-                              float rowHeight,
-                              float[] colWidths,
-                              Map.Entry<String,String> e) throws IOException {
+		String sustituta = (profSubs != null && profSubs.getNombre() != null) ? profSubs.getNombre() : "-";
+		String curso = "-";
+		String hora = "-";
+		String asignatura = "-";
+		String espacio = "-";
 
-        String[] key = e.getKey().split("_");
-        ProfesorDTO profSubs = null;
-        if (e.getValue() != null && !"0".equals(e.getValue())) {
-            profSubs = profesoresService.findProfesorById(Integer.parseInt(e.getValue()));
-        }
-
-        String sustituta = (profSubs != null && profSubs.getNombre() != null) ? profSubs.getNombre() : "-";
-        String curso = "-";
-        String hora = "-";
-        String asignatura = "-";
-        String espacio = "-";
-        String observaciones = "";
-
-        if ("Clase".equalsIgnoreCase(key[0])) {
-            HorarioDTO h = horariosService.findHorarioById(Integer.parseInt(key[1]));
-            if (h != null) {
-                curso = safe(h.getCurso());
-                hora = safe(h.getHora());
-                asignatura = safe(h.getAsignatura());
-                espacio = safe(h.getEspacio());
-            }
-        } else {
-            TurnoDTO t = guardiasService.findTurnoByTipoAndId(key[0], Integer.parseInt(key[1]));
-            if (t != null) {
-                hora = safe(t.getHora());
-                observaciones = safe(t.getTipo());
-            }
-        }
-
-        float x = margin;
-        String[] values = { sustituta, curso, hora, asignatura, espacio, observaciones };
-
-        for (int i = 0; i < values.length; i++) {
-            drawCellBorders(cs, x, y - rowHeight, colWidths[i], rowHeight);
-            drawText(cs, truncate(values[i], 160), x + 2f, y - rowHeight + 4f, PDType1Font.HELVETICA, 11);
-            x += colWidths[i];
-        }
-
-        return y - rowHeight;
-    }
+			HorarioDTO h = horariosService.findHorarioById(Integer.parseInt(key[1]));
+			if (h != null) {
+				curso = safe(h.getCurso());
+				hora = safe(h.getHora());
+				asignatura = safe(h.getAsignatura());
+				espacio = safe(h.getEspacio());
+			}
 
 
-    private static void drawRowBackground(PDPageContentStream cs, float x, float y, float width, float height) throws IOException {}
-    private static void drawCellBorders(PDPageContentStream cs, float x, float y, float width, float height) throws IOException {
-        cs.setLineWidth(0.5f);
-        cs.addRect(x, y, width, height);
-        cs.stroke();
-    }
-    private static void drawText(PDPageContentStream cs, String text, float x, float y, PDFont font, float fontSize) throws IOException {
-        cs.beginText();
-        cs.setFont(font, fontSize);
-        cs.newLineAtOffset(x, y);
-        cs.showText(text != null ? text : "");
-        cs.endText();
-    }
-    private static String safe(String s) { return (s == null) ? "-" : s; }
-    private static String truncate(String s, int maxLen) {
-        if (s == null) return "";
-        return s.length() <= maxLen ? s : s.substring(0, maxLen - 1) + "…";
-    }
+		float x = margin;
+		String[] values = { sustituta, curso, hora, asignatura, espacio, observaciones };
+
+		for (int i = 0; i < values.length; i++) {
+			drawCellBorders(cs, x, y - rowHeight, colWidths[i], rowHeight);
+			drawText(cs, truncate(values[i], 160), x + 2f, y - rowHeight + 4f, PDType1Font.HELVETICA, 11);
+			x += colWidths[i];
+		}
+
+		return y - rowHeight;
+	}
+
+	private static void drawRowBackground(PDPageContentStream cs, float x, float y, float width, float height)
+			throws IOException {
+	}
+
+	private static void drawCellBorders(PDPageContentStream cs, float x, float y, float width, float height)
+			throws IOException {
+		cs.setLineWidth(0.5f);
+		cs.addRect(x, y, width, height);
+		cs.stroke();
+	}
+
+	private static void drawText(PDPageContentStream cs, String text, float x, float y, PDFont font, float fontSize)
+			throws IOException {
+		cs.beginText();
+		cs.setFont(font, fontSize);
+		cs.newLineAtOffset(x, y);
+		cs.showText(text != null ? text : "");
+		cs.endText();
+	}
+
+	private static String safe(String s) {
+		return (s == null) ? "-" : s;
+	}
+
+	private static String truncate(String s, int maxLen) {
+		if (s == null)
+			return "";
+		return s.length() <= maxLen ? s : s.substring(0, maxLen - 1) + "…";
+	}
 
 }

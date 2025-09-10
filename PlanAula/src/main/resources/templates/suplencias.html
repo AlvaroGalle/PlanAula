@@ -11,9 +11,13 @@
         trs.forEach((tr) => {
             let ths = tr.querySelectorAll("th");
             let tds = tr.querySelectorAll("td");
-            const id = ths[1].textContent + "_" + tr.id.split("_")[1];
-            const tdSustituto = tds[3].querySelector("select").value;
-            horario.set(id, tdSustituto);
+            const id = ths[0].textContent + "_" + tr.id.split("_")[1];
+            const idSustituto = tds[2].querySelector("select").value;
+			const observaciones = tds[4].querySelector("textarea").value;
+			horario.set(id, {
+			    idSustituto: idSustituto,
+			    observaciones: observaciones
+			});
         });
 
         let h = Object.fromEntries(horario);
@@ -87,7 +91,7 @@
                     </tr>
                     </thead>
                     <tbody id="tbody_horarios">
-                    <tr th:each="horario : ${horarios}" th:id="'h_' + ${horario.id}" th:if="${horario.tipo == 'Clase'}"
+                    <tr th:each="horario : ${horarios}" th:id="'h_' + ${horario.id}" th:if="${horario.tipo == 'Clase'}" 
                         class="align-middle">
                         <th scope="row" th:text="${horario.hora}"></th>
                         <td th:text="${horario.curso}"></td>
@@ -95,8 +99,12 @@
                         <td>
                             <select class="form-select" name="profesor">
                                 <option value="0"></option>
-                                <option th:each=" profesor : ${profesores}" th:value="${profesor.id}"
-                                        th:text="${profesor.nombre}" th:if="${profesorFiltro != profesor.id}"></option>
+								<option th:each="profesor : ${profesores}"
+								        th:value="${profesor.id}"
+								        th:text="${profesor.nombre}"
+										th:selected="${turnoMap[horario.hora + '_' + profesor.nombre] eq 'text-danger'}"
+										th:classappend="${turnoMap[horario.hora + '_' + profesor.nombre]}">
+								</option>
                             </select>
                         </td>
                         <td th:text="${horario.espacio}"></td>
