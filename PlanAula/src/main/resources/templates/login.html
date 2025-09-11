@@ -62,10 +62,9 @@
 <body>
 <th:block th:replace="~{fragments/links.html}"></th:block>
 
-<video autoplay muted loop id="video_background">
-    <source src="/videos/ondasAzules.mp4" type="video/mp4">
-</video>
 
+<div th:replace="~{fragments/preloader.html}"></div>
+<div th:replace="~{fragments/video_background.html}"></div>
 
 <section class="d-flex justify-content-center align-items-center min-vh-100">
     <div class="container">

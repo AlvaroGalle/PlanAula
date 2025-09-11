@@ -1,0 +1,22 @@
+<script>
+  $(document).on("submit", "form", function () {
+    $("#preloader").css("opacity", "1");
+  });
+</script>
+
+<div id="preloader" style="
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(255,255,255,0.8);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    pointer-events: none;
+    z-index: 9999;
+">
+  <img src="/videos/preloader.gif" alt="preloader" style="
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+  ">
+</div>
