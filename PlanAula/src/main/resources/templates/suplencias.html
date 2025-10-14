@@ -94,11 +94,11 @@
                     <tbody id="tbody_horarios">
                     <tr th:each="horario : ${horarios}" th:id="'h_' + ${horario.id}" th:if="${horario.tipo == 'Clase'}" 
                         class="align-middle">
-                        <th scope="row" th:text="${horario.hora}"></th>
-                        <td th:text="${horario.curso}"></td>
+                        <th class="w-auto" scope="row" th:text="${horario.hora}"></th>
+                        <td class="w-auto" th:text="${horario.curso}"></td>
                         <td th:text="${horario.asignatura}"></td>
                         <td>
-                            <select class="form-select" name="profesor">
+                            <select class="form-select w-auto" name="profesor">
                                 <option value="0"></option>
 								<option th:each="profesor : ${profesores}"
 								        th:value="${profesor.id}"
