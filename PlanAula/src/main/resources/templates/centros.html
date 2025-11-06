@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <div th:replace="~{fragments/head.html}"></div>
+</head>
+<div th:replace="~{fragments/links.html}"></div>
+<style>
+    .menu-item {
+        border-radius: 15px;
+        text-align: center;
+        cursor: pointer;
+        transition: transform 0.2s, box-shadow 0.2s;
+        padding: 15px;
+        margin-bottom: 10px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        height: 150px;
+        background: white;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .menu-item:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+    }
+
+    .menu-item-add {
+        background: rgba(255, 255, 255, 0.6);
+        backdrop-filter: blur(10px);
+        border: 2px dashed #ccc;
+    }
+
+    .menu-item-add:hover {
+        border-color: #4A90E2;
+        background: rgba(255, 255, 255, 0.8);
+    }
+
+    .icon-circle {
+        width: 80px;
+        height: 80px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto 12px;
+    }
+
+    .icon-circle img {
+        width: 50%;
+        height: 50%;
+        object-fit: contain;
+    }
+
+    .hover-overlay .overlay {
+        background: rgba(0, 0, 0, 0.5);
+        opacity: 0;
+        transition: opacity 0.3s ease;
+    }
+
+    .hover-overlay:hover .overlay {
+        opacity: 1;
+    }
+
+    .hover-opacity:hover {
+        opacity: 1 !important;
+    }
+
+    .transition {
+        transition: opacity 0.3s ease;
+    }
+
+    .cursor-pointer {
+        cursor: pointer;
+    }
+</style>
+
+<body class="d-flex flex-column min-vh-100">
+<div th:replace="~{fragments/preloader.html}"></div>
+<div th:replace="~{fragments/video_background.html}"></div>
+
+<section class="container py-4">
+    <div class="row g-4 text-center">
+        <div th:each="centro : ${centros}" class="col-12 col-sm-6 col-lg-3">
+            <div class="card h-100 menu-item" th:data-idcentro="${centro.id}"
+                 onclick="location.href='/' + this.dataset.idcentro + '/menu'">
+                <div class="card-body">
+                    <button class="btn p-0 border-0 bg-transparent position-absolute top-0 end-0 m-2 star-btn"
+                            onclick="event.stopPropagation(); toggleStar(this)">
+                        <i class="bi bi-star fs-4 text-secondary"></i>
+                        <i class="bi bi-bookmark-star fs-4 text-secondary"></i>
+                        <br>
+                        <i class="bi bi-star-fill fs-4 text-warning"></i>
+                        <i class="bi bi-bookmark-star-fill fs-4 text-warning"></i>
+                        <br>
+                        <i class="bi bi-star-fill fs-4 text-primary"></i>
+                        <i class="bi bi-bookmark-star-fill fs-4 text-primary"></i>
+                        <br>
+                        <i class="bi bi-star-fill fs-4 text-info"></i>
+                        <i class="bi bi-bookmark-star-fill fs-4 text-info"></i>
+                    </button>
+
+                    <div class="d-flex justify-content-center align-items-center">
+                        <div class="theme-espacios rounded-circle position-relative overflow-hidden mx-auto mb-3 hover-overlay"
+                             style="width: 80px; height: 80px;">
+                            <img th:src="${centro.image}" alt="espacios" width="50%"
+                                 class="position-absolute top-50 start-50 translate-middle">
+
+                            <div class="overlay position-absolute top-0 start-0 w-100 h-100 d-flex justify-content-center align-items-center">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="white"
+                                     class="bi bi-camera" viewBox="0 0 16 16">
+                                    <path d="M10.5 3a.5.5 0 0 1 .5.5V4h1a2 2 0 0 1 2 2v6a2 2 0 0 1-2 2h-9a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h1v-.5a.5.5 0 0 1 .5-.5h6ZM8 5a3 3 0 1 0 0 6 3 3 0 0 0 0-6Z"/>
+                                    <path d="M8 6a2 2 0 1 1 0 4 2 2 0 0 1 0-4Z"/>
+                                </svg>
+                            </div>
+                        </div>
+                    </div>
+
+                    <h6 class="card-title text-dark fw-bold" th:text="${centro.nombre}"></h6>
+                </div>
+            </div>
+        </div>
+
+        <!-- Card para añadir nueva asignatura -->
+        <div class="col-12 col-sm-6 col-lg-3">
+            <div class="card h-100 menu-item menu-item-add" data-bs-toggle="modal" data-bs-target="#spotifyModal">
+                <div class="card-body">
+                    <div class="d-flex justify-content-center align-items-center mx-auto mb-3">
+                        <!-- Pega aquí el SVG que elijas -->
+                        <svg width="80" height="80" viewBox="0 0 80 80" xmlns="http://www.w3.org/2000/svg">
+                            <circle cx="40" cy="40" r="38" fill="none" stroke="#0d6efd" stroke-width="2"
+                                    stroke-dasharray="5,5"/>
+                            <line x1="40" y1="20" x2="40" y2="60" stroke="#0d6efd" stroke-width="3"
+                                  stroke-linecap="round"/>
+                            <line x1="20" y1="40" x2="60" y2="40" stroke="#0d6efd" stroke-width="3"
+                                  stroke-linecap="round"/>
+                        </svg>
+                    </div>
+                    <h6 class="card-title text-dark fw-bold">Añadir centro</h6>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<footer class="bg-white text-black py-3 mt-auto">
+    <div class="container">
+        <div class="row">
+            <div class="col-6 text-start">
+                <small>&copy; 2025 PlanAula — Todos los derechos reservados</small>
+            </div>
+            <div class="col-6 text-end">
+                <a href="/logout" class="text-black">
+                    <small>Desconectar</small>
+                </a>
+            </div>
+        </div>
+    </div>
+</footer>
+</body>
+
+<!-- Modal -->
+<div class="modal fade" id="spotifyModal" tabindex="-1" aria-labelledby="spotifyModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content border-0 shadow-lg rounded-4">
+            <!-- Encabezado -->
+            <div class="modal-header border-0 bg-dark text-white rounded-top-4">
+                <h5 class="modal-title fw-semibold" id="spotifyModalLabel">Nuevo centro</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
+                        aria-label="Cerrar"></button>
+            </div>
+
+            <!-- Cuerpo -->
+            <div class="modal-body p-4">
+                <div class="row">
+                    <div class="col-4 d-flex justify-content-center align-items-center">
+                        <!-- Imagen con overlay -->
+                        <div class="d-flex justify-content-center align-items-center position-relative mx-auto mb-3"
+                             style="width: 120px; height: 120px;">
+                            <div class="d-flex justify-content-center align-items-center rounded-circle mx-auto shadow-sm"
+                                 style="width: 120px; height: 120px; font-size: 2rem; overflow: hidden">
+                                <img id="previewImage" src="/images/menu/aula.png" alt="Previsualización" width="80%"/>
+                            </div>
+
+
+                            <!-- Overlay -->
+                            <div class="position-absolute top-0 start-0 w-100 h-100 d-flex justify-content-center align-items-center rounded-circle bg-dark bg-opacity-50 opacity-0 hover-opacity transition">
+                                <label for="imageUpload"
+                                       class="cursor-pointer text-white d-flex flex-column align-items-center">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="white"
+                                         class="bi bi-camera mb-1" viewBox="0 0 16 16">
+                                        <path d="M10.5 3a.5.5 0 0 1 .5.5V4h1a2 2 0 0 1 2 2v6a2 2 0 0 1-2 2h-9a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h1v-.5a.5.5 0 0 1 .5-.5h6Z"/>
+                                        <path d="M8 5a3 3 0 1 0 0 6 3 3 0 0 0 0-6Z"/>
+                                    </svg>
+                                    <small>Cambiar</small>
+                                </label>
+                                <input id="imageUpload" type="file" accept="image/*" class="d-none"
+                                       onchange="previewFile(event)">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-8">
+                        <!-- Nombre -->
+                        <div class="mb-3">
+                            <label for="nombre" class="form-label fw-semibold">Nombre</label>
+                            <input type="text" class="form-control rounded-3" id="nombre"
+                                   placeholder="Introduce un nombre...">
+                        </div>
+
+                        <!-- Observaciones -->
+                        <div class="mb-3">
+                            <label for="observaciones" class="form-label fw-semibold">Observaciones</label>
+                            <textarea class="form-control rounded-3" id="observaciones" rows="3"
+                                      placeholder="Escribe tus observaciones..."></textarea>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Pie -->
+            <div class="modal-footer border-0 bg-light rounded-bottom-4">
+                <button type="button" class="btn btn-outline-secondary rounded-pill" data-bs-dismiss="modal">Cancelar
+                </button>
+                <button type="button" class="btn btn-primary rounded-pill px-4">Guardar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    function toggleStar(btn) {
+        const icon = btn.querySelector("i");
+        if (icon.classList.contains("bi-star")) {
+            icon.classList.replace("bi-star", "bi-star-fill");
+            icon.classList.replace("text-secondary", "text-warning");
+        } else {
+            icon.classList.replace("bi-star-fill", "bi-star");
+            icon.classList.replace("text-warning", "text-secondary");
+        }
+    }
+
+    function previewFile(event) {
+        const reader = new FileReader();
+        reader.onload = function () {
+            const output = document.getElementById('previewImage');
+            output.src = reader.result;
+        };
+        reader.readAsDataURL(event.target.files[0]);
+    }
+</script>
+</html>
