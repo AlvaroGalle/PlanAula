@@ -29,7 +29,7 @@ public class GuardiasService {
     private JdbcTemplate jdbcTemplate;
 
     public Page<TurnoDTO> findPageTurnosByDiaHoraProfesor(
-            Integer dia, Integer hora, Integer profesor, String tipo, Pageable pageable) {
+            Integer dia, Integer hora, Integer profesor, String tipo, Pageable pageable, int idCentro) {
 
         if (tipo == null || tipo.equals("0") || tipo.isBlank()) {
             tipo = "T";
@@ -39,37 +39,50 @@ public class GuardiasService {
         if (tipo.equals("L")) tipo = "Libranza";
 
         String sql = """
-        WITH u AS (
-            SELECT 'Guardia' AS tipo, g.id, g.id_profesor, p.nombre, p.apellidos, d.dia, h.hora
-            FROM guardias g
-            JOIN profesores p ON g.id_profesor = p.id
-            JOIN dias d ON g.id_dia = d.id
-            JOIN horas h ON g.id_hora = h.id
+        	    WITH u AS (
+        	        SELECT 'Guardia' AS tipo, g.id, g.id_profesor, p.nombre, p.apellidos, d.dia, h.hora
+        	        FROM guardias g
+        	        JOIN profesores p ON g.id_profesor = p.id
+        	        JOIN dias d ON g.id_dia = d.id
+        	        JOIN horas h ON g.id_hora = h.id
+        	        WHERE g.id_centro = :idCentro
+        	          AND p.id_centro = :idCentro
+        	          AND d.id_centro = :idCentro
+        	          AND h.id_centro = :idCentro
 
-            UNION ALL
+        	        UNION ALL
 
-            SELECT 'Recreo' AS tipo, r.id, r.id_profesor, p.nombre, p.apellidos, d.dia, h.hora
-            FROM recreos r
-            JOIN profesores p ON r.id_profesor = p.id
-            JOIN dias d ON r.id_dia = d.id
-            JOIN horas h ON r.id_hora = h.id
+        	        SELECT 'Recreo' AS tipo, r.id, r.id_profesor, p.nombre, p.apellidos, d.dia, h.hora
+        	        FROM recreos r
+        	        JOIN profesores p ON r.id_profesor = p.id
+        	        JOIN dias d ON r.id_dia = d.id
+        	        JOIN horas h ON r.id_hora = h.id
+        	        WHERE r.id_centro = :idCentro
+        	          AND p.id_centro = :idCentro
+        	          AND d.id_centro = :idCentro
+        	          AND h.id_centro = :idCentro
 
-            UNION ALL
+        	        UNION ALL
 
-            SELECT 'Libranza' AS tipo, l.id, l.id_profesor, p.nombre, p.apellidos, d.dia, h.hora
-            FROM libranzas l
-            JOIN profesores p ON l.id_profesor = p.id
-            JOIN dias d ON l.id_dia = d.id
-            JOIN horas h ON l.id_hora = h.id
-        )
-        SELECT tipo, id, id_profesor, nombre, apellidos, dia, hora
-        FROM u
-        WHERE (:tipo = 'T' OR u.tipo = :tipo)
-          AND (:profesor = 0 OR u.id_profesor = :profesor)
-          AND (:dia = 0 OR u.dia = (SELECT dia FROM dias WHERE id = :dia))
-          AND (:hora = 0 OR u.hora = (SELECT hora FROM horas WHERE id = :hora))
-        ORDER BY u.dia, u.hora, u.tipo
-        """;
+        	        SELECT 'Libranza' AS tipo, l.id, l.id_profesor, p.nombre, p.apellidos, d.dia, h.hora
+        	        FROM libranzas l
+        	        JOIN profesores p ON l.id_profesor = p.id
+        	        JOIN dias d ON l.id_dia = d.id
+        	        JOIN horas h ON l.id_hora = h.id
+        	        WHERE l.id_centro = :idCentro
+        	          AND p.id_centro = :idCentro
+        	          AND d.id_centro = :idCentro
+        	          AND h.id_centro = :idCentro
+        	    )
+        	    SELECT tipo, id, id_profesor, nombre, apellidos, dia, hora
+        	    FROM u
+        	    WHERE (:tipo = 'T' OR u.tipo = :tipo)
+        	      AND (:profesor = 0 OR u.id_profesor = :profesor)
+        	      AND (:dia = 0 OR u.dia = (SELECT dia FROM dias WHERE id = :dia))
+        	      AND (:hora = 0 OR u.hora = (SELECT hora FROM horas WHERE id = :hora))
+        	    ORDER BY u.dia, u.hora, u.tipo
+        	""";
+
 
         @SuppressWarnings("unchecked")
         List<Object[]> filas = entityManager.createNativeQuery(sql)
@@ -77,6 +90,7 @@ public class GuardiasService {
                 .setParameter("profesor", profesor)
                 .setParameter("dia", dia)
                 .setParameter("hora", hora)
+                .setParameter("idCentro", idCentro)
                 .getResultList();
 
         if (filas == null || filas.isEmpty()){
@@ -93,11 +107,11 @@ public class GuardiasService {
                         (String) r[4]
                 ))
                 .collect(Collectors.toList());
-        return new PageImpl<>(turnos, pageable, countTurnos(dia, hora, profesor, tipo));
+        return new PageImpl<>(turnos, pageable, countTurnos(dia, hora, profesor, tipo, idCentro));
     }
 
     public List<TurnoDTO> findAllTurnosByDiaHoraProfesor(
-            Integer dia, Integer hora, Integer profesor, String tipo) {
+            Integer dia, Integer hora, Integer profesor, String tipo, int idCentro) {
 
         if (tipo == null || tipo.equals("0") || tipo.isBlank()) {
             tipo = "T";
@@ -107,37 +121,50 @@ public class GuardiasService {
         if (tipo.equals("L")) tipo = "Libranza";
 
         String sql = """
-        WITH u AS (
-            SELECT 'Guardia' AS tipo, g.id, g.id_profesor, p.nombre, p.apellidos, d.dia, h.hora
-            FROM guardias g
-            JOIN profesores p ON g.id_profesor = p.id
-            JOIN dias d ON g.id_dia = d.id
-            JOIN horas h ON g.id_hora = h.id
+        	    WITH u AS (
+        	        SELECT 'Guardia' AS tipo, g.id, g.id_profesor, p.nombre, p.apellidos, d.dia, h.hora
+        	        FROM guardias g
+        	        JOIN profesores p ON g.id_profesor = p.id
+        	        JOIN dias d ON g.id_dia = d.id
+        	        JOIN horas h ON g.id_hora = h.id
+        	        WHERE g.id_centro = :idCentro
+        	          AND p.id_centro = :idCentro
+        	          AND d.id_centro = :idCentro
+        	          AND h.id_centro = :idCentro
 
-            UNION ALL
+        	        UNION ALL
 
-            SELECT 'Recreo' AS tipo, r.id, r.id_profesor, p.nombre, p.apellidos, d.dia, h.hora
-            FROM recreos r
-            JOIN profesores p ON r.id_profesor = p.id
-            JOIN dias d ON r.id_dia = d.id
-            JOIN horas h ON r.id_hora = h.id
+        	        SELECT 'Recreo' AS tipo, r.id, r.id_profesor, p.nombre, p.apellidos, d.dia, h.hora
+        	        FROM recreos r
+        	        JOIN profesores p ON r.id_profesor = p.id
+        	        JOIN dias d ON r.id_dia = d.id
+        	        JOIN horas h ON r.id_hora = h.id
+        	        WHERE r.id_centro = :idCentro
+        	          AND p.id_centro = :idCentro
+        	          AND d.id_centro = :idCentro
+        	          AND h.id_centro = :idCentro
 
-            UNION ALL
+        	        UNION ALL
 
-            SELECT 'Libranza' AS tipo, l.id, l.id_profesor, p.nombre, p.apellidos, d.dia, h.hora
-            FROM libranzas l
-            JOIN profesores p ON l.id_profesor = p.id
-            JOIN dias d ON l.id_dia = d.id
-            JOIN horas h ON l.id_hora = h.id
-        )
-        SELECT tipo, id, id_profesor, nombre, apellidos, dia, hora
-        FROM u
-        WHERE (:tipo = 'T' OR u.tipo = :tipo)
-          AND (:profesor = 0 OR u.id_profesor = :profesor)
-          AND (:dia = 0 OR u.dia = (SELECT dia FROM dias WHERE id = :dia))
-          AND (:hora = 0 OR u.hora = (SELECT hora FROM horas WHERE id = :hora))
-        ORDER BY u.dia, u.hora, u.tipo
-        """;
+        	        SELECT 'Libranza' AS tipo, l.id, l.id_profesor, p.nombre, p.apellidos, d.dia, h.hora
+        	        FROM libranzas l
+        	        JOIN profesores p ON l.id_profesor = p.id
+        	        JOIN dias d ON l.id_dia = d.id
+        	        JOIN horas h ON l.id_hora = h.id
+        	        WHERE l.id_centro = :idCentro
+        	          AND p.id_centro = :idCentro
+        	          AND d.id_centro = :idCentro
+        	          AND h.id_centro = :idCentro
+        	    )
+        	    SELECT tipo, id, id_profesor, nombre, apellidos, dia, hora
+        	    FROM u
+        	    WHERE (:tipo = 'T' OR u.tipo = :tipo)
+        	      AND (:profesor = 0 OR u.id_profesor = :profesor)
+        	      AND (:dia = 0 OR u.dia = (SELECT dia FROM dias WHERE id = :dia))
+        	      AND (:hora = 0 OR u.hora = (SELECT hora FROM horas WHERE id = :hora))
+        	    ORDER BY u.dia, u.hora, u.tipo
+        	""";
+
 
         @SuppressWarnings("unchecked")
         List<Object[]> filas = entityManager.createNativeQuery(sql)
@@ -145,6 +172,7 @@ public class GuardiasService {
                 .setParameter("profesor", profesor)
                 .setParameter("dia", dia)
                 .setParameter("hora", hora)
+                .setParameter("idCentro", idCentro)
                 .getResultList();
 
 
@@ -210,49 +238,63 @@ public class GuardiasService {
         );
     }
 
-    public Long countTurnos(Integer dia, Integer hora, Integer profesor, String tipo) {
-        String countSql = """
-        WITH u AS (
-            SELECT 'Guardia' AS tipo, g.id, g.id_profesor, p.nombre, p.apellidos, d.dia, h.hora
-            FROM guardias g
-            JOIN profesores p ON g.id_profesor = p.id
-            JOIN dias d ON g.id_dia = d.id
-            JOIN horas h ON g.id_hora = h.id
+    public Long countTurnos(Integer dia, Integer hora, Integer profesor, String tipo, int idCentro) {
+    	String countSql = """
+    		    WITH u AS (
+    		        SELECT 'Guardia' AS tipo, g.id, g.id_profesor, p.nombre, p.apellidos, d.dia, h.hora
+    		        FROM guardias g
+    		        JOIN profesores p ON g.id_profesor = p.id
+    		        JOIN dias d ON g.id_dia = d.id
+    		        JOIN horas h ON g.id_hora = h.id
+    		        WHERE g.id_centro = :idCentro
+    		          AND p.id_centro = :idCentro
+    		          AND d.id_centro = :idCentro
+    		          AND h.id_centro = :idCentro
 
-            UNION ALL
+    		        UNION ALL
 
-            SELECT 'Recreo' AS tipo, r.id, r.id_profesor, p.nombre, p.apellidos, d.dia, h.hora
-            FROM recreos r
-            JOIN profesores p ON r.id_profesor = p.id
-            JOIN dias d ON r.id_dia = d.id
-            JOIN horas h ON r.id_hora = h.id
+    		        SELECT 'Recreo' AS tipo, r.id, r.id_profesor, p.nombre, p.apellidos, d.dia, h.hora
+    		        FROM recreos r
+    		        JOIN profesores p ON r.id_profesor = p.id
+    		        JOIN dias d ON r.id_dia = d.id
+    		        JOIN horas h ON r.id_hora = h.id
+    		        WHERE r.id_centro = :idCentro
+    		          AND p.id_centro = :idCentro
+    		          AND d.id_centro = :idCentro
+    		          AND h.id_centro = :idCentro
 
-            UNION ALL
+    		        UNION ALL
 
-            SELECT 'Libranza' AS tipo, l.id, l.id_profesor, p.nombre, p.apellidos, d.dia, h.hora
-            FROM libranzas l
-            JOIN profesores p ON l.id_profesor = p.id
-            JOIN dias d ON l.id_dia = d.id
-            JOIN horas h ON l.id_hora = h.id
-        )
-        SELECT COUNT(*)
-        FROM u
-        WHERE (:tipo = 'T' OR u.tipo = :tipo)
-          AND (:profesor = 0 OR u.id_profesor = :profesor)
-          AND (:dia = 0 OR u.dia = (SELECT dia FROM dias WHERE id = :dia))
-          AND (:hora = 0 OR u.hora = (SELECT hora FROM horas WHERE id = :hora))
-        """;
+    		        SELECT 'Libranza' AS tipo, l.id, l.id_profesor, p.nombre, p.apellidos, d.dia, h.hora
+    		        FROM libranzas l
+    		        JOIN profesores p ON l.id_profesor = p.id
+    		        JOIN dias d ON l.id_dia = d.id
+    		        JOIN horas h ON l.id_hora = h.id
+    		        WHERE l.id_centro = :idCentro
+    		          AND p.id_centro = :idCentro
+    		          AND d.id_centro = :idCentro
+    		          AND h.id_centro = :idCentro
+    		    )
+    		    SELECT COUNT(*)
+    		    FROM u
+    		    WHERE (:tipo = 'T' OR u.tipo = :tipo)
+    		      AND (:profesor = 0 OR u.id_profesor = :profesor)
+    		      AND (:dia = 0 OR u.dia = (SELECT dia FROM dias WHERE id = :dia))
+    		      AND (:hora = 0 OR u.hora = (SELECT hora FROM horas WHERE id = :hora))
+    		""";
+
         @SuppressWarnings("unchecked")
         Query countQuery = entityManager.createNativeQuery(countSql)
                 .setParameter("tipo", tipo)
                 .setParameter("profesor", profesor)
                 .setParameter("dia", dia)
-                .setParameter("hora", hora);
+                .setParameter("hora", hora)
+                .setParameter("idCentro", idCentro);
         return ((Number) countQuery.getSingleResult()).longValue();
     }
 
     @Transactional
-    public void anadirTurno(TurnoDTO turno) {
+    public void anadirTurno(TurnoDTO turno, int idCentro) {
         String tabla;
         switch (turno.getTipo()) {
             case "G" -> tabla = "guardias";
@@ -262,14 +304,15 @@ public class GuardiasService {
         }
 
         String sql = """
-        INSERT INTO %s (id_profesor, id_dia, id_hora)
-        VALUES (:profesor, :dia, :hora)
+        INSERT INTO %s (id_profesor, id_dia, id_hora, id_centro)
+        VALUES (:profesor, :dia, :hora, :idCentro)
         """.formatted(tabla);
 
         entityManager.createNativeQuery(sql)
                 .setParameter("profesor", Integer.parseInt(turno.getNombre()))
                 .setParameter("dia", Integer.parseInt(turno.getDia()))
                 .setParameter("hora", Integer.parseInt(turno.getHora()))
+                .setParameter("idCentro", idCentro)
                 .executeUpdate();
     }
 

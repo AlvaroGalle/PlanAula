@@ -5,6 +5,7 @@ import com.example.planaula.services.*;
 import jakarta.transaction.TransactionalException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -16,7 +17,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 @Controller
-@RequestMapping("/horarios")
+@RequestMapping("/{idCentro}/horarios")
 public class HorariosController {
 
     private final String RUTATEMPLATE = "horarios/";
@@ -42,7 +43,9 @@ public class HorariosController {
     }
 
     @GetMapping("")
-    public String findAllHorarios(@RequestParam(name = "dia", required = false, defaultValue = "0") int dia,
+    @PreAuthorize("@permisoService.tieneAccesoCentroFromPath(authentication, #this)")
+    public String findAllHorarios(@PathVariable(name = "idCentro") int idCentro,
+    							  @RequestParam(name = "dia", required = false, defaultValue = "0") int dia,
                                   @RequestParam(name = "hora", required = false, defaultValue = "0") int hora,
                                   @RequestParam(name = "aula", required = false, defaultValue = "0") int aula,
                                   @RequestParam(name = "asignatura", required = false, defaultValue = "0") int asignatura,
@@ -53,7 +56,7 @@ public class HorariosController {
                                   @RequestParam(name = "id", required = false, defaultValue = "0") String id,
                                   Model model) {
         model.addAttribute("id", id);
-
+        model.addAttribute("idCentro", idCentro);
         model.addAttribute("diaFiltro", dia);
         model.addAttribute("horaFiltro", hora);
         model.addAttribute("aulaFiltro", aula);
@@ -61,13 +64,13 @@ public class HorariosController {
         model.addAttribute("profesorFiltro", profesor);
         model.addAttribute("cursoFiltro", curso);
 
-        List<DiaDTO> diaDTOList =  diasService.findAllDias();
+        List<DiaDTO> diaDTOList =  diasService.findAllDias(idCentro);
         model.addAttribute("dias", diaDTOList);
 
-        List<HoraDTO> horaDTOList =  horasService.findAllHoras();
+        List<HoraDTO> horaDTOList =  horasService.findAllHoras(idCentro);
         model.addAttribute("horas", horaDTOList);
 
-        List<AulaDTO> aulaDTOList =  aulasService.findAllAulas();
+        List<AulaDTO> aulaDTOList =  aulasService.findAllAulas(idCentro);
         model.addAttribute("aulas", aulaDTOList);
         for(AulaDTO a : aulaDTOList){
             if(a.getId() == aula){
@@ -75,7 +78,7 @@ public class HorariosController {
             }
         }
         
-        List<ProfesorDTO> profesorDTOList = profesoresService.findAllProfesores();
+        List<ProfesorDTO> profesorDTOList = profesoresService.findAllProfesores(idCentro);
         model.addAttribute("profesores", profesorDTOList);
         for(ProfesorDTO p : profesorDTOList){
             if(p.getId() == profesor){
@@ -83,7 +86,7 @@ public class HorariosController {
             }
         }
         
-        List<CursoDTO> cursosDTOList = cursosService.findAllCursos();
+        List<CursoDTO> cursosDTOList = cursosService.findAllCursos(idCentro);
         model.addAttribute("cursos", cursosDTOList);
         for(CursoDTO c : cursosDTOList){
             if(c.getId() == curso){
@@ -92,7 +95,7 @@ public class HorariosController {
         }
         
 
-        List<AsignaturaDTO> asignaturaDTOList =  asignaturasService.findAllAsignaturas();
+        List<AsignaturaDTO> asignaturaDTOList =  asignaturasService.findAllAsignaturas(idCentro);
         model.addAttribute("asignaturas", asignaturaDTOList);
         for(AsignaturaDTO a : asignaturaDTOList){
             if(a.getId() == asignatura){
@@ -100,34 +103,35 @@ public class HorariosController {
             }
         }
 
-        Page<EspacioDTO> espacioDTOList = espaciosService.findAllEspaciosByDiaAndHoraAndAulaAndAsignatura(dia,hora,asignatura,aula,profesor,curso, PageRequest.of(page, size));
+        Page<EspacioDTO> espacioDTOList = espaciosService.findAllEspaciosByDiaAndHoraAndAulaAndAsignatura(dia,hora,asignatura,aula,profesor,curso, PageRequest.of(page, size), idCentro);
         model.addAttribute("page", espacioDTOList);
         return "horarios";
     }
 
     @GetMapping("{id}")
-    public String findHorarioById(@PathVariable(name="id") int id, Model model) {
+    public String findHorarioById(@PathVariable(name = "idCentro") int idCentro,
+    							  @PathVariable(name="id") int id, Model model) {
         try {
 
             EspacioDTO espacioDTO = espaciosService.findEspacioById(id);
             model.addAttribute("espacio", espacioDTO);
 
-            List<DiaDTO> diaDTOList =  diasService.findAllDias();
+            List<DiaDTO> diaDTOList =  diasService.findAllDias(idCentro);
             model.addAttribute("dias", diaDTOList);
 
-            List<HoraDTO> horaDTOList =  horasService.findAllHoras();
+            List<HoraDTO> horaDTOList =  horasService.findAllHoras(idCentro);
             model.addAttribute("horas", horaDTOList);
 
-            List<AulaDTO> aulaDTOList =  aulasService.findAllAulas();
+            List<AulaDTO> aulaDTOList =  aulasService.findAllAulas(idCentro);
             model.addAttribute("aulas", aulaDTOList);
 
-            List<AsignaturaDTO> asignaturaDTOList =  asignaturasService.findAllAsignaturas();
+            List<AsignaturaDTO> asignaturaDTOList =  asignaturasService.findAllAsignaturas(idCentro);
             model.addAttribute("asignaturas", asignaturaDTOList);
 
-            List<ProfesorDTO> profesorDTOList = profesoresService.findAllProfesores();
+            List<ProfesorDTO> profesorDTOList = profesoresService.findAllProfesores(idCentro);
             model.addAttribute("profesores", profesorDTOList);
 
-            List<CursoDTO> cursosDTOList = cursosService.findAllCursos();
+            List<CursoDTO> cursosDTOList = cursosService.findAllCursos(idCentro);
             model.addAttribute("cursos", cursosDTOList);
 
             return RUTATEMPLATE + "cardHorarios";
@@ -138,17 +142,19 @@ public class HorariosController {
 
     @PostMapping("/anadir")
     public String addHorario(@ModelAttribute HorarioDTO horarioDTO,
+    						 @PathVariable(name = "idCentro") int idCentro,
                              @RequestParam(name="search", required = false, defaultValue = "") String search) {
-        horariosService.anadirHorario(horarioDTO);
+        horariosService.anadirHorario(horarioDTO, idCentro);
         return "redirect:/horarios" + search;
     }
 
     @PostMapping("/accion")
-    public String accionHorario(@RequestParam(name="search", required = false, defaultValue = "") String search,
+    public String accionHorario(@PathVariable(name = "idCentro") int idCentro,
+    							@RequestParam(name="search", required = false, defaultValue = "") String search,
                                 @ModelAttribute HorarioDTO accionesHorario) {
         try{
             if(accionesHorario.getId() == 0) {
-                horariosService.anadirHorario(accionesHorario);
+                horariosService.anadirHorario(accionesHorario, idCentro);
             }else {
                 horariosService.editarHorario(accionesHorario);
             }
@@ -159,7 +165,8 @@ public class HorariosController {
     }
 
     @PostMapping("/eliminar")
-    public String eliminarHorario(@RequestParam(name="id") int id,
+    public String eliminarHorario(@PathVariable(name = "idCentro") int idCentro,
+    							  @RequestParam(name="id") int id,
                                   @RequestParam(name="search") String search) {
         try {
             horariosService.eliminarHorario(id);

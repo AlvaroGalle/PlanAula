@@ -18,10 +18,12 @@ public class DiasService {
     @Autowired
     private EntityManager entityManager;
 
-    public List<DiaDTO> findAllDias() {
-        String sql = "SELECT * FROM dias order by id asc";
+    public List<DiaDTO> findAllDias(int idCentro) {
+        String sql = "SELECT * FROM dias WHERE id_centro = :idCentro order by id asc";
 
-        List<Object[]> resultados = entityManager.createNativeQuery(sql).getResultList();
+        List<Object[]> resultados = entityManager.createNativeQuery(sql)
+        							.setParameter("idCentro", idCentro)
+        							.getResultList();
 
         if (resultados == null || resultados.isEmpty()) {
             return Collections.emptyList();

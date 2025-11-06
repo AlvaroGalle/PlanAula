@@ -11,6 +11,6 @@ public class PlanAulaController {
 
     @GetMapping("")
     public String incio() {
-        return "redirect:/menu";
+        return "redirect:/centros";
     }
 }

@@ -22,9 +22,90 @@ public class HorariosService {
     @Autowired
     private EntityManager entityManager;
 
-    public List<HorarioDTO> findAllHorariosByDiaAndHoraAndCurso(Integer dia, Integer hora, Integer curso, Integer asignatura, Integer profesor, Integer aula) {
-    	String sql = 
-    		    "SELECT h.id, d.dia, ho.hora, c.curso, asig.asignatura, p.nombre AS profesor, a.aula, h.observaciones, 'clase' AS tipo, 'horarios' AS origen FROM horarios h LEFT JOIN cursos c ON h.id_curso = c.id LEFT JOIN profesores p ON h.id_profesor = p.id LEFT JOIN asignaturas asig ON h.id_asignatura = asig.id LEFT JOIN aulas a ON h.id_aula = a.id LEFT JOIN dias d ON h.id_dia = d.id LEFT JOIN horas ho ON h.id_hora = ho.id WHERE (:dia IS NULL OR :dia = 0 OR h.id_dia = :dia) AND (:hora IS NULL OR :hora = 0 OR h.id_hora = :hora) AND (:curso IS NULL OR :curso = 0 OR h.id_curso = :curso) AND (:asignatura IS NULL OR :asignatura = 0 OR h.id_asignatura = :asignatura) AND (:profesor IS NULL OR :profesor = 0 OR h.id_profesor = :profesor) AND (:aula IS NULL OR :aula = 0 OR h.id_aula = :aula) UNION ALL SELECT g.id, d.dia, ho.hora, NULL AS curso, NULL AS asignatura, p.nombre AS profesor, NULL AS aula, NULL AS observaciones, 'guardia' AS tipo, 'guardias' AS origen FROM guardias g LEFT JOIN profesores p ON g.id_profesor = p.id LEFT JOIN dias d ON g.id_dia = d.id LEFT JOIN horas ho ON g.id_hora = ho.id WHERE (:dia IS NULL OR :dia = 0 OR g.id_dia = :dia) AND (:hora IS NULL OR :hora = 0 OR g.id_hora = :hora) AND (:profesor IS NULL OR :profesor = 0 OR g.id_profesor = :profesor) AND (:curso IS NULL OR :curso = 0) AND (:asignatura IS NULL OR :asignatura = 0) AND (:aula IS NULL OR :aula = 0) UNION ALL SELECT r.id, d.dia, ho.hora, NULL AS curso, NULL AS asignatura, p.nombre AS profesor, NULL AS aula, NULL AS observaciones, 'recreo' AS tipo, 'recreo' AS origen FROM recreos r LEFT JOIN profesores p ON r.id_profesor = p.id LEFT JOIN dias d ON r.id_dia = d.id LEFT JOIN horas ho ON r.id_hora = ho.id WHERE (:dia IS NULL OR :dia = 0 OR r.id_dia = :dia) AND (:hora IS NULL OR :hora = 0 OR r.id_hora = :hora) AND (:profesor IS NULL OR :profesor = 0 OR r.id_profesor = :profesor) AND (:curso IS NULL OR :curso = 0) AND (:asignatura IS NULL OR :asignatura = 0) AND (:aula IS NULL OR :aula = 0) UNION ALL SELECT l.id, d.dia, ho.hora, NULL AS curso, NULL AS asignatura, p.nombre AS profesor, NULL AS aula, NULL AS observaciones, 'libranza' AS tipo, 'libranza' AS origen FROM libranzas l LEFT JOIN profesores p ON l.id_profesor = p.id LEFT JOIN dias d ON l.id_dia = d.id LEFT JOIN horas ho ON l.id_hora = ho.id WHERE (:dia IS NULL OR :dia = 0 OR l.id_dia = :dia) AND (:hora IS NULL OR :hora = 0 OR l.id_hora = :hora) AND (:profesor IS NULL OR :profesor = 0 OR l.id_profesor = :profesor) AND (:curso IS NULL OR :curso = 0) AND (:asignatura IS NULL OR :asignatura = 0) AND (:aula IS NULL OR :aula = 0) ORDER BY dia, hora;";
+    public List<HorarioDTO> findAllHorariosByDiaAndHoraAndCurso(Integer dia, Integer hora, Integer curso, Integer asignatura, Integer profesor, Integer aula, int idCentro) {
+    	String sql = """
+    			SELECT h.id, d.dia, ho.hora, c.curso, asig.asignatura, p.nombre AS profesor, a.aula, h.observaciones,
+    			       'clase' AS tipo, 'horarios' AS origen
+    			FROM horarios h
+    			LEFT JOIN cursos c ON h.id_curso = c.id
+    			LEFT JOIN profesores p ON h.id_profesor = p.id
+    			LEFT JOIN asignaturas asig ON h.id_asignatura = asig.id
+    			LEFT JOIN aulas a ON h.id_aula = a.id
+    			LEFT JOIN dias d ON h.id_dia = d.id
+    			LEFT JOIN horas ho ON h.id_hora = ho.id
+    			WHERE h.id_centro = :idCentro
+    			  AND c.id_centro = :idCentro
+    			  AND p.id_centro = :idCentro
+    			  AND asig.id_centro = :idCentro
+    			  AND a.id_centro = :idCentro
+    			  AND d.id_centro = :idCentro
+    			  AND ho.id_centro = :idCentro
+    			  AND (:dia IS NULL OR :dia = 0 OR h.id_dia = :dia)
+    			  AND (:hora IS NULL OR :hora = 0 OR h.id_hora = :hora)
+    			  AND (:curso IS NULL OR :curso = 0 OR h.id_curso = :curso)
+    			  AND (:asignatura IS NULL OR :asignatura = 0 OR h.id_asignatura = :asignatura)
+    			  AND (:profesor IS NULL OR :profesor = 0 OR h.id_profesor = :profesor)
+    			  AND (:aula IS NULL OR :aula = 0 OR h.id_aula = :aula)
+
+    			UNION ALL
+
+    			SELECT g.id, d.dia, ho.hora, NULL AS curso, NULL AS asignatura, p.nombre AS profesor, NULL AS aula,
+    			       NULL AS observaciones, 'guardia' AS tipo, 'guardias' AS origen
+    			FROM guardias g
+    			LEFT JOIN profesores p ON g.id_profesor = p.id
+    			LEFT JOIN dias d ON g.id_dia = d.id
+    			LEFT JOIN horas ho ON g.id_hora = ho.id
+    			WHERE g.id_centro = :idCentro
+    			  AND p.id_centro = :idCentro
+    			  AND d.id_centro = :idCentro
+    			  AND ho.id_centro = :idCentro
+    			  AND (:dia IS NULL OR :dia = 0 OR g.id_dia = :dia)
+    			  AND (:hora IS NULL OR :hora = 0 OR g.id_hora = :hora)
+    			  AND (:profesor IS NULL OR :profesor = 0 OR g.id_profesor = :profesor)
+    			  AND (:curso IS NULL OR :curso = 0)
+    			  AND (:asignatura IS NULL OR :asignatura = 0)
+    			  AND (:aula IS NULL OR :aula = 0)
+
+    			UNION ALL
+
+    			SELECT r.id, d.dia, ho.hora, NULL AS curso, NULL AS asignatura, p.nombre AS profesor, NULL AS aula,
+    			       NULL AS observaciones, 'recreo' AS tipo, 'recreo' AS origen
+    			FROM recreos r
+    			LEFT JOIN profesores p ON r.id_profesor = p.id
+    			LEFT JOIN dias d ON r.id_dia = d.id
+    			LEFT JOIN horas ho ON r.id_hora = h.id
+    			WHERE r.id_centro = :idCentro
+    			  AND p.id_centro = :idCentro
+    			  AND d.id_centro = :idCentro
+    			  AND ho.id_centro = :idCentro
+    			  AND (:dia IS NULL OR :dia = 0 OR r.id_dia = :dia)
+    			  AND (:hora IS NULL OR :hora = 0 OR r.id_hora = :hora)
+    			  AND (:profesor IS NULL OR :profesor = 0 OR r.id_profesor = :profesor)
+    			  AND (:curso IS NULL OR :curso = 0)
+    			  AND (:asignatura IS NULL OR :asignatura = 0)
+    			  AND (:aula IS NULL OR :aula = 0)
+
+    			UNION ALL
+
+    			SELECT l.id, d.dia, ho.hora, NULL AS curso, NULL AS asignatura, p.nombre AS profesor, NULL AS aula,
+    			       NULL AS observaciones, 'libranza' AS tipo, 'libranza' AS origen
+    			FROM libranzas l
+    			LEFT JOIN profesores p ON l.id_profesor = p.id
+    			LEFT JOIN dias d ON l.id_dia = d.id
+    			LEFT JOIN horas ho ON l.id_hora = h.id
+    			WHERE l.id_centro = :idCentro
+    			  AND p.id_centro = :idCentro
+    			  AND d.id_centro = :idCentro
+    			  AND ho.id_centro = :idCentro
+    			  AND (:dia IS NULL OR :dia = 0 OR l.id_dia = :dia)
+    			  AND (:hora IS NULL OR :hora = 0 OR l.id_hora = :hora)
+    			  AND (:profesor IS NULL OR :profesor = 0 OR l.id_profesor = :profesor)
+    			  AND (:curso IS NULL OR :curso = 0)
+    			  AND (:asignatura IS NULL OR :asignatura = 0)
+    			  AND (:aula IS NULL OR :aula = 0)
+
+    			ORDER BY dia, hora;
+    			""";
 
 
         List<Object[]> resultados = entityManager.createNativeQuery(sql)
@@ -34,6 +115,7 @@ public class HorariosService {
                 .setParameter("asignatura", asignatura)
                 .setParameter("profesor", profesor)
                 .setParameter("aula", aula)
+                .setParameter("idCentro", idCentro)
                 .getResultList();
 
         if (resultados == null || resultados.isEmpty()) {
@@ -133,13 +215,14 @@ public class HorariosService {
 	}
 
     @Transactional
-    public void anadirHorario(HorarioDTO horarioDTO) {
+    public void anadirHorario(HorarioDTO horarioDTO, int idCentro) {
     	String sql = """
-    		    INSERT INTO horarios (id_dia, id_hora, id_curso, id_asignatura, id_profesor, id_aula, observaciones)
-    		    VALUES (:dia, :hora, :curso, :asignatura, :profesor, :aula, :observaciones)
+    		    INSERT INTO horarios (id_centro, id_dia, id_hora, id_curso, id_asignatura, id_profesor, id_aula, observaciones)
+    		    VALUES (:idCentro, :dia, :hora, :curso, :asignatura, :profesor, :aula, :observaciones)
     		""";
 
     		entityManager.createNativeQuery(sql)
+    				.setParameter("idCentro", idCentro)
     		        .setParameter("dia", Integer.parseInt(horarioDTO.getDia()))
     		        .setParameter("hora", Integer.parseInt(horarioDTO.getHora()))
     		        .setParameter("curso", Integer.parseInt(horarioDTO.getCurso()))
@@ -187,13 +270,65 @@ public class HorariosService {
     	    .executeUpdate();
     }
 
-	public List<HorarioDTO> findHorarioByProfesorAndDia(int profesor, int dia) {
-		String sql = "SELECT h.id, d.dia, ho.hora, c.curso, asig.asignatura, p.nombre AS profesor, a.aula, h.observaciones, 'Clase' AS tipo, 'horarios' AS origen FROM horarios h LEFT JOIN cursos c ON h.id_curso = c.id LEFT JOIN profesores p ON h.id_profesor = p.id LEFT JOIN asignaturas asig ON h.id_asignatura = asig.id LEFT JOIN aulas a ON h.id_aula = a.id LEFT JOIN dias d ON h.id_dia = d.id LEFT JOIN horas ho ON h.id_hora = ho.id WHERE (:dia IS NULL OR :dia = 0 OR h.id_dia = :dia) AND (:profesor IS NULL OR :profesor = 0 OR h.id_profesor = :profesor) UNION ALL SELECT g.id, d.dia, ho.hora, NULL AS curso, NULL AS asignatura, p.nombre AS profesor, NULL AS aula, NULL AS observaciones, 'guardia' AS tipo, 'guardias' AS origen FROM guardias g LEFT JOIN profesores p ON g.id_profesor = p.id LEFT JOIN dias d ON g.id_dia = d.id LEFT JOIN horas ho ON g.id_hora = ho.id WHERE (:dia IS NULL OR :dia = 0 OR g.id_dia = :dia) AND (:profesor IS NULL OR :profesor = 0 OR g.id_profesor = :profesor)" +
-				" UNION ALL SELECT r.id, d.dia, ho.hora, NULL AS curso, NULL AS asignatura, p.nombre AS profesor, NULL AS aula, NULL AS observaciones, 'Recreo' AS tipo, 'recreo' AS origen FROM recreos r LEFT JOIN profesores p ON r.id_profesor = p.id LEFT JOIN dias d ON r.id_dia = d.id LEFT JOIN horas ho ON r.id_hora = ho.id WHERE (:dia IS NULL OR :dia = 0 OR r.id_dia = :dia) AND (:profesor IS NULL OR :profesor = 0 OR r.id_profesor = :profesor) UNION ALL SELECT l.id, d.dia, ho.hora, NULL AS curso, NULL AS asignatura, p.nombre AS profesor, NULL AS aula, NULL AS observaciones, 'Libranza' AS tipo, 'libranza' AS origen FROM libranzas l LEFT JOIN profesores p ON l.id_profesor = p.id LEFT JOIN dias d ON l.id_dia = d.id LEFT JOIN horas ho ON l.id_hora = ho.id WHERE (:dia IS NULL OR :dia = 0 OR l.id_dia = :dia) AND (:profesor IS NULL OR :profesor = 0 OR l.id_profesor = :profesor) ORDER BY hora;";
+	public List<HorarioDTO> findHorarioByProfesorAndDia(int profesor, int dia, int idCentro) {
+		String sql = """
+				SELECT h.id, d.dia, ho.hora, c.curso, asig.asignatura, p.nombre AS profesor, 
+				       a.aula, h.observaciones, 'Clase' AS tipo, 'horarios' AS origen
+				FROM horarios h
+				LEFT JOIN cursos c ON h.id_curso = c.id
+				LEFT JOIN profesores p ON h.id_profesor = p.id
+				LEFT JOIN asignaturas asig ON h.id_asignatura = asig.id
+				LEFT JOIN aulas a ON h.id_aula = a.id
+				LEFT JOIN dias d ON h.id_dia = d.id
+				LEFT JOIN horas ho ON h.id_hora = ho.id
+				WHERE (:dia IS NULL OR :dia = 0 OR h.id_dia = :dia)
+				  AND (:profesor IS NULL OR :profesor = 0 OR h.id_profesor = :profesor)
+				  AND (:idCentro IS NULL OR :idCentro = 0 OR h.id_centro = :idCentro)
+
+				UNION ALL
+
+				SELECT g.id, d.dia, ho.hora, NULL AS curso, NULL AS asignatura, p.nombre AS profesor, 
+				       NULL AS aula, NULL AS observaciones, 'Guardia' AS tipo, 'guardias' AS origen
+				FROM guardias g
+				LEFT JOIN profesores p ON g.id_profesor = p.id
+				LEFT JOIN dias d ON g.id_dia = d.id
+				LEFT JOIN horas ho ON g.id_hora = ho.id
+				WHERE (:dia IS NULL OR :dia = 0 OR g.id_dia = :dia)
+				  AND (:profesor IS NULL OR :profesor = 0 OR g.id_profesor = :profesor)
+				  AND (:idCentro IS NULL OR :idCentro = 0 OR g.id_centro = :idCentro)
+
+				UNION ALL
+
+				SELECT r.id, d.dia, ho.hora, NULL AS curso, NULL AS asignatura, p.nombre AS profesor, 
+				       NULL AS aula, NULL AS observaciones, 'Recreo' AS tipo, 'recreo' AS origen
+				FROM recreos r
+				LEFT JOIN profesores p ON r.id_profesor = p.id
+				LEFT JOIN dias d ON r.id_dia = d.id
+				LEFT JOIN horas ho ON r.id_hora = ho.id
+				WHERE (:dia IS NULL OR :dia = 0 OR r.id_dia = :dia)
+				  AND (:profesor IS NULL OR :profesor = 0 OR r.id_profesor = :profesor)
+				  AND (:idCentro IS NULL OR :idCentro = 0 OR r.id_centro = :idCentro)
+
+				UNION ALL
+
+				SELECT l.id, d.dia, ho.hora, NULL AS curso, NULL AS asignatura, p.nombre AS profesor, 
+				       NULL AS aula, NULL AS observaciones, 'Libranza' AS tipo, 'libranza' AS origen
+				FROM libranzas l
+				LEFT JOIN profesores p ON l.id_profesor = p.id
+				LEFT JOIN dias d ON l.id_dia = d.id
+				LEFT JOIN horas ho ON l.id_hora = ho.id
+				WHERE (:dia IS NULL OR :dia = 0 OR l.id_dia = :dia)
+				  AND (:profesor IS NULL OR :profesor = 0 OR l.id_profesor = :profesor)
+				  AND (:idCentro IS NULL OR :idCentro = 0 OR l.id_centro = :idCentro)
+
+				ORDER BY hora;
+				""";
+
 
 		List<Object[]> resultados = entityManager.createNativeQuery(sql)
 				.setParameter("dia", dia)
 				.setParameter("profesor", profesor)
+				.setParameter("idCentro", idCentro)
 				.getResultList();
 
 		if (resultados == null || resultados.isEmpty()) {

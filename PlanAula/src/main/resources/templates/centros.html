@@ -86,27 +86,20 @@
             <div class="card h-100 menu-item" th:data-idcentro="${centro.id}"
                  onclick="location.href='/' + this.dataset.idcentro + '/menu'">
                 <div class="card-body">
-                    <button class="btn p-0 border-0 bg-transparent position-absolute top-0 end-0 m-2 star-btn"
+                    <button class="btn p-0 border-0 bg-transparent position-absolute top-0 end-0 m-2 star-btn" th:data-idcentro="${centro.id}" th:data-fav="${centro.favorito}" 
                             onclick="event.stopPropagation(); toggleStar(this)">
-                        <i class="bi bi-star fs-4 text-secondary"></i>
-                        <i class="bi bi-bookmark-star fs-4 text-secondary"></i>
-                        <br>
-                        <i class="bi bi-star-fill fs-4 text-warning"></i>
-                        <i class="bi bi-bookmark-star-fill fs-4 text-warning"></i>
-                        <br>
-                        <i class="bi bi-star-fill fs-4 text-primary"></i>
-                        <i class="bi bi-bookmark-star-fill fs-4 text-primary"></i>
-                        <br>
-                        <i class="bi bi-star-fill fs-4 text-info"></i>
-                        <i class="bi bi-bookmark-star-fill fs-4 text-info"></i>
+                        <i class="bi fs-4" th:classappend="${centro.favorito ? 'bi-star-fill text-warning' : 'bi-star text-secondary'}"></i>
                     </button>
 
                     <div class="d-flex justify-content-center align-items-center">
-                        <div class="theme-espacios rounded-circle position-relative overflow-hidden mx-auto mb-3 hover-overlay"
+                        <div class="rounded-circle position-relative overflow-hidden mx-auto mb-3 hover-overlay"
                              style="width: 80px; height: 80px;">
-                            <img th:src="${centro.image}" alt="espacios" width="50%"
+                            <img th:if="${centro.logo != null}" th:src="${centro.logo}" th:alt="${centro.nombre}" width="50%"
                                  class="position-absolute top-50 start-50 translate-middle">
-
+								 <svg th:unless="${centro.logo != null}" xmlns="http://www.w3.org/2000/svg" fill="currentColor" class="bi bi-building" viewBox="0 0 16 16">
+								     <path d="M4 2.5a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5zm3 0a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5zm3.5-.5a.5.5 0 0 0-.5.5v1a.5.5 0 0 0 .5.5h1a.5.5 0 0 0 .5-.5v-1a.5.5 0 0 0-.5-.5zM4 5.5a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5zM7.5 5a.5.5 0 0 0-.5.5v1a.5.5 0 0 0 .5.5h1a.5.5 0 0 0 .5-.5v-1a.5.5 0 0 0-.5-.5zm2.5.5a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5zM4.5 8a.5.5 0 0 0-.5.5v1a.5.5 0 0 0 .5.5h1a.5.5 0 0 0 .5-.5v-1a.5.5 0 0 0-.5-.5zm2.5.5a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5zm3.5-.5a.5.5 0 0 0-.5.5v1a.5.5 0 0 0 .5.5h1a.5.5 0 0 0 .5-.5v-1a.5.5 0 0 0-.5-.5z"/>
+								     <path d="M2 1a1 1 0 0 1 1-1h10a1 1 0 0 1 1 1v14a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1zm11 0H3v14h3v-2.5a.5.5 0 0 1 .5-.5h3a.5.5 0 0 1 .5.5V15h3z"/>
+								   </svg>
                             <div class="overlay position-absolute top-0 start-0 w-100 h-100 d-flex justify-content-center align-items-center">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="white"
                                      class="bi bi-camera" viewBox="0 0 16 16">
@@ -160,6 +153,10 @@
 </footer>
 </body>
 
+<form method="post" id="toggleFav" action="/centros/fav">
+	<input type="hidden" name="idCentro" id="idCentro">
+	<input type="hidden" name="fav" id="fav">
+</form>
 <!-- Modal -->
 <div class="modal fade" id="spotifyModal" tabindex="-1" aria-labelledby="spotifyModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
@@ -182,7 +179,6 @@
                                  style="width: 120px; height: 120px; font-size: 2rem; overflow: hidden">
                                 <img id="previewImage" src="/images/menu/aula.png" alt="Previsualización" width="80%"/>
                             </div>
-
 
                             <!-- Overlay -->
                             <div class="position-absolute top-0 start-0 w-100 h-100 d-flex justify-content-center align-items-center rounded-circle bg-dark bg-opacity-50 opacity-0 hover-opacity transition">
@@ -231,14 +227,9 @@
 
 <script>
     function toggleStar(btn) {
-        const icon = btn.querySelector("i");
-        if (icon.classList.contains("bi-star")) {
-            icon.classList.replace("bi-star", "bi-star-fill");
-            icon.classList.replace("text-secondary", "text-warning");
-        } else {
-            icon.classList.replace("bi-star-fill", "bi-star");
-            icon.classList.replace("text-warning", "text-secondary");
-        }
+		$('#idCentro').val(btn.dataset.idcentro);
+		$('#fav').val(btn.dataset.fav !== 'true');
+		$('#toggleFav').submit();
     }
 
     function previewFile(event) {

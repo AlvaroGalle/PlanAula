@@ -19,10 +19,12 @@ public class HorasService {
     @Autowired
     private EntityManager entityManager;
 
-    public List<HoraDTO> findAllHoras() {
-        String sql = "SELECT * FROM horas";
+    public List<HoraDTO> findAllHoras(int idCentro) {
+        String sql = "SELECT * FROM horas WHERE id_centro = :idCentro";
 
-        List<Object[]> resultados = entityManager.createNativeQuery(sql).getResultList();
+        List<Object[]> resultados = entityManager.createNativeQuery(sql)
+        							.setParameter("idCentro", idCentro)
+        							.getResultList();
 
         if (resultados == null || resultados.isEmpty()) {
             return Collections.emptyList();

@@ -4,7 +4,7 @@
     <div th:replace="~{fragments/head.html}"></div>
 </head>
 <div th:replace="~{fragments/links.html}"></div>
-<script>
+<script th:inline="javascript">
     function generarPdfSuplencias() {
         let trs = document.querySelectorAll("#tbody_horarios tr");
         let horario = new Map();
@@ -21,7 +21,7 @@
         });
 
         let h = Object.fromEntries(horario);
-        let url = "/profesores/suplencias/pdf?fecha=" + document.getElementById("fechaSuplencia").value + "&profesor=" + document.getElementById("profesorFilter").value;
+        let url =  "/" + [[${idCentro}]] +  "/profesores/suplencias/pdf?fecha=" + document.getElementById("fechaSuplencia").value + "&profesor=" + document.getElementById("profesorFilter").value;
         fetch(url, {
             method: "POST",
             headers: {
@@ -51,7 +51,7 @@
         <div class="card-header theme-profesores text-white">
             <div class="row">
                 <div class="col-1 text-center">
-                    <a href="/menu">
+                    <a th:href="@{'/' + ${idCentro} + /menu}">
                         <img src="/images/casa.png" alt="home" width="50%" style="filter:invert(100%)"/>
                     </a>
                 </div>
@@ -62,7 +62,7 @@
 
         </div>
         <div class="card-body filter-section">
-            <form action="/profesores/suplencias" method="get" id="filtrosForm">
+            <form th:action="@{'/' + ${idCentro} + '/profesores/suplencias'}" method="get" id="filtrosForm">
                 <div class="row align-items-center">
 
                     <div class="col-md-6 mb-3">

@@ -68,7 +68,8 @@
     <section class="container py-4">
         <div class="row g-4 text-center">
             <div class="col-12 col-sm-6 col-lg-3">
-                <div class="card h-100 menu-item" onclick="location.href='/asignaturas'">
+                <div class="card h-100 menu-item" th:data-idcentro="${idCentro}"
+				     onclick="location.href='/' + this.dataset.idcentro + '/asignaturas'">
                     <div class="card-body">
                         <div class="d-flex justify-content-center align-items-center theme-asignaturas rounded-circle mx-auto mb-3" style="width: 80px; height: 80px; font-size: 2rem;">
                             <img src="/images/menu/asignaturas.png" alt="asignaturas" width="50%" />
@@ -79,7 +80,8 @@
             </div>
 
             <div class="col-12 col-sm-6 col-lg-3">
-                <div class="card h-100 menu-item" onclick="location.href='/profesores'">
+                <div class="card h-100 menu-item" th:data-idcentro="${idCentro}"
+					 onclick="location.href='/' + this.dataset.idcentro + '/profesores'">
                     <div class="card-body">
                         <div class="d-flex justify-content-center align-items-center theme-profesores rounded-circle mx-auto mb-3" style="width: 80px; height: 80px; font-size: 2rem;">
                             <img src="/images/menu/profesor.png" alt="profesores" width="50%" />
@@ -90,7 +92,8 @@
             </div>
 
             <div class="col-12 col-sm-6 col-lg-3">
-                <div class="card h-100 menu-item" onclick="location.href='/horarios'">
+                <div class="card h-100 menu-item" th:data-idcentro="${idCentro}"
+					 onclick="location.href='/' + this.dataset.idcentro + '/horarios'">
                     <div class="card-body">
                         <div class="d-flex justify-content-center align-items-center theme-espacios rounded-circle mx-auto mb-3" style="width: 80px; height: 80px; font-size: 2rem;">
                             <img src="/images/menu/aula.png" alt="espacios" width="50%" />
@@ -101,7 +104,8 @@
             </div>
 
             <div class="col-12 col-sm-6 col-lg-3">
-                <div class="card h-100 menu-item" onclick="location.href='/guardias'">
+                <div class="card h-100 menu-item" th:data-idcentro="${idCentro}"
+					  onclick="location.href='/' + this.dataset.idcentro + '/guardias'">
                     <div class="card-body">
                         <div class="d-flex justify-content-center align-items-center theme-guardias rounded-circle mx-auto mb-3" style="width: 80px; height: 80px; font-size: 2rem;">
                             <img src="/images/menu/guardia.png" alt="guardias" width="50%" />
@@ -116,7 +120,7 @@
 	<main class="container mb-4">
 		                                       
 		<div class="card">
-			<form id="filtrosForm" method="get" th:action="@{'/menu'}">
+			<form id="filtrosForm" method="get" th:action="@{'/' + ${idCentro} + '/menu'}">
 				<div th:replace="~{fragments/tableHorario.html}"></div>
 			</form>
 		</div>

@@ -4,13 +4,13 @@
     <div th:replace="~{fragments/head.html}"></div>
 </head>
 <div th:replace="~{fragments/links.html}"></div>
-<script>
+<script th:inline="javascript">
     function accionProfesores(accion, boton) {
         let td = boton.closest("td");
         let id = td.dataset.id;
         $('#id_profesor').val(id);
         $('#accion_profesor').val(accion);
-        let url = "/profesores/" + id;
+        let url =  '/' + [[${idCentro}]] +  '/profesores/' + id;
         $.ajax({
             url: url,
             type: "GET",
@@ -49,7 +49,7 @@
         <div class="card-header theme-profesores text-white">
 			<div class="row">
 			<div class="col-1 text-center">
-													<a href="/menu">
+													<a th:href="@{'/' + ${idCentro} + '/menu'}">
 														<img src="/images/casa.png" alt="home" width="50%" style="filter:invert(100%)"/>
 													</a>
 												</div>
@@ -65,7 +65,7 @@
 	
 			<div class="col-auto text-center">
 			  <a class="btn btn-outline-primary"
-			     href="/profesores/suplencias"
+			     th:href="@{'/' + ${idCentro} + '/profesores/suplencias'}"
 			     data-toggle="tooltip"
 			     data-placement="top"
 			     title="Gestionar sustituciones">
@@ -140,7 +140,7 @@
     </div>
 </div>
 
-<form action="/profesores" method="post" id="accionesProfesorForm" th:object="${profesorForm}">
+<form th:action="@{'/' + ${idCentro} + '/profesores'}" method="post" id="accionesProfesorForm" th:object="${profesorForm}">
     <input type="hidden" id="accion_profesor" name="accion">
     <input type="hidden" id="id_profesor" th:field="*{id}">
 	<input type="hidden" id="nombre_profesor" th:field="*{nombre}">

@@ -1,56 +1,68 @@
 package com.example.planaula.services;
 
+import com.example.planaula.Dto.CentroDTO;
 import com.example.planaula.Dto.UsuarioDTO;
+import com.example.planaula.security.CustomUserDetails;
+
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.NoResultException;
 import jakarta.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
+
 @Slf4j
 @Service
 public class UserService implements UserDetailsService {
+
     @Autowired
     private EntityManager entityManager;
 
     private final PasswordEncoder passwordEncoder;
+    
+    private final CentrosService centrosService;
 
-    public UserService(PasswordEncoder passwordEncoder) {
+    public UserService(PasswordEncoder passwordEncoder, CentrosService centrosService) {
         this.passwordEncoder = passwordEncoder;
+        this.centrosService = centrosService;
     }
 
     @Transactional
-    public void createUser(UsuarioDTO usuarioDTO){
+    public void createUser(UsuarioDTO usuarioDTO) {
         String passwordEncriptada = passwordEncoder.encode(usuarioDTO.getPassword());
 
-            String sql = """
-        INSERT INTO usuarios (username, password, role)
-        VALUES (:username, :password, :role)
-    """;
+        String sql = """
+            INSERT INTO usuarios (username, password, role)
+            VALUES (:username, :password, :role)
+        """;
 
-            entityManager.createNativeQuery(sql)
-                    .setParameter("username", usuarioDTO.getUsername())
-                    .setParameter("password", passwordEncriptada)
-                    .setParameter("role", "admin")
-                    .executeUpdate();
-        }
+        entityManager.createNativeQuery(sql)
+                .setParameter("username", usuarioDTO.getUsername())
+                .setParameter("password", passwordEncriptada)
+                .setParameter("role", "admin")
+                .executeUpdate();
+    }
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        String sql = """
-            SELECT id, username, password, role, id_profesor, id_alumno
+        String sqlUsuario = """
+            SELECT id, username, password, role
             FROM usuarios
             WHERE username = :username
         """;
 
         try {
-            Object[] result = (Object[]) entityManager.createNativeQuery(sql)
+            Object[] result = (Object[]) entityManager.createNativeQuery(sqlUsuario)
                     .setParameter("username", username)
                     .getSingleResult();
 
@@ -59,11 +71,15 @@ public class UserService implements UserDetailsService {
             String pass = (String) result[2];
             String rol = (String) result[3];
 
-            return User.builder()
-                    .username(nombre)
-                    .password(pass)
-                    .roles(rol)
-                    .build();
+            List<CentroDTO> centros = centrosService.obtenerCentrosPorUsuario(id);
+            Set<Integer> centrosPermitidos = centros.stream()
+                    .map(CentroDTO::getId)
+                    .collect(Collectors.toSet());
+
+
+            var authorities = List.of(new SimpleGrantedAuthority("ROLE_" + rol.toUpperCase()));
+
+            return new CustomUserDetails(id, nombre, pass, authorities, centrosPermitidos);
 
         } catch (NoResultException e) {
             throw new UsernameNotFoundException("Usuario no encontrado");

@@ -24,7 +24,7 @@ public class EspaciosService {
     @Autowired
     private EntityManager entityManager;
 
-    public Page<EspacioDTO> findAllEspaciosByDiaAndHoraAndAulaAndAsignatura(Integer dia, Integer hora, Integer asignatura, Integer aula, Integer profesor, Integer curso, Pageable pageable) {
+    public Page<EspacioDTO> findAllEspaciosByDiaAndHoraAndAulaAndAsignatura(Integer dia, Integer hora, Integer asignatura, Integer aula, Integer profesor, Integer curso, Pageable pageable, int idCentro) {
         try {
         	
         	  String countSql = "SELECT COUNT(*) FROM horarios h\n"
@@ -39,14 +39,24 @@ public class EspaciosService {
         	  		+ "AND (:aula IS NULL OR :aula = 0 OR a.id = :aula)\n"
         	  		+ "AND (:profesor IS NULL OR :profesor = 0 OR p.id = :profesor)\n"
         	  		+ "AND (:curso IS NULL OR :curso = 0 OR c.id = :curso)\n"
-        	  		+ "AND (:asignatura IS NULL OR :asignatura = 0 OR asig.id = :asignatura)";
+        	  		+ "AND (:asignatura IS NULL OR :asignatura = 0 OR asig.id = :asignatura)"
+        	  		+ "AND (\r\n"
+        	  		+ "           h.id_centro = :idCentro\r\n"
+        	  		+ "       AND c.id_centro = :idCentro\r\n"
+        	  		+ "       AND p.id_centro = :idCentro\r\n"
+        	  		+ "       AND asig.id_centro = :idCentro\r\n"
+        	  		+ "       AND a.id_centro = :idCentro\r\n"
+        	  		+ "       AND d.id_centro = :idCentro\r\n"
+        	  		+ "       AND ho.id_centro = :idCentro\r\n"
+        	  		+ "      )";
               Query countQuery = entityManager.createNativeQuery(countSql)
                       .setParameter("dia", dia)
                       .setParameter("hora", hora)
                       .setParameter("aula", aula)
                       .setParameter("asignatura", asignatura)
                       .setParameter("profesor", profesor)
-                      .setParameter("curso", curso);
+                      .setParameter("curso", curso)
+              		  .setParameter("idCentro", idCentro);
               long total = ((Number) countQuery.getSingleResult()).longValue();
               
             String sql = "SELECT h.id, d.dia, ho.hora, c.curso, asig.asignatura, p.nombre, a.aula, h.observaciones\n" +
@@ -62,7 +72,17 @@ public class EspaciosService {
                     "AND (:aula IS NULL OR :aula = 0 OR a.id = :aula)\n" +
                     "AND (:profesor IS NULL OR :profesor = 0 OR p.id = :profesor)\n" +
                     "AND (:curso IS NULL OR :curso = 0 OR c.id = :curso)\n" +
-                    "AND (:asignatura IS NULL OR :asignatura = 0 OR asig.id = :asignatura) order by d.id, ho.hora, c.curso\n";
+                    "AND (:asignatura IS NULL OR :asignatura = 0 OR asig.id = :asignatura) "
+                    + "AND (\r\n"
+                    + "           h.id_centro = :idCentro\r\n"
+                    + "       AND c.id_centro = :idCentro\r\n"
+                    + "       AND p.id_centro = :idCentro\r\n"
+                    + "       AND asig.id_centro = :idCentro\r\n"
+                    + "       AND a.id_centro = :idCentro\r\n"
+                    + "       AND d.id_centro = :idCentro\r\n"
+                    + "       AND ho.id_centro = :idCentro\r\n"
+                    + "      ) "
+                    + "order by d.id, ho.hora, c.curso\n";
 
             Query query = entityManager.createNativeQuery(sql)
                     .setParameter("dia", dia)
@@ -71,6 +91,7 @@ public class EspaciosService {
                     .setParameter("asignatura", asignatura)
                     .setParameter("profesor", profesor)
                     .setParameter("curso", curso)
+                    .setParameter("idCentro", idCentro)
                     .setFirstResult((int) pageable.getOffset())
                     .setMaxResults(pageable.getPageSize());
 

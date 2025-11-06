@@ -4,13 +4,13 @@
     <div th:replace="~{fragments/head.html}"></div>
 </head>
 <div th:replace="~{fragments/links.html}"></div>
-<script>
+<script th:inline="javascript">
     function accionAsignatura(accion, boton) {
         let td = boton.closest("td");
         let id = td.dataset.id;
         $('#id_asignatura').val(id);
         $('#accion_asignatura').val(accion);
-        let url = "/asignaturas/" + id;
+        let url = '/' + [[${idCentro}]] + '/asignaturas/' + id;
         $.ajax({
             url: url,
             type: "GET",
@@ -57,7 +57,7 @@
                     </button>
                 </div>
                 <div class="col-3">
-                    <form id="filtrosForm" method="get" th:action="@{'/asignaturas'}">
+                    <form id="filtrosForm" method="get" th:action="@{'/' + ${idCentro} + '/asignaturas'}">
                         <div class="form-group row justify-content-end mb-3">
                             <div th:replace="~{fragments/filtros/filterPage.html}"></div>
                         </div>
@@ -112,7 +112,7 @@
     </div>
 </div>
 
-    <form action="/asignaturas" method="post" id="accionesAsignaturaForm" th:object="${asignaturaForm}">
+    <form th:action="@{'/' + ${idCentro} + '/asignaturas'}" method="post" id="accionesAsignaturaForm" th:object="${asignaturaForm}">
         <input type="hidden" id="accion_asignatura" name="accion">
         <input type="hidden" id="id_asignatura" th:field="*{id}">
         <input type="hidden" id="nombre_asignatura" th:field="*{nombre}">

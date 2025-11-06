@@ -4,6 +4,7 @@ import com.example.planaula.Dto.*;
 import com.example.planaula.services.*;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -15,7 +16,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 @Controller
-@RequestMapping("/espacios")
+@RequestMapping("/{idCentro}/espacios")
 public class EspaciosController {
 
     private final String RUTATEMPLATE = "espacios/";
@@ -41,7 +42,9 @@ public class EspaciosController {
     }
 
     @GetMapping("")
-    public String findAllEspacios(@RequestParam(name = "dia", required = false, defaultValue = "0") int dia,
+    @PreAuthorize("@permisoService.tieneAccesoCentroFromPath(authentication, #this)")
+    public String findAllEspacios(@PathVariable(name = "idCentro") int idCentro,
+    							  @RequestParam(name = "dia", required = false, defaultValue = "0") int dia,
             					  @RequestParam(name = "hora", required = false, defaultValue = "0") int hora,
             					  @RequestParam(name = "aula", required = false, defaultValue = "0") int aula,
             					  @RequestParam(name = "asignatura", required = false, defaultValue = "0") int asignatura,
@@ -52,7 +55,7 @@ public class EspaciosController {
             					  @RequestParam(name = "id", required = false, defaultValue = "0") String id,
                                   Model model) {
     	model.addAttribute("id", id);
-    	
+    	model.addAttribute("idCentro", idCentro);
         model.addAttribute("diaFiltro", dia);
         model.addAttribute("horaFiltro", hora);
         model.addAttribute("aulaFiltro", aula);
@@ -60,13 +63,13 @@ public class EspaciosController {
         model.addAttribute("profesorFiltro", profesor);
         model.addAttribute("cursoFiltro", curso);
 
-        List<DiaDTO> diaDTOList =  diasService.findAllDias();
+        List<DiaDTO> diaDTOList =  diasService.findAllDias(idCentro);
         model.addAttribute("dias", diaDTOList);
 
-        List<HoraDTO> horaDTOList =  horasService.findAllHoras();
+        List<HoraDTO> horaDTOList =  horasService.findAllHoras(idCentro);
         model.addAttribute("horas", horaDTOList);
 
-        List<AulaDTO> aulaDTOList =  aulasService.findAllAulas();
+        List<AulaDTO> aulaDTOList =  aulasService.findAllAulas(idCentro);
         model.addAttribute("aulas", aulaDTOList);
         for(AulaDTO a : aulaDTOList){
             if(a.getId() == aula){
@@ -74,7 +77,7 @@ public class EspaciosController {
             }
         }
         
-        List<ProfesorDTO> profesorDTOList = profesoresService.findAllProfesores();
+        List<ProfesorDTO> profesorDTOList = profesoresService.findAllProfesores(idCentro);
         model.addAttribute("profesores", profesorDTOList);
         for(ProfesorDTO p : profesorDTOList){
             if(p.getId() == profesor){
@@ -82,7 +85,7 @@ public class EspaciosController {
             }
         }
         
-        List<CursoDTO> cursosDTOList = cursosService.findAllCursos();
+        List<CursoDTO> cursosDTOList = cursosService.findAllCursos(idCentro);
         model.addAttribute("cursos", cursosDTOList);
         for(CursoDTO c : cursosDTOList){
             if(c.getId() == curso){
@@ -91,7 +94,7 @@ public class EspaciosController {
         }
         
 
-        List<AsignaturaDTO> asignaturaDTOList =  asignaturasService.findAllAsignaturas();
+        List<AsignaturaDTO> asignaturaDTOList =  asignaturasService.findAllAsignaturas(idCentro);
         model.addAttribute("asignaturas", asignaturaDTOList);
         for(AsignaturaDTO a : asignaturaDTOList){
             if(a.getId() == asignatura){
@@ -99,27 +102,28 @@ public class EspaciosController {
             }
         }
 
-        Page<EspacioDTO> espacioDTOList = espaciosService.findAllEspaciosByDiaAndHoraAndAulaAndAsignatura(dia,hora,asignatura,aula,profesor,curso, PageRequest.of(page, size));
+        Page<EspacioDTO> espacioDTOList = espaciosService.findAllEspaciosByDiaAndHoraAndAulaAndAsignatura(dia,hora,asignatura,aula,profesor,curso, PageRequest.of(page, size), idCentro);
         model.addAttribute("page", espacioDTOList);
         return "espacios";
     }
     
     @GetMapping("{id}")
-    public String findEspacioaById(@PathVariable(name="id") int id, Model model) {
+    public String findEspacioaById(@PathVariable(name = "idCentro") int idCentro,
+    							   @PathVariable(name="id") int id, Model model) {
         try {
             EspacioDTO espacioDTO = espaciosService.findEspacioById(id);
             model.addAttribute("espacio", espacioDTO);
 
-            List<AulaDTO> aulaDTOList =  aulasService.findAllAulas();
+            List<AulaDTO> aulaDTOList =  aulasService.findAllAulas(idCentro);
             model.addAttribute("aulas", aulaDTOList);
             
-            List<AsignaturaDTO> asignaturaDTOList =  asignaturasService.findAllAsignaturas();
+            List<AsignaturaDTO> asignaturaDTOList =  asignaturasService.findAllAsignaturas(idCentro);
             model.addAttribute("asignaturas", asignaturaDTOList);
 
-            List<ProfesorDTO> profesorDTOList = profesoresService.findAllProfesores();
+            List<ProfesorDTO> profesorDTOList = profesoresService.findAllProfesores(idCentro);
             model.addAttribute("profesores", profesorDTOList);
 
-            List<CursoDTO> cursosDTOList = cursosService.findAllCursos();
+            List<CursoDTO> cursosDTOList = cursosService.findAllCursos(idCentro);
             model.addAttribute("cursos", cursosDTOList);
             
             return RUTATEMPLATE + "cardEspacios";
@@ -129,9 +133,10 @@ public class EspaciosController {
     }
 
     @PostMapping("/anadir")
-    public String addEspacio(@ModelAttribute HorarioDTO horarioDTO,
-                                @RequestParam(name="params", required= false) String params) {
-        horariosService.anadirHorario(horarioDTO);
+    public String addEspacio(@PathVariable(name = "idCentro") int idCentro,
+    						 @ModelAttribute HorarioDTO horarioDTO,
+                             @RequestParam(name="params", required= false) String params) {
+        horariosService.anadirHorario(horarioDTO, idCentro);
         return "redirect:/espacios?" + params;
     }
 }

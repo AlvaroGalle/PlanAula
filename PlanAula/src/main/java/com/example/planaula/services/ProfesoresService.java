@@ -24,10 +24,12 @@ public class ProfesoresService {
     @Autowired
     private EntityManager entityManager;
 
-    public List<ProfesorDTO> findAllProfesores() {
-        String sql = "SELECT id, nombre FROM profesores order by nombre";
+    public List<ProfesorDTO> findAllProfesores(int idCentro) {
+        String sql = "SELECT id, nombre FROM profesores WHERE id_centro = :idCentro order by nombre";
 
-        List<Object[]> resultados = entityManager.createNativeQuery(sql).getResultList();
+        List<Object[]> resultados = entityManager.createNativeQuery(sql)
+        							.setParameter("idCentro", idCentro)
+        							.getResultList();
 
         if (resultados == null || resultados.isEmpty()) {
             return Collections.emptyList();
@@ -51,14 +53,16 @@ public class ProfesoresService {
                 (String) resultado[1]);
     }
 
-    public Page<ProfesorDTO> findPageProfesores(Pageable pageable) {
+    public Page<ProfesorDTO> findPageProfesores(Pageable pageable, int idCentro) {
         try {
-            String countSql = "SELECT COUNT(*) FROM profesores";
-            Query countQuery = entityManager.createNativeQuery(countSql);
+            String countSql = "SELECT COUNT(*) FROM profesores WHERE id_centro = :idCentro";
+            Query countQuery = entityManager.createNativeQuery(countSql)
+            					.setParameter("idCentro", idCentro);
             long total = ((Number) countQuery.getSingleResult()).longValue();
 
-            String sql = "SELECT id, nombre FROM profesores order by nombre";
+            String sql = "SELECT id, nombre FROM profesores WHERE id_centro = :idCentro order by nombre";
             Query query = entityManager.createNativeQuery(sql)
+            		.setParameter("idCentro", idCentro)
                     .setFirstResult((int) pageable.getOffset())
                     .setMaxResults(pageable.getPageSize());
 
@@ -79,12 +83,13 @@ public class ProfesoresService {
     }
 
     @Transactional
-    public void anadirProfesor(ProfesorDTO profesorDTO) {
+    public void anadirProfesor(ProfesorDTO profesorDTO, int idCentro) {
         try {
-            String insertSql = "INSERT INTO profesores (nombre, apellidos) VALUES (:nombre, :apellidos)";
+            String insertSql = "INSERT INTO profesores (nombre, apellidos, id_centro) VALUES (:nombre, :apellidos, :idCentro)";
             int filasInsertadas = entityManager.createNativeQuery(insertSql)
                     .setParameter("nombre", profesorDTO.getNombre())
                     .setParameter("apellidos", profesorDTO.getApellidos())
+                    .setParameter("idCentro", idCentro)
                     .executeUpdate();
 
             if (filasInsertadas == 0) {
@@ -99,7 +104,7 @@ public class ProfesoresService {
     @Transactional
     public void eliminarProfesorById(int id) {
         try {
-            String deleteSql = "DELETE FROM profesores WHERE id = :id"; // Ajuste de columna
+            String deleteSql = "DELETE FROM profesores WHERE id = :id";
             int filasEliminadas = entityManager.createNativeQuery(deleteSql)
                     .setParameter("id", id)
                     .executeUpdate();
@@ -128,12 +133,18 @@ public class ProfesoresService {
     }
 
 
-    public List<TutorDTO> findAllTutores() {
-        String sql = "SELECT t.id, p.nombre, p.apellidos, c.curso t.anio\n" +
-                "FROM tutores t\n" +
-                "JOIN profesores p ON t.id_profesor = p.id";
+    public List<TutorDTO> findAllTutores(int idCentro) {
+    	String sql = """
+    			SELECT t.id, p.nombre, p.apellidos, c.curso, t.anio
+    			FROM tutores t
+    			JOIN profesores p ON t.id_profesor = p.id
+    			JOIN cursos c ON t.id_curso = c.id
+    			WHERE (:idCentro IS NULL OR :idCentro = 0 OR t.id_centro = :idCentro);
+    			""";
 
-        List<Object[]> resultados = entityManager.createNativeQuery(sql).getResultList();
+        List<Object[]> resultados = entityManager.createNativeQuery(sql)
+        							.setParameter("idCentro", idCentro)
+        							.getResultList();
 
         if (resultados == null || resultados.isEmpty()) {
             return Collections.emptyList();
@@ -150,17 +161,22 @@ public class ProfesoresService {
                 .collect(Collectors.toList());
     }
 
-    public List<TutorDTO> findAllTutoresByCursoAndProfesor(int curso, int profesor) {
-        String sql = "SELECT t.id, p.nombre, p.apellidos, c.curso, t.anio\n" +
-                "FROM tutores t\n" +
-                "JOIN profesores p ON t.id_profesor = p.id\n" +
-                "JOIN cursos c ON t.id_curso = c.id\n" +
-                "WHERE (:curso IS NULL OR :curso = 0 OR c.id = :curso)\n" +
-                "AND (:profesor IS NULL OR :profesor = 0 OR p.id = :profesor)";
+    public List<TutorDTO> findAllTutoresByCursoAndProfesor(int curso, int profesor, int idCentro) {
+    	String sql = """
+    			SELECT t.id, p.nombre, p.apellidos, c.curso, t.anio
+    			FROM tutores t
+    			JOIN profesores p ON t.id_profesor = p.id
+    			JOIN cursos c ON t.id_curso = c.id
+    			WHERE (:curso IS NULL OR :curso = 0 OR c.id = :curso)
+    			  AND (:profesor IS NULL OR :profesor = 0 OR p.id = :profesor)
+    			  AND (:idCentro IS NULL OR :idCentro = 0 OR t.id_centro = :idCentro);
+    			""";
+
 
         List<Object[]> resultados = entityManager.createNativeQuery(sql)
                 .setParameter("curso", curso)
                 .setParameter("profesor", profesor)
+                .setParameter("idCentro", idCentro)
                 .getResultList();
 
         if (resultados == null || resultados.isEmpty()) {
@@ -178,30 +194,38 @@ public class ProfesoresService {
                 .collect(Collectors.toList());
     }
 
-    public Page<TutorDTO> findPageTutoresByCursoAndProfesor(int curso, int profesor, Pageable pageable) {
+    public Page<TutorDTO> findPageTutoresByCursoAndProfesor(int curso, int profesor, Pageable pageable, int idCentro) {
         try {
-            String countSql = "SELECT count(*)\n" +
-                    "FROM tutores t\n" +
-                    "JOIN profesores p ON t.id_profesor = p.id\n" +
-                    "JOIN cursos c ON t.id_curso = c.id\n" +
-                    "WHERE (:curso IS NULL OR :curso = 0 OR c.id = :curso)\n" +
-                    "AND (:profesor IS NULL OR :profesor = 0 OR p.id = :profesor)";
+        	String countSql = """
+        			SELECT COUNT(*)
+        			FROM tutores t
+        			JOIN profesores p ON t.id_profesor = p.id
+        			JOIN cursos c ON t.id_curso = c.id
+        			WHERE (:curso IS NULL OR :curso = 0 OR c.id = :curso)
+        			  AND (:profesor IS NULL OR :profesor = 0 OR p.id = :profesor)
+        			  AND (:idCentro IS NULL OR :idCentro = 0 OR t.id_centro = :idCentro);
+        			""";
 
             Query countQuery = entityManager.createNativeQuery(countSql)
                     .setParameter("curso", curso)
-                    .setParameter("profesor", profesor);
+                    .setParameter("profesor", profesor)
+                    .setParameter("idCentro", idCentro);
             long total = ((Number) countQuery.getSingleResult()).longValue();
 
-            String sql = "SELECT t.id, p.nombre, p.apellidos, c.curso, t.anio\n" +
-                    "FROM tutores t\n" +
-                    "JOIN profesores p ON t.id_profesor = p.id\n" +
-                    "JOIN cursos c ON t.id_curso = c.id\n" +
-                    "WHERE (:curso IS NULL OR :curso = 0 OR c.id = :curso)\n" +
-                    "AND (:profesor IS NULL OR :profesor = 0 OR p.id = :profesor)";
+            String sql = """
+            		SELECT t.id, p.nombre, p.apellidos, c.curso, t.anio
+            		FROM tutores t
+            		JOIN profesores p ON t.id_profesor = p.id
+            		JOIN cursos c ON t.id_curso = c.id
+            		WHERE (:curso IS NULL OR :curso = 0 OR c.id = :curso)
+            		  AND (:profesor IS NULL OR :profesor = 0 OR p.id = :profesor)
+            		  AND (:idCentro IS NULL OR :idCentro = 0 OR t.id_centro = :idCentro);
+            		""";
 
             Query query = entityManager.createNativeQuery(sql)
                     .setParameter("curso", curso)
                     .setParameter("profesor", profesor)
+                    .setParameter("idCentro", idCentro)
                     .setFirstResult((int) pageable.getOffset())
                     .setMaxResults(pageable.getPageSize());
 
@@ -223,58 +247,4 @@ public class ProfesoresService {
             return new PageImpl<>(Collections.emptyList(), pageable, 0);
         }
     }
-
-    /*public void modificarTutor(TutorDTO tutorDTO) {
-        List<String> campos = new ArrayList<>();
-        if (tutorDTO.getCurso() != null) campos.add("id_curso = :curso");
-        if (tutorDTO.getTutor2425() != null) campos.add("id = :tutor2425");
-        if (tutorDTO.getTutor2324() != null) campos.add("id = :tutor2324");
-
-        try {
-            if (campos.isEmpty()) {
-                throw new IllegalArgumentException("Debe proporcionar al menos un campo para actualizar");
-            }
-            String updateSql = "UPDATE tutoria SET " + String.join(", ", campos) + " WHERE id_tutoria = :id"; // Ajuste de columna
-
-            Query query = entityManager.createNativeQuery(updateSql)
-                    .setParameter("id", tutorDTO.getId());
-
-            if (tutorDTO.getCurso() != null) {
-                query.setParameter("curso", tutorDTO.getCurso());
-            }
-            if (tutorDTO.getTutor2425() != null) {
-                query.setParameter("tutor2425", tutorDTO.getTutor2425());
-            }
-            if (tutorDTO.getTutor2324() != null) {
-                query.setParameter("tutor2324", tutorDTO.getTutor2324());
-            }
-            query.executeUpdate();
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    public List<TurnoDTO> findTaskById(Integer id_profesor){
-        String sql = "SELECT 'G' AS tipo, g.id AS id_guardia, d.dia, ho.hora FROM guardias g JOIN dias d ON g.id_dia = d.id JOIN horas ho ON g.id_hora = ho.id WHERE g.id_profesor = :id_profesor UNION ALL SELECT 'L' AS tipo, l.id AS id_libranza, d.dia, ho.hora FROM libranzas l JOIN dias d ON l.id_dia = d.id JOIN horas ho ON l.id_hora = ho.id WHERE l.id_profesor = :id_profesor UNION ALL SELECT 'R' AS tipo, r.id AS id_recreo, d.dia, ho.hora FROM recreos r JOIN dias d ON r.id_dia = d.id JOIN horas ho ON r.id_hora = ho.id WHERE r.id_profesor = :id_profesor;";
-
-        List<Object[]> resultados = entityManager.createNativeQuery(sql)
-                .setParameter("id_profesor", id_profesor)
-                .getResultList();
-
-        if (resultados == null || resultados.isEmpty()) {
-            return Collections.emptyList();
-        }
-
-        return resultados.stream()
-                .map(resultado -> new TurnoDTO(
-                        ((Number) resultado[1]).intValue(),
-                        (String) resultado[0] + resultado[1],
-                        (String) resultado[2],
-                        (String) resultado[3],
-                        null,
-                        null
-                ))
-                .collect(Collectors.toList());
-    }*/
-
 }

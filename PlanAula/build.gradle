@@ -40,7 +40,7 @@ tasks.named('test') {
 }
 
 tasks.withType(JavaCompile).configureEach {
-    options.compilerArgs = ['-parameters']
+    options.compilerArgs += ['-parameters']
     options.encoding = 'UTF-8'
 }
 

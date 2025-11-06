@@ -17,10 +17,12 @@ public class AulasService {
     @Autowired
     private EntityManager entityManager;
 
-    public List<AulaDTO> findAllAulas() {
-        String sql = "SELECT * FROM aulas order by aula asc";
+    public List<AulaDTO> findAllAulas(int idCentro) {
+        String sql = "SELECT * FROM aulas WHERE id_centro = :idCentro order by aula asc";
 
-        List<Object[]> resultados = entityManager.createNativeQuery(sql).getResultList();
+        List<Object[]> resultados = entityManager.createNativeQuery(sql)
+        		.setParameter("idCentro", idCentro)
+        		.getResultList();
 
         if (resultados == null || resultados.isEmpty()) {
             return Collections.emptyList();

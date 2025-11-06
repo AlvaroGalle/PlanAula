@@ -4,7 +4,7 @@
     <div th:replace="~{fragments/head.html}"></div>
 </head>
 <div th:replace="~{fragments/links.html}"></div>
-<script>
+<script th:inline="javascript">
     $(document).ready(function () {
         let id = "[[${id}]]";
         if (id !== "0") {
@@ -14,7 +14,7 @@
 
 
     function zoomCards(id) {
-        let url = "/espacios/" + id;
+        let url = '/' + [[${idCentro}]] + '/espacios/' + id;
         $.ajax({
             url: url,
             type: "GET",
@@ -38,7 +38,7 @@
         <div class="card-header theme-espacios text-white">
 			<div class="row">
 										<div class="col-1 text-center">
-											<a href="/menu">
+											<a th:href="@{'/' + ${idCentro} + '/menu'}">
 												<img src="/images/casa.png" alt="home" width="50%" style="filter:invert(100%)"/>
 											</a>
 										</div>
@@ -48,7 +48,7 @@
 									</div>
 								</div></div>
         <div class="card-body filter-section">
-            <form id="filtrosForm" method="get" th:action="@{'/espacios'}">
+            <form id="filtrosForm" method="get" th:action="@{'/' + ${idCentro} +'/espacios'}">
                 <div class="accordion mb-3" id="acordeonFiltros">
                     <div class="accordion-item">
                         <h2 class="accordion-header">

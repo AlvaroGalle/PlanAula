@@ -16,6 +16,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -27,7 +28,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 @Controller
-@RequestMapping("/profesores")
+@RequestMapping("/{idCentro}/profesores")
 public class ProfesoresController {
 
 	private final ProfesoresService profesoresService;
@@ -44,17 +45,21 @@ public class ProfesoresController {
 	}
 
 	@GetMapping("")
-	public String findAllProfesores(@RequestParam(name = "page", required = false, defaultValue = "0") int page,
-			@RequestParam(name = "size", required = false, defaultValue = "15") int size, Model model) {
-		Page<ProfesorDTO> profesorDTOList = profesoresService.findPageProfesores(PageRequest.of(page, size));
+	@PreAuthorize("@permisoService.tieneAccesoCentroFromPath(authentication, #this)")
+	public String findAllProfesores(@PathVariable(name = "idCentro") int idCentro,
+								    @RequestParam(name = "page", required = false, defaultValue = "0") int page,
+									@RequestParam(name = "size", required = false, defaultValue = "15") int size, Model model) {
+		model.addAttribute("idCentro", idCentro);
+		Page<ProfesorDTO> profesorDTOList = profesoresService.findPageProfesores(PageRequest.of(page, size), idCentro);
 		model.addAttribute("page", profesorDTOList);
 		model.addAttribute("profesorForm", new ProfesorDTO());
 		return "profesores";
 	}
 
 	@PostMapping("")
-	public String accionProfesores(@ModelAttribute ProfesorDTO profesorDTO,
-			@RequestParam(name = "accion", required = false, defaultValue = "A") String accion) {
+	public String accionProfesores(@PathVariable(name = "idCentro") int idCentro,
+								   @ModelAttribute ProfesorDTO profesorDTO,
+								   @RequestParam(name = "accion", required = false, defaultValue = "A") String accion) {
 		String[] apellidos = profesorDTO.getNombre().split(" ");
 		profesorDTO.setNombre(apellidos[0]);
 		for (int i = 1; i < apellidos.length; i++) {
@@ -62,7 +67,7 @@ public class ProfesoresController {
 		}
 		switch (accion) {
 		case "A":
-			profesoresService.anadirProfesor(profesorDTO);
+			profesoresService.anadirProfesor(profesorDTO, idCentro);
 			break;
 		case "M":
 			profesoresService.modificarProfesor(profesorDTO);
@@ -81,27 +86,33 @@ public class ProfesoresController {
 	}
 
 	@GetMapping("/tutores")
-	public String findAllTutores(@RequestParam(name = "curso", required = false, defaultValue = "0") int curso,
-			@RequestParam(name = "profesor", required = false, defaultValue = "0") int profesor,
-			@RequestParam(name = "page", required = false, defaultValue = "0") int page,
-			@RequestParam(name = "size", required = false, defaultValue = "15") int size, Model model) {
+	@PreAuthorize("@permisoService.tieneAccesoCentroFromPath(authentication, #this)")
+	public String findAllTutores(@PathVariable(name = "idCentro") int idCentro,
+								 @RequestParam(name = "curso", required = false, defaultValue = "0") int curso,
+								 @RequestParam(name = "profesor", required = false, defaultValue = "0") int profesor,
+								 @RequestParam(name = "page", required = false, defaultValue = "0") int page,
+								 @RequestParam(name = "size", required = false, defaultValue = "15") int size, Model model) {
 		model.addAttribute("cursoFiltro", curso);
 		model.addAttribute("profesorFiltro", profesor);
+		model.addAttribute("idCentro", idCentro);
 		Page<TutorDTO> tutorDTOList;
-		tutorDTOList = profesoresService.findPageTutoresByCursoAndProfesor(curso, profesor, PageRequest.of(page, size));
+		tutorDTOList = profesoresService.findPageTutoresByCursoAndProfesor(curso, profesor, PageRequest.of(page, size), idCentro);
 		model.addAttribute("page", tutorDTOList);
 
-		List<ProfesorDTO> profesorDTOList = profesoresService.findAllProfesores();
+		List<ProfesorDTO> profesorDTOList = profesoresService.findAllProfesores(idCentro);
 		model.addAttribute("profesores", profesorDTOList);
 
-		List<CursoDTO> cursoDTOList = cursosService.findAllCursos();
+		List<CursoDTO> cursoDTOList = cursosService.findAllCursos(idCentro);
 		model.addAttribute("cursos", cursoDTOList);
 		return "tutores";
 	}
 
 	@GetMapping("/tutores/modificar/{id}")
 	@ResponseBody
-	public String modificarTutor(@PathVariable Integer id, @RequestParam String curso, @RequestParam String profesor) {
+	public String modificarTutor(@PathVariable(name = "idCentro") int idCentro,
+								 @PathVariable Integer id, 
+								 @RequestParam String curso,
+								 @RequestParam String profesor) {
 		/*
 		 * TutorDTO tutorDTO = new TutorDTO(id, null, Objects.equals(curso, "2425") ?
 		 * profesor : null, Objects.equals(curso, "2324") ? profesor : null);
@@ -111,12 +122,14 @@ public class ProfesoresController {
 	}
 
 	@GetMapping("/suplencias")
-	public String suplenciaProfesor(@RequestParam(name = "fecha", required = false, defaultValue = "") String fecha,
-			@RequestParam(name = "profesor", required = false, defaultValue = "0") int profesor, Model model) {
+	@PreAuthorize("@permisoService.tieneAccesoCentroFromPath(authentication, #this)")
+	public String suplenciaProfesor(@PathVariable(name = "idCentro") int idCentro,
+									@RequestParam(name = "fecha", required = false, defaultValue = "") String fecha,
+									@RequestParam(name = "profesor", required = false, defaultValue = "0") int profesor, Model model) {
 		model.addAttribute("fechaFiltro", fecha);
 		model.addAttribute("profesorFiltro", profesor);
-
-		List<ProfesorDTO> profesorDTOList = profesoresService.findAllProfesores();
+		model.addAttribute("idCentro", idCentro);
+		List<ProfesorDTO> profesorDTOList = profesoresService.findAllProfesores(idCentro);
 		model.addAttribute("profesores", profesorDTOList);
 
 		if (!fecha.isEmpty() && profesor != 0) {
@@ -124,10 +137,10 @@ public class ProfesoresController {
 			LocalDate date = LocalDate.parse(fecha, formatter);
 			model.addAttribute("dia", date.getDayOfWeek());
 			List<HorarioDTO> horarioDTO = horariosService.findHorarioByProfesorAndDia(profesor,
-					date.getDayOfWeek().getValue());
+					date.getDayOfWeek().getValue(), idCentro);
 			model.addAttribute("horarios", horarioDTO);
 			List<TurnoDTO> turnoDTO = guardiasService.findAllTurnosByDiaHoraProfesor(date.getDayOfWeek().getValue(), 0,
-					0, "T");
+					0, "T", idCentro);
 			model.addAttribute("turnos", turnoDTO);
 
 			Map<String, String> turnoMap = new HashMap<>();
@@ -148,8 +161,10 @@ public class ProfesoresController {
 	}
 
 	@PostMapping("/suplencias/pdf")
-	public ResponseEntity<byte[]> generarPdfHorario(@RequestParam(name = "fecha") String fecha,
-			@RequestParam(name = "profesor") int id_profesor, @RequestBody Map<String, Map<String, String>> horario) {
+	public ResponseEntity<byte[]> generarPdfHorario(@PathVariable(name = "idCentro") int idCentro,
+													@RequestParam(name = "fecha") String fecha,
+													@RequestParam(name = "profesor") int id_profesor,
+													@RequestBody Map<String, Map<String, String>> horario) {
 		ProfesorDTO profesor = profesoresService.findProfesorById(id_profesor);
 		String titulo = "Suplencias " + profesor.getNombre() + " " + fecha;
 

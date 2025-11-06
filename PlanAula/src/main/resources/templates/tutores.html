@@ -4,11 +4,11 @@
     <div th:replace="~{fragments/head.html}"></div>
 </head>
 <div th:replace="~{fragments/links.html}"></div>
-<script>
+<script th:inline="javascript">
     function changeTutor(select, curso){
         let id = select.dataset.id;
         let profesor = select.value;
-        let url = "/profesores/tutores/modificar/" + id + "?curso=" + curso + "&profesor=" + profesor;
+        let url =  "/" + [[${idCentro}]] + "/profesores/tutores/modificar/" + id + "?curso=" + curso + "&profesor=" + profesor;
         $.ajax({
             url: url,
             type: "GET",
@@ -33,7 +33,7 @@
             <div class="row align-items-center">
                 <div class="col-12">
                     <form id="filtrosForm" method="get"
-                          th:action="@{'/profesores/tutores'}">
+                          th:action="@{'/' + ${idCentro} + '/profesores/tutores'}">
                         <div class="accordion" id="acordeonFiltros">
                             <div class="accordion-item">
                                 <h2 class="accordion-header">

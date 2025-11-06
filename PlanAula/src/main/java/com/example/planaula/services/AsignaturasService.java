@@ -23,10 +23,12 @@ public class AsignaturasService {
     @Autowired
     private EntityManager entityManager;
 
-    public List<AsignaturaDTO> findAllAsignaturas() {
-        String sqlfindAllAsignaturas = "SELECT * FROM asignaturas order by asignatura asc";
+    public List<AsignaturaDTO> findAllAsignaturas(int idCentro) {
+        String sqlfindAllAsignaturas = "SELECT * FROM asignaturas WHERE id_centro = :idCentro order by asignatura asc";
 
-        List<Object[]> resultados = entityManager.createNativeQuery(sqlfindAllAsignaturas).getResultList();
+        List<Object[]> resultados = entityManager.createNativeQuery(sqlfindAllAsignaturas)
+        							.setParameter("idCentro", idCentro)
+        							.getResultList();
 
         if (resultados == null || resultados.isEmpty()) {
             return Collections.emptyList();
@@ -50,14 +52,15 @@ public class AsignaturasService {
                 (String) resultado[1]);
     }
 
-    public Page<AsignaturaDTO> findPageAsignaturas(Pageable pageable) {
+    public Page<AsignaturaDTO> findPageAsignaturas(Pageable pageable, int idCentro) {
         try {
             String countSql = "SELECT COUNT(*) FROM asignaturas";
             Query countQuery = entityManager.createNativeQuery(countSql);
             long total = ((Number) countQuery.getSingleResult()).longValue();
 
-            String sql = "SELECT id, asignatura FROM asignaturas order by asignatura";
+            String sql = "SELECT id, asignatura FROM asignaturas WHERE id_centro = :idCentro order by asignatura";
             Query query = entityManager.createNativeQuery(sql)
+            		.setParameter("idCentro", idCentro)
                     .setFirstResult((int) pageable.getOffset())
                     .setMaxResults(pageable.getPageSize());
 
@@ -78,14 +81,15 @@ public class AsignaturasService {
     }
 
     @Transactional
-    public void addAsignatura(String nombre) {
+    public void addAsignatura(String nombre, int idCentro) {
     	String sql = """
-    		    INSERT INTO asignaturas (asignatura)
-    		    VALUES (:nombre)
+    		    INSERT INTO asignaturas (asignatura, id_centro)
+    		    VALUES (:nombre, :idCentro)
     		""";
 
     		entityManager.createNativeQuery(sql)
     		        .setParameter("nombre", nombre)
+    		        .setParameter("idCentro", idCentro)
     		        .executeUpdate();
 
      }
