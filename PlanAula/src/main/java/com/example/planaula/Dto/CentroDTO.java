@@ -1,16 +1,25 @@
 package com.example.planaula.Dto;
 
+import org.springframework.web.multipart.MultipartFile;
+
 public class CentroDTO {
     private Integer id;
     private String nombre;
     private String descripcion;
-    private byte[] logo;
+    private MultipartFile logo;
     private boolean favorito;
 
     public CentroDTO() {
     }
 
-    public CentroDTO(Integer id, String nombre, String descripcion, byte[] logo, boolean favorito) {
+    public CentroDTO(Integer id, String nombre, String descripcion, boolean favorito) {
+        this.id = id;
+        this.nombre = nombre;
+        this.descripcion = descripcion;
+        this.favorito = favorito;
+    }
+    
+    public CentroDTO(Integer id, String nombre, String descripcion, MultipartFile logo, boolean favorito) {
         this.id = id;
         this.nombre = nombre;
         this.descripcion = descripcion;
@@ -42,11 +51,11 @@ public class CentroDTO {
         this.descripcion = descripcion;
     }
     
-    public byte[] getLogo() {
+    public MultipartFile getLogo() {
         return logo;
     }
 
-    public void setLogo(byte[] logo) {
+    public void setLogo(MultipartFile logo) {
         this.logo = logo;
     }
     

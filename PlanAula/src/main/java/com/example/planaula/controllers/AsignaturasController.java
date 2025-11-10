@@ -57,7 +57,7 @@ public class AsignaturasController {
                 asignaturasService.deleteAsignatura(asignaturaDTO.getId());
                 break;
         }
-        return "redirect:/asignaturas";
+        return "redirect:/" + idCentro + "/asignaturas";
     }
     
     @PostMapping("/anadir")
@@ -73,6 +73,6 @@ public class AsignaturasController {
     							   @RequestParam(name="id") int id, 
     							   @RequestParam(name="params", required= false) String params) {
     	asignaturasService.deleteAsignatura(id);
-		return "redirect:/asignaturas?" + params;
+		return "redirect:/" + idCentro + "/asignaturas?" + params;
     }
 }

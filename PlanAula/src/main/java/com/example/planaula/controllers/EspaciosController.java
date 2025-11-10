@@ -137,6 +137,6 @@ public class EspaciosController {
     						 @ModelAttribute HorarioDTO horarioDTO,
                              @RequestParam(name="params", required= false) String params) {
         horariosService.anadirHorario(horarioDTO, idCentro);
-        return "redirect:/espacios?" + params;
+        return "redirect:/" + idCentro + "/espacios?" + params;
     }
 }

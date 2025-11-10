@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+	<div th:replace="~{fragments/head.html}"></div>
+	<div th:replace="~{fragments/links.html}"></div>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <style>
+    .day-btn {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      margin: 0 5px;
+      font-weight: bold;
+      border: 1px solid #ccc;
+      transition: all 0.2s ease;
+    }
+    .day-btn.active {
+      background-color: #0d6efd;
+      color: white;
+      box-shadow: 0 0 5px #0d6efd;
+    }
+    td, th {
+      text-align: center;
+      vertical-align: middle;
+    }
+    td.active {
+      background-color: #bde0fe;
+    }
+    .btn-trash {
+      border: none;
+      background: none;
+      color: #dc3545;
+      font-size: 1.2rem;
+      cursor: pointer;
+    }
+  </style>
+</head>
+
+<body>
+	<div th:replace="~{fragments/preloader.html}"></div>
+		<div th:replace="~{fragments/video_background.html}"></div>
+  <div class="container py-5 min-vh-100 d-flex align-items-center justify-content-center">
+    <div class="card shadow-sm p-4 min-vh-75 mx-auto" style="max-width: 900px; width: 100%;">
+      <h4 class="mb-4 text-center">Gestión de la jornada</h4>
+
+      <!-- Días -->
+      <div class="text-center mb-3">
+        <button class="day-btn btn" data-day="Lunes">L</button>
+        <button class="day-btn btn" data-day="Martes">M</button>
+        <button class="day-btn btn" data-day="Miércoles">X</button>
+        <button class="day-btn btn" data-day="Jueves">J</button>
+        <button class="day-btn btn" data-day="Viernes">V</button>
+		<button class="day-btn btn" data-day="Sábado">S</button>
+		<button class="day-btn btn" data-day="Domingo">D</button>
+      </div>
+
+      <!-- Horas -->
+      <div class="row g-3 align-items-center justify-content-center mb-4">
+        <div class="col-auto">
+          <label for="horaInput" class="col-form-label">Hora:</label>
+        </div>
+        <div class="col-auto">
+          <input type="time" id="horaInput" class="form-control" value="08:00" />
+        </div>
+        <div class="col-auto">
+          <button id="btnAdd" class="btn btn-primary">Añadir hora</button>
+        </div>
+      </div>
+
+      <!-- Tabla -->
+      <div class="table-responsive">
+        <table id="tablaHorario" class="table table-bordered text-center align-middle">
+          <thead class="table-light">
+            <tr id="encabezado">
+              <th style="width: 50px;"></th>
+              <th>Hora</th>
+            </tr>
+          </thead>
+          <tbody id="cuerpoTabla"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+<script>
+  const dayButtons = document.querySelectorAll('.day-btn');
+  const encabezado = document.getElementById('encabezado');
+  const cuerpoTabla = document.getElementById('cuerpoTabla');
+  const horaInput = document.getElementById('horaInput');
+  const btnAdd = document.getElementById('btnAdd');
+
+  const DIAS_ORDENADOS = ['Lunes','Martes','Miércoles','Jueves','Viernes', 'Sábado', 'Domingo'];
+  let diasSeleccionados = [];
+  let horas = [];
+
+  // Activar/desactivar días
+  dayButtons.forEach(btn => {
+    btn.addEventListener('click', () => {
+      btn.classList.toggle('active');
+      const dia = btn.dataset.day;
+
+      if (btn.classList.contains('active')) {
+        if (!diasSeleccionados.includes(dia)) diasSeleccionados.push(dia);
+      } else {
+        diasSeleccionados = diasSeleccionados.filter(d => d !== dia);
+      }
+
+      // Mantener orden L-M-X-J-V
+      diasSeleccionados = DIAS_ORDENADOS.filter(d => diasSeleccionados.includes(d));
+      actualizarTabla();
+    });
+  });
+
+  // Añadir hora
+  btnAdd.addEventListener('click', () => {
+    const hora = horaInput.value;
+    if (!hora) return alert('Introduce una hora válida.');
+    if (!horas.includes(hora)) horas.push(hora);
+    horas.sort();
+    actualizarTabla();
+  });
+
+  // Actualizar tabla
+  function actualizarTabla() {
+    // Encabezado dinámico
+    encabezado.innerHTML = `
+      <th style="width: 50px;"></th>
+      <th>Hora</th>
+      ${diasSeleccionados.map(d => `<th>${d}</th>`).join('')}
+    `;
+
+    cuerpoTabla.innerHTML = '';
+
+    horas.forEach(h => {
+      const fila = document.createElement('tr');
+
+      // Botón papelera
+      const colDelete = document.createElement('td');
+      const btnTrash = document.createElement('button');
+      btnTrash.className = 'btn-trash';
+      btnTrash.innerHTML = '🗑';
+      btnTrash.title = 'Eliminar hora';
+      btnTrash.addEventListener('click', () => {
+        horas = horas.filter(x => x !== h);
+        actualizarTabla();
+      });
+      colDelete.appendChild(btnTrash);
+      fila.appendChild(colDelete);
+
+      // Columna de hora
+      const colHora = document.createElement('td');
+      colHora.textContent = h;
+      fila.appendChild(colHora);
+
+      // Crear columnas solo para días seleccionados
+      diasSeleccionados.forEach(d => {
+        const celda = document.createElement('td');
+        celda.addEventListener('click', () => celda.classList.toggle('active'));
+        fila.appendChild(celda);
+      });
+
+      cuerpoTabla.appendChild(fila);
+    });
+  }
+</script>
+</body>
+</html>

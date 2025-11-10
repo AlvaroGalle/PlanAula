@@ -145,7 +145,7 @@ public class HorariosController {
     						 @PathVariable(name = "idCentro") int idCentro,
                              @RequestParam(name="search", required = false, defaultValue = "") String search) {
         horariosService.anadirHorario(horarioDTO, idCentro);
-        return "redirect:/horarios" + search;
+        return "redirect:/" + idCentro + "/horarios" + search;
     }
 
     @PostMapping("/accion")
@@ -173,6 +173,6 @@ public class HorariosController {
         }catch(TransactionalException e){
             e.printStackTrace();
         }
-        return "redirect:/horarios" + search;
+        return "redirect:/" + idCentro + "/horarios" + search;
     }
 }

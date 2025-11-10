@@ -1,13 +1,132 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-			<link rel="shortcut icon" href="/images/calendario.png">
-		  <title>INTERNAL SERVER ERROR - 500 | PlanAula</title>
-</head>
-<body class="d-flex flex-column min-vh-100">
-	<div th:replace="~{fragments/preloader.html}"></div>
-	<div th:replace="~{fragments/video_background.html}"></div>
+			  <html lang="en">
+			  <head>
+			      <meta charset="UTF-8"/>
+			      <meta name="viewport" content="width=device-width, initial-scale=1"/>
+				  <title>INTERNAL SERVER ERROR - 500 | PlanAula</title>
 
-</body>
-</html>
+			      <th:block th:replace="~{fragments/head.html}"></th:block>
+
+			      <style>
+			          body {
+			              background-color: #0056d6;
+			              color: #fff;
+			              min-height: 100vh;
+			              font-family: 'Arial Black', Arial, sans-serif;
+			          }
+
+			          .year-big {
+			              font-size: 8vw;
+			              font-weight: 900;
+			              line-height: 0.85;
+			              text-shadow: 0 8px 24px rgba(0, 0, 0, 0.18);
+			              letter-spacing: -0.03em;
+			              user-select: none;
+			          }
+
+			          .year-big .digit {
+			              display: block;
+			              color: white;
+			          }
+
+			          .card-blur {
+			              background: rgba(255, 255, 255, 0.15);
+			              backdrop-filter: blur(30px);
+			              border-radius: 1rem;
+			              box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+			              color: #000;
+			          }
+
+			          @media (max-width: 991.98px) {
+			              .container {
+			                  padding-left: 1rem;
+			                  padding-right: 1rem;
+			              }
+			          }
+
+			          #video_background {
+			              position: fixed;
+			              top: 0; left: 0;
+			              width: 100vw;
+			              height: 100vh;
+			              object-fit: cover;
+			              z-index: -1;
+			              pointer-events: none;
+			          }
+					  
+					  /* Animación pulse para el ícono SVG */
+					      @keyframes pulse {
+					        0% {
+					          transform: scale(1);
+					          opacity: 1;
+					        }
+					        50% {
+					          transform: scale(1.1);
+					          opacity: 0.7;
+					        }
+					        100% {
+					          transform: scale(1);
+					          opacity: 1;
+					        }
+					      }
+					      .pulse {
+					        animation: pulse 2s infinite ease-in-out;
+					      }
+						  
+						  .img-roja {
+						  						    filter: invert(14%) sepia(100%) saturate(7500%) hue-rotate(-20deg) brightness(83%) contrast(120%);
+						  						  }
+			      </style>
+			  </head>
+			  <body class="d-flex flex-column min-vh-100">
+			  <th:block th:replace="~{fragments/links.html}"></th:block>
+
+
+			  <div th:replace="~{fragments/preloader.html}"></div>
+			  <div th:replace="~{fragments/video_background.html}"></div>
+			  
+			    <section class="flex-grow-1 d-flex justify-content-center align-items-center">
+			      <div class="container">
+			          <div class="row justify-content-center align-items-center gy-5">
+			              <div class="col-lg-6 text-center text-lg-end">
+			                  <div class="year-big" id="bigYear" aria-label="Year">
+			                      <span class="digit">INTERNAL SERVER</span>
+			                  </div>
+			              </div>
+						  <div class="col-lg-6">
+						    <div class="card card-blur p-4 p-md-5">
+						      <div class="card-body text-center">
+								<img src="/images/error/500.png" alt="Error 500" class="pulse img-roja"
+														          style="width: 120px; height: 120px; margin-bottom: 1rem;" />
+						        <p class="card-text mb-3">
+						          Error interno del servidor.<br />
+						          Por favor inténtalo de nuevo más tarde.
+						        </p>
+						      </div>
+
+						      <div class="card-footer d-flex flex-column flex-sm-row justify-content-center align-items-center gap-3 border-0 mt-3">
+						        <a href="/centros" class="btn btn-outline-danger btn-sm px-4">Volver al menú</a>
+						        <a href="mailto:plan.aula.dev@gmail.com" class="text-secondary text-decoration-none">Contactar con un administrador</a>
+						      </div>
+						    </div>
+						  </div>
+
+			          </div>
+			      </div>
+			  </section>
+			  <footer class="bg-white text-black py-3 mt-auto">
+			  			  			    	    <div class="container">
+			  			  			    	        <div class="row">
+			  			  			    	            <div class="col-6 text-start">
+			  			  			    	                <small>&copy; 2025 PlanAula — Todos los derechos reservados</small>
+			  			  			    	            </div>
+			  			  			    	            <div class="col-6 text-end">
+			  			  			    	                <a href="/logout" class="text-black">
+			  			  			    	                    <small>Desconectar</small>
+			  			  			    	                </a>
+			  			  			    	            </div>
+			  			  			    	        </div>
+			  			  			    	    </div>
+			  			  			    	</footer>
+			  </body>
+			  </html>

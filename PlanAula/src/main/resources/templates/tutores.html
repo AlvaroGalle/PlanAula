@@ -91,7 +91,7 @@
             <div th:replace="~{fragments/noResultAlert.html}"></div>
         </div>
         <div class="card-footer text-muted bg-white d-flex justify-content-end">
-            <button type="button" class="btn btn-dark" onclick="location.href='/menu'">Volver</button>
+            <a class="btn btn-dark" th:href="@{'/' + ${idCentro} + '/menu'}">Volver</a>
         </div>
     </div>
 </div>

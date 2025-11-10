@@ -1,16 +1,23 @@
 function showMsg(type, msg) {
-    arrClass = [];
-    arrClass['E'] = "danger";
-    arrClass['N'] = "primary";
-    arrClass['S'] = "success";
-    arrClass['W'] = "warning";
-    document.getElementById("divErrMsg") != null ? document.getElementById("divErrMsg").remove() : null;
-    $('.card').first().before('<div id="divErrMsg" class="alert alert-' + arrClass[type] + '" style="z-index: 10" style="transform: translate(0px, 0px); top: 15px;"></div>');
-    $('#divErrMsg').html(msg);
+    const arrClass = {
+        'E': 'danger',
+        'N': 'primary',
+        'S': 'success',
+        'W': 'warning'
+    };
+    $('#divErrMsg').remove();
+    $('body').append(`
+        <div id="divErrMsg"
+             class="alert alert-${arrClass[type]} text-center position-fixed top-0 start-50 translate-middle-x mt-3 shadow fade show"
+             style="z-index: 2000; width: auto; max-width: 90%; transition: opacity 0.5s;">
+             ${msg}
+        </div>
+    `);
     setTimeout(() => {
-        $('#divErrMsg').addClass('d-none');
-    }, "4000");
+        $('#divErrMsg').fadeOut(500, function() { $(this).remove(); });
+    }, 4000);
 }
+
 
 function cambiarPagina(page) {
     $('#pageFilter').val(page);

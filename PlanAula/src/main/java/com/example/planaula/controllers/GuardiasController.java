@@ -94,7 +94,7 @@ public class GuardiasController {
     						 @PathVariable(name = "idCentro") int idCentro,
                              @RequestParam(name="params", required= false) String params) {
         guardiasService.anadirTurno(turnoDTO, idCentro);
-        return "redirect:/guardias?" + params;
+        return "redirect:/" + idCentro + "/guardias?" + params;
     }
 
     @GetMapping("accion")

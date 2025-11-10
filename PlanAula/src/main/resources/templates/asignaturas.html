@@ -42,7 +42,7 @@
         <div class="card-header theme-asignaturas text-white">
             <div class="row">
 				<div class="col-1 text-center">
-					<a href="/menu">
+					<a th:href="@{'/' + ${idCentro} + '/menu'}">
 						<img src="/images/casa.png" alt="home" width="50%" style="filter:invert(100%)"/>
 					</a>
 				</div>
@@ -107,7 +107,7 @@
         </div>
 		</div>
         <div class="card-footer text-muted bg-white d-flex justify-content-end">
-            <button type="button" class="btn btn-dark" onclick="location.href='/menu'">Volver</button>
+            <a class="btn btn-dark" th:href="@{'/' + ${idCentro} + '/menu'}">Volver</a>
         </div>
     </div>
 </div>
