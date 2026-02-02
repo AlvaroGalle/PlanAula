@@ -45,17 +45,6 @@ Funcionalidades principales:
 
 ---
 
-## Estructura del proyecto
-
-```plaintext
-PlanAula/
-├── backend/        # API Spring Boot
-├── frontend/       # Aplicación Angular
-├── screenshots/    # Capturas de la aplicación
-├── README.md
-└── ...
----
-
 Desarrollado por Álvaro Galle  
 Portfolio: https://alvarogalle.github.io/aboutme/   
 GitHub: [github.com/AlvaroGalle](https://github.com/AlvaroGalle/)
