@@ -4,6 +4,7 @@ Aplicación web para la gestión y planificación de aulas y horarios en centros
 
 PlanAula permite organizar asignaturas, espacios y planificación semanal de forma clara y estructurada, facilitando la administración académica y la visualización de horarios.
 
+[Ver aplicación en producción](https://planaula.onrender.com)
 ---
 
 ## Descripción
@@ -23,7 +24,7 @@ Funcionalidades principales:
 
 ## Tecnologías utilizadas
 
-- **Frontend:** Angular  
+- **Frontend:** Thymeleaf (templates server-side)
 - **Backend:** Spring Boot (Java)  
 - **Base de datos:** PostgreSQL / MySQL  
 - **Control de versiones:** Git y GitHub  
@@ -32,8 +33,6 @@ Funcionalidades principales:
 ---
 
 ## Capturas de la aplicación
-
-*(Crea una carpeta `screenshots/` en el repositorio y añade aquí tus imágenes)*
 
 ### Pantalla de inicio de sesión
 ![Login](screenshots/login.png)
@@ -55,3 +54,8 @@ PlanAula/
 ├── screenshots/    # Capturas de la aplicación
 ├── README.md
 └── ...
+---
+
+Desarrollado por Álvaro Galle  
+Portfolio: https://alvarogalle.github.io/aboutme/   
+GitHub: [github.com/AlvaroGalle](https://github.com/AlvaroGalle/)
