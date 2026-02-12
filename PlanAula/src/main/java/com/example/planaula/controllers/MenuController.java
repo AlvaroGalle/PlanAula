@@ -1,12 +1,12 @@
 package com.example.planaula.controllers;
 
-import com.example.planaula.Dto.AsignaturaDTO;
-import com.example.planaula.Dto.AulaDTO;
-import com.example.planaula.Dto.CursoDTO;
-import com.example.planaula.Dto.DiaDTO;
-import com.example.planaula.Dto.HoraDTO;
-import com.example.planaula.Dto.HorarioDTO;
-import com.example.planaula.Dto.ProfesorDTO;
+import com.example.planaula.dto.AsignaturaDTO;
+import com.example.planaula.dto.AulaDTO;
+import com.example.planaula.dto.CursoDTO;
+import com.example.planaula.dto.DiaDTO;
+import com.example.planaula.dto.HoraDTO;
+import com.example.planaula.dto.HorarioDTO;
+import com.example.planaula.dto.ProfesorDTO;
 import com.example.planaula.services.AsignaturasService;
 import com.example.planaula.services.AulasService;
 import com.example.planaula.services.CursosService;
@@ -17,8 +17,6 @@ import com.example.planaula.services.ProfesoresService;
 import com.example.planaula.services.UserService;
 
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -28,8 +26,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import java.time.LocalDate;
 import java.time.format.TextStyle;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
 
@@ -57,6 +53,8 @@ public class MenuController {
         this.aulasService = aulasService;
     }
 
+    LocalDate localDate = LocalDate.now();
+
     @GetMapping("")
     @PreAuthorize("@permisoService.tieneAccesoCentroFromPath(authentication, #this)")
     public String menu(
@@ -66,15 +64,15 @@ public class MenuController {
         Model model
     ) {
 
-        LocalDate fechaActual = LocalDate.now();
-        String diaSemana = fechaActual.getDayOfWeek().getDisplayName(TextStyle.FULL, new Locale("es", "ES")).toUpperCase();
-        int dia = fechaActual.getDayOfMonth();
-        String mes = fechaActual.getMonth().getDisplayName(TextStyle.FULL, new Locale("es", "ES")).toUpperCase();
-        int anio = fechaActual.getYear();
+
+        String diaSemana = localDate.getDayOfWeek().getDisplayName(TextStyle.FULL, new Locale("es", "ES")).toUpperCase();
+        int dia = localDate.getDayOfMonth();
+        String mes = localDate.getMonth().getDisplayName(TextStyle.FULL, new Locale("es", "ES")).toUpperCase();
+        int anio = localDate.getYear();
         String fechaFormateada = String.format("%s, %d de %s de %d",
                 diaSemana, dia, mes, anio);
 
-
+        model.addAttribute("anio", localDate.getYear());
         model.addAttribute("menuItems", new String[]{"Asignaturas", "Profesores", "Tutores", "Espacios", "Guardias", "Horarios"});
         model.addAttribute("fecha", fechaFormateada);
         

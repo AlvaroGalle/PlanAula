@@ -1,6 +1,6 @@
 package com.example.planaula.controllers;
 
-import com.example.planaula.Dto.*;
+import com.example.planaula.dto.*;
 import com.example.planaula.services.*;
 import jakarta.transaction.TransactionalException;
 import org.springframework.data.domain.Page;
@@ -10,11 +10,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import java.lang.reflect.Field;
-import java.util.ArrayList;
+import java.time.LocalDate;
 import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
 
 @Controller
 @RequestMapping("/{idCentro}/horarios")
@@ -42,6 +39,8 @@ public class HorariosController {
         this.horariosService = horariosService;
     }
 
+    LocalDate localDate = LocalDate.now();
+
     @GetMapping("")
     @PreAuthorize("@permisoService.tieneAccesoCentroFromPath(authentication, #this)")
     public String findAllHorarios(@PathVariable(name = "idCentro") int idCentro,
@@ -55,6 +54,7 @@ public class HorariosController {
                                   @RequestParam(name="size", required = false, defaultValue = "15") int size,
                                   @RequestParam(name = "id", required = false, defaultValue = "0") String id,
                                   Model model) {
+        model.addAttribute("anio", localDate.getYear());
         model.addAttribute("id", id);
         model.addAttribute("idCentro", idCentro);
         model.addAttribute("diaFiltro", dia);

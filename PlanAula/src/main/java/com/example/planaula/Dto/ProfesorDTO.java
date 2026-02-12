@@ -1,10 +1,10 @@
-package com.example.planaula.Dto;
+package com.example.planaula.dto;
 
-import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+@Getter
+@Setter
 public class ProfesorDTO {
     private int id;
     private String nombre;

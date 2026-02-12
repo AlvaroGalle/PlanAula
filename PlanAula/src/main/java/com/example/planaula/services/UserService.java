@@ -1,7 +1,6 @@
 package com.example.planaula.services;
 
-import com.example.planaula.Dto.CentroDTO;
-import com.example.planaula.Dto.UsuarioDTO;
+import com.example.planaula.dto.UsuarioDTO;
 import com.example.planaula.security.CustomUserDetails;
 
 import jakarta.persistence.EntityManager;
@@ -16,10 +15,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -71,15 +67,9 @@ public class UserService implements UserDetailsService {
             String pass = (String) result[2];
             String rol = (String) result[3];
 
-            List<CentroDTO> centros = centrosService.obtenerCentrosPorUsuario(id);
-            Set<Integer> centrosPermitidos = centros.stream()
-                    .map(CentroDTO::getId)
-                    .collect(Collectors.toSet());
-
-
             var authorities = List.of(new SimpleGrantedAuthority("ROLE_" + rol.toUpperCase()));
 
-            return new CustomUserDetails(id, nombre, pass, authorities, centrosPermitidos);
+            return new CustomUserDetails(id, nombre, pass, authorities);
 
         } catch (NoResultException e) {
             throw new UsernameNotFoundException("Usuario no encontrado");

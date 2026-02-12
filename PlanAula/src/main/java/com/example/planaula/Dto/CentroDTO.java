@@ -1,7 +1,11 @@
-package com.example.planaula.Dto;
+package com.example.planaula.dto;
 
+import lombok.Getter;
+import lombok.Setter;
 import org.springframework.web.multipart.MultipartFile;
 
+ @Setter
+ @Getter
 public class CentroDTO {
     private Integer id;
     private String nombre;

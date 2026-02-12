@@ -1,6 +1,6 @@
 package com.example.planaula.controllers;
 
-import com.example.planaula.Dto.UsuarioDTO;
+import com.example.planaula.dto.UsuarioDTO;
 import com.example.planaula.services.UserService;
 
 import java.time.LocalDate;
@@ -19,10 +19,11 @@ public class LoginController {
         this.userService = userService;
     }
 
+    LocalDate localDate = LocalDate.now();
+
     @GetMapping("/login")
     public String login(Model model) {
         model.addAttribute("newUser", new UsuarioDTO());
-        LocalDate localDate = LocalDate.now();
         model.addAttribute("anio", localDate.getYear());
         return "login";
     }

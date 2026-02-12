@@ -1,5 +1,10 @@
-package com.example.planaula.Dto;
+package com.example.planaula.dto;
 
+import lombok.Getter;
+import lombok.Setter;
+
+@Getter
+@Setter
 public class JornadaDTO {
 	private int idCentro;
     private String[] dias;

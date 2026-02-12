@@ -1,7 +1,6 @@
 package com.example.planaula.controllers;
 
-import com.example.planaula.Dto.AsignaturaDTO;
-import com.example.planaula.Dto.ProfesorDTO;
+import com.example.planaula.dto.AsignaturaDTO;
 import com.example.planaula.services.AsignaturasService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -9,6 +8,8 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+
+import java.time.LocalDate;
 
 @Controller
 @RequestMapping("/{idCentro}/asignaturas")
@@ -19,6 +20,7 @@ public class AsignaturasController {
     public AsignaturasController(AsignaturasService asignaturasService) {
         this.asignaturasService = asignaturasService;
     }
+    LocalDate localDate = LocalDate.now();
 
     @GetMapping("")
     @PreAuthorize("@permisoService.tieneAccesoCentroFromPath(authentication, #this)")
@@ -32,6 +34,7 @@ public class AsignaturasController {
         model.addAttribute("page", asignaturaDTOS);
         model.addAttribute("asignaturaForm", new AsignaturaDTO());
         model.addAttribute("params", "page=" + page + "&size=" + size);
+        model.addAttribute("anio", localDate.getYear());
         return "asignaturas";
     }
 

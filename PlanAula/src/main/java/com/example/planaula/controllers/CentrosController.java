@@ -1,9 +1,10 @@
 package com.example.planaula.controllers;
-import com.example.planaula.Dto.CentroDTO;
+import com.example.planaula.dto.CentroDTO;
 import com.example.planaula.security.CustomUserDetails;
 import com.example.planaula.services.*;
 
 import java.io.IOException;
+import java.time.LocalDate;
 
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.http.HttpHeaders;
@@ -32,6 +33,8 @@ public class CentrosController {
     	this.centrosService = centrosService;
     }
 
+    LocalDate localDate = LocalDate.now();
+
     @GetMapping("")
     public String centros(@AuthenticationPrincipal CustomUserDetails user,
     					  @RequestParam(name="curso", required = false, defaultValue = "0") int curso,
@@ -39,6 +42,7 @@ public class CentrosController {
             		   Model model) {
         model.addAttribute("centros", centrosService.obtenerCentrosPorUsuario(user.getId()));
         model.addAttribute("centroDTO", new CentroDTO());
+        model.addAttribute("anio", localDate.getYear());
         return "centros";
     }
     

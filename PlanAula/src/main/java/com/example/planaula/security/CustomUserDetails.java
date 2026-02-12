@@ -14,25 +14,25 @@ public class CustomUserDetails implements UserDetails {
     private final String username;
     private final String password;
     private final List<SimpleGrantedAuthority> authorities;
-    private final Set<Integer> centrosPermitidos;
+    //private final Set<Integer> centrosPermitidos;
 
+    //Set<Integer> centrosPermitidos
     public CustomUserDetails(Integer id, String username, String password,
-                             List<SimpleGrantedAuthority> authorities2,
-                             Set<Integer> centrosPermitidos) {
+                             List<SimpleGrantedAuthority> authorities2) {
         this.id = id;
         this.username = username;
         this.password = password;
         this.authorities = authorities2;
-        this.centrosPermitidos = centrosPermitidos;
+        //this.centrosPermitidos = centrosPermitidos;
     }
 
     public Integer getId() {
         return id;
     }
 
-    public Set<Integer> getCentrosPermitidos() {
+    /*public Set<Integer> getCentrosPermitidos() {
         return centrosPermitidos;
-    }
+    }*/
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

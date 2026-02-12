@@ -1,4 +1,4 @@
-package com.example.planaula.Dto;
+package com.example.planaula.dto;
 
 public class CodigoHorasDTO {
     private int id;

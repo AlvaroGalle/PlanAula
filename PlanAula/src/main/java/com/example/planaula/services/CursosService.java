@@ -1,7 +1,6 @@
 package com.example.planaula.services;
 
-import com.example.planaula.Dto.AsignaturaDTO;
-import com.example.planaula.Dto.CursoDTO;
+import com.example.planaula.dto.CursoDTO;
 import jakarta.persistence.EntityManager;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;

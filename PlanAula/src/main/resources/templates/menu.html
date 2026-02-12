@@ -5,141 +5,136 @@
 </head>
 <div th:replace="~{fragments/links.html}"></div>
 <style>
-       .menu-item {
-           border-radius: 15px;
-           text-align: center;
-           cursor: pointer;
-           transition: transform 0.2s, box-shadow 0.2s;
-           color: white;
-           padding: 15px;
-           margin-bottom: 10px;
-           font-weight: bold;
-           display: flex;
-           flex-direction: column;
-           align-items: center;
-           justify-content: center;
-           height: 150px;
-       }
-       .menu-item:hover {
-           transform: translateY(-4px);
-           box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
-       }
-       .menu-item img {
-           font-size: 2em;
-       }
-       .content {
-           margin-left: 10%;
-           margin-right: 10%;
-           padding: 2rem;
-       }
+    .menu-item {
+        border-radius: 15px;
+        text-align: center;
+        cursor: pointer;
+        transition: transform 0.2s, box-shadow 0.2s;
+        color: white;
+        padding: 15px;
+        margin-bottom: 10px;
+        font-weight: bold;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        height: 150px;
+    }
 
-       .post-it {
-           background: #fffb8f;
-           width: 17%;
-           min-height: 200px;
-           padding: 1rem;
-           margin: 1rem;
-           box-shadow: 2px 2px 6px rgba(0,0,0,0.2);
-           position: relative;
-           transform: rotate(-2deg);
-           font-family: 'Comic Sans MS', cursive, sans-serif;
-           transition: transform 0.3s ease, box-shadow 0.3s ease;
-       }
-       .post-it::before {
-           content: '';
-           position: absolute;
-           top: -10px;
-           left: 50%;
-           transform: translateX(-50%);
-           width: 30px;
-           height: 10px;
-           background: #d4d4d4;
-           border-radius: 2px;
-       }
-       .post-it:hover {
-           transform: rotate(-2deg) translateY(-10px) scale(1.05);
-           box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
-       }
-   </style>
+    .menu-item:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+    }
+
+    .menu-item img {
+        font-size: 2em;
+    }
+
+    .content {
+        margin-left: 10%;
+        margin-right: 10%;
+        padding: 2rem;
+    }
+
+    .post-it {
+        background: #fffb8f;
+        width: 17%;
+        min-height: 200px;
+        padding: 1rem;
+        margin: 1rem;
+        box-shadow: 2px 2px 6px rgba(0, 0, 0, 0.2);
+        position: relative;
+        transform: rotate(-2deg);
+        font-family: 'Comic Sans MS', cursive, sans-serif;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .post-it::before {
+        content: '';
+        position: absolute;
+        top: -10px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 30px;
+        height: 10px;
+        background: #d4d4d4;
+        border-radius: 2px;
+    }
+
+    .post-it:hover {
+        transform: rotate(-2deg) translateY(-10px) scale(1.05);
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+    }
+</style>
 <body class="d-flex flex-column min-vh-100">
-	<div th:replace="~{fragments/preloader.html}"></div>
-	<div th:replace="~{fragments/video_background.html}"></div>
-    <section class="container py-4">
-        <div class="row g-4 text-center">
-            <div class="col-12 col-sm-6 col-lg-3">
-                <div class="card h-100 menu-item" th:data-idcentro="${idCentro}"
-				     onclick="location.href='/' + this.dataset.idcentro + '/asignaturas'">
-                    <div class="card-body">
-                        <div class="d-flex justify-content-center align-items-center theme-asignaturas rounded-circle mx-auto mb-3" style="width: 80px; height: 80px; font-size: 2rem;">
-                            <img src="/images/menu/asignaturas.png" alt="asignaturas" width="50%" />
-                        </div>
-                        <h6 class="card-title text-dark fw-bold">Asignaturas</h6>
+<div th:replace="~{fragments/preloader.html}"></div>
+<div th:replace="~{fragments/video_background.html}"></div>
+<section class="container py-4">
+    <div class="row g-4 text-center">
+        <div class="col-12 col-sm-6 col-lg-3">
+            <div class="card h-100 menu-item" th:data-idcentro="${idCentro}"
+                 onclick="location.href='/' + this.dataset.idcentro + '/asignaturas'">
+                <div class="card-body">
+                    <div class="d-flex justify-content-center align-items-center theme-asignaturas rounded-circle mx-auto mb-3"
+                         style="width: 80px; height: 80px; font-size: 2rem;">
+                        <img src="/images/menu/asignaturas.png" alt="asignaturas" width="50%"/>
                     </div>
-                </div>
-            </div>
-
-            <div class="col-12 col-sm-6 col-lg-3">
-                <div class="card h-100 menu-item" th:data-idcentro="${idCentro}"
-					 onclick="location.href='/' + this.dataset.idcentro + '/profesores'">
-                    <div class="card-body">
-                        <div class="d-flex justify-content-center align-items-center theme-profesores rounded-circle mx-auto mb-3" style="width: 80px; height: 80px; font-size: 2rem;">
-                            <img src="/images/menu/profesor.png" alt="profesores" width="50%" />
-                        </div>
-                        <h6 class="card-title text-dark fw-bold">Profesores</h6>
-                    </div>
-                </div>
-            </div>
-
-            <div class="col-12 col-sm-6 col-lg-3">
-                <div class="card h-100 menu-item" th:data-idcentro="${idCentro}"
-					 onclick="location.href='/' + this.dataset.idcentro + '/horarios'">
-                    <div class="card-body">
-                        <div class="d-flex justify-content-center align-items-center theme-espacios rounded-circle mx-auto mb-3" style="width: 80px; height: 80px; font-size: 2rem;">
-                            <img src="/images/menu/aula.png" alt="espacios" width="50%" />
-                        </div>
-                        <h6 class="card-title text-dark fw-bold">Horarios</h6>
-                    </div>
-                </div>
-            </div>
-
-            <div class="col-12 col-sm-6 col-lg-3">
-                <div class="card h-100 menu-item" th:data-idcentro="${idCentro}"
-					  onclick="location.href='/' + this.dataset.idcentro + '/guardias'">
-                    <div class="card-body">
-                        <div class="d-flex justify-content-center align-items-center theme-guardias rounded-circle mx-auto mb-3" style="width: 80px; height: 80px; font-size: 2rem;">
-                            <img src="/images/menu/guardia.png" alt="guardias" width="50%" />
-                        </div>
-                        <h6 class="card-title text-dark fw-bold">Turnos</h6>
-                    </div>
+                    <h6 class="card-title text-dark fw-bold">Asignaturas</h6>
                 </div>
             </div>
         </div>
-    </section>
 
-	<main class="container mb-4">
-		                                       
-		<div class="card">
-			<form id="filtrosForm" method="get" th:action="@{'/' + ${idCentro} + '/menu'}">
-				<div th:replace="~{fragments/tableHorario.html}"></div>
-			</form>
-		</div>
-		</main>
-		
-    <footer class="bg-white text-black py-3 mt-auto">
-        <div class="container">
-			<div class="row">
-				<div class="col-6 text-start">
-					<small>&copy; 2025 PlanAula — Todos los derechos reservados</small>
-					</div>
-					<div class="col-6 text-end" >
-						<a href="/logout" class="text-black">
-						<small>Desconectar</small>
-						</a>
-						</div>
-			
+        <div class="col-12 col-sm-6 col-lg-3">
+            <div class="card h-100 menu-item" th:data-idcentro="${idCentro}"
+                 onclick="location.href='/' + this.dataset.idcentro + '/profesores'">
+                <div class="card-body">
+                    <div class="d-flex justify-content-center align-items-center theme-profesores rounded-circle mx-auto mb-3"
+                         style="width: 80px; height: 80px; font-size: 2rem;">
+                        <img src="/images/menu/profesor.png" alt="profesores" width="50%"/>
+                    </div>
+                    <h6 class="card-title text-dark fw-bold">Profesores</h6>
+                </div>
+            </div>
         </div>
-		</div>
-    </footer>
+
+        <div class="col-12 col-sm-6 col-lg-3">
+            <div class="card h-100 menu-item" th:data-idcentro="${idCentro}"
+                 onclick="location.href='/' + this.dataset.idcentro + '/horarios'">
+                <div class="card-body">
+                    <div class="d-flex justify-content-center align-items-center theme-espacios rounded-circle mx-auto mb-3"
+                         style="width: 80px; height: 80px; font-size: 2rem;">
+                        <img src="/images/menu/aula.png" alt="espacios" width="50%"/>
+                    </div>
+                    <h6 class="card-title text-dark fw-bold">Horarios</h6>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-12 col-sm-6 col-lg-3">
+            <div class="card h-100 menu-item" th:data-idcentro="${idCentro}"
+                 onclick="location.href='/' + this.dataset.idcentro + '/guardias'">
+                <div class="card-body">
+                    <div class="d-flex justify-content-center align-items-center theme-guardias rounded-circle mx-auto mb-3"
+                         style="width: 80px; height: 80px; font-size: 2rem;">
+                        <img src="/images/menu/guardia.png" alt="guardias" width="50%"/>
+                    </div>
+                    <h6 class="card-title text-dark fw-bold">Turnos</h6>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<main class="container mb-4">
+
+    <div class="card">
+        <form id="filtrosForm" method="get" th:action="@{'/' + ${idCentro} + '/menu'}">
+            <div th:replace="~{fragments/tableHorario.html}"></div>
+        </form>
+    </div>
+</main>
+
+<div th:replace="~{fragments/footer.html}"></div>
 
 </body>
 </html>

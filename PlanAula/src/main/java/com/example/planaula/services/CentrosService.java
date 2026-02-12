@@ -1,7 +1,6 @@
 package com.example.planaula.services;
 
-import com.example.planaula.Dto.CentroDTO;
-import com.example.planaula.Dto.ProfesorDTO;
+import com.example.planaula.dto.CentroDTO;
 
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.NoResultException;
@@ -42,13 +41,13 @@ public class CentrosService {
 
         return centros;
     }
-    
+
     @Transactional
     public CentroDTO obtenerCentroPorId(Integer idCentro) {
         String sql = """
-            SELECT c.id, c.nombre, c.descripcion
-            FROM centros c
-            WHERE c.id = :idCentro
+            SELECT c.id, c.nombre, c.descripcion, u.favorito
+            FROM centros c and usuarios_centros u 
+            WHERE c.id = :idCentro and u.id_centro = :idCentro
         """;
 
         try {
@@ -62,11 +61,11 @@ public class CentrosService {
 
             return new CentroDTO(id, nombre, descripcion, false);
         } catch (NoResultException e) {
-            return null; 
+            return null;
         }
     }
 
-    
+
     @Transactional
     public void modificarCentrosFav(int idUsuario, int idCentro, boolean fav) {
         try {
@@ -80,37 +79,37 @@ public class CentrosService {
             System.out.println("Error en la consulta: " + e.getMessage());
         }
     }
-    
+
     @Transactional
     public Integer crearCentro(int idUsuario, CentroDTO centroDTO, byte[] logoBytes) {
         try {
             String insertCentroSql = "INSERT INTO centros (nombre, descripcion, logo) " +
                                     "VALUES (:nombre, :descripcion, :logo) " +
                                     "RETURNING id";
-            
+
             Integer idCentroGenerado = ((Number) entityManager.createNativeQuery(insertCentroSql)
                     .setParameter("nombre", centroDTO.getNombre())
                     .setParameter("descripcion", centroDTO.getDescripcion())
                     .setParameter("logo", logoBytes)
                     .getSingleResult()).intValue();
-            
+
             String insertRelacionSql = "INSERT INTO usuarios_centros (id_usuario, id_centro, favorito) " +
                                       "VALUES (:idUsuario, :idCentro, :favorito)";
-            
+
             entityManager.createNativeQuery(insertRelacionSql)
                     .setParameter("idUsuario", idUsuario)
                     .setParameter("idCentro", idCentroGenerado)
                     .setParameter("favorito", centroDTO.getFavorito())
                     .executeUpdate();
-            
+
             return idCentroGenerado;
-            
+
         } catch (Exception e) {
             System.out.println("Error al crear centro: " + e.getMessage());
             throw new RuntimeException("Error al crear centro", e);
         }
     }
-    
+
     @Transactional
     public void editarCentro(CentroDTO centroDTO, byte[] logoBytes) {
         try {
@@ -136,7 +135,7 @@ public class CentrosService {
 
             query.executeUpdate();
         } catch (Exception e) {
-            System.err.println("❌ Error al actualizar centro: " + e.getMessage());
+            System.err.println("Error al actualizar centro: " + e.getMessage());
             throw new RuntimeException("Error al actualizar centro", e);
         }
     }
@@ -164,7 +163,7 @@ public class CentrosService {
         }
     }
 
-    
+
     public byte[] obtenerLogoPorId(Integer idCentro) {
         String sql = "SELECT logo FROM centros WHERE id = :idCentro";
         List<byte[]> resultado = entityManager.createNativeQuery(sql)

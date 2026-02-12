@@ -1,8 +1,7 @@
 package com.example.planaula.services;
 
-import com.example.planaula.Dto.ProfesorDTO;
-import com.example.planaula.Dto.TurnoDTO;
-import com.example.planaula.Dto.TutorDTO;
+import com.example.planaula.dto.ProfesorDTO;
+import com.example.planaula.dto.TutorDTO;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.Query;
 import jakarta.transaction.Transactional;

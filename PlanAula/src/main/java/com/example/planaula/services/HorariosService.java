@@ -1,6 +1,6 @@
 package com.example.planaula.services;
 
-import com.example.planaula.Dto.HorarioDTO;
+import com.example.planaula.dto.HorarioDTO;
 
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.NoResultException;
@@ -9,9 +9,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.time.DayOfWeek;
-import java.time.LocalDate;
-import java.time.LocalTime;
 import java.util.*;
 import java.util.stream.Collectors;
 

@@ -1,6 +1,6 @@
 package com.example.planaula.controllers;
 
-import com.example.planaula.Dto.*;
+import com.example.planaula.dto.*;
 import com.example.planaula.services.CursosService;
 import com.example.planaula.services.GuardiasService;
 import com.example.planaula.services.HorariosService;
@@ -43,6 +43,8 @@ public class ProfesoresController {
 		this.horariosService = horariosService;
 		this.guardiasService = guardiasService;
 	}
+
+	LocalDate localDate = LocalDate.now();
 
 	@GetMapping("")
 	@PreAuthorize("@permisoService.tieneAccesoCentroFromPath(authentication, #this)")
@@ -126,6 +128,7 @@ public class ProfesoresController {
 	public String suplenciaProfesor(@PathVariable(name = "idCentro") int idCentro,
 									@RequestParam(name = "fecha", required = false, defaultValue = "") String fecha,
 									@RequestParam(name = "profesor", required = false, defaultValue = "0") int profesor, Model model) {
+		model.addAttribute("anio", localDate.getYear());
 		model.addAttribute("fechaFiltro", fecha);
 		model.addAttribute("profesorFiltro", profesor);
 		model.addAttribute("idCentro", idCentro);
