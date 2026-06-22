@@ -1,6 +1,6 @@
 package com.example.planaula.controllers;
 
-import com.example.planaula.Dto.*;
+import com.example.planaula.dto.*;
 import com.example.planaula.services.CursosService;
 import com.example.planaula.services.GuardiasService;
 import com.example.planaula.services.HorariosService;
@@ -154,9 +154,8 @@ public class ProfesoresController {
 		String titulo = "Suplencias " + profesor.getNombre() + " " + fecha;
 
 		try (PDDocument doc = new PDDocument(); ByteArrayOutputStream baos = new ByteArrayOutputStream()) {
-			PDPage pagina = new PDPage(PDRectangle.A4);
+			PDPage pagina = new PDPage(new PDRectangle(PDRectangle.A4.getHeight(), PDRectangle.A4.getWidth()));
 			doc.addPage(pagina);
-
 			float pageWidth = pagina.getMediaBox().getWidth();
 			float pageHeight = pagina.getMediaBox().getHeight();
 			float margin = 40f;

@@ -1,6 +1,6 @@
 package com.example.planaula.controllers;
 
-import com.example.planaula.Dto.UsuarioDTO;
+import com.example.planaula.dto.UsuarioDTO;
 import com.example.planaula.services.UserService;
 
 import java.time.LocalDate;

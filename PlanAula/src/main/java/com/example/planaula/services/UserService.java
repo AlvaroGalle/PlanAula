@@ -1,6 +1,6 @@
 package com.example.planaula.services;
 
-import com.example.planaula.Dto.UsuarioDTO;
+import com.example.planaula.dto.UsuarioDTO;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.NoResultException;
 import jakarta.transaction.Transactional;

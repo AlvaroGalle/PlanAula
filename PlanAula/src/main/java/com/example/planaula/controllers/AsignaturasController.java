@@ -1,7 +1,7 @@
 package com.example.planaula.controllers;
 
-import com.example.planaula.Dto.AsignaturaDTO;
-import com.example.planaula.Dto.ProfesorDTO;
+import com.example.planaula.dto.AsignaturaDTO;
+import com.example.planaula.dto.ProfesorDTO;
 import com.example.planaula.services.AsignaturasService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;

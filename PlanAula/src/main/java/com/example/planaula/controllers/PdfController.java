@@ -27,7 +27,7 @@ public class PdfController {
             contenido.beginText();
             contenido.setFont(PDType1Font.HELVETICA_BOLD, 16);
             contenido.newLineAtOffset(100, 700);
-            contenido.showText("Hola, mundo con PDFBox y Spring Boot!");
+            contenido.showText("");
             contenido.endText();
             contenido.close();
 

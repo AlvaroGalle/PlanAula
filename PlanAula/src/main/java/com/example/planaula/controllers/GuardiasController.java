@@ -1,6 +1,6 @@
 package com.example.planaula.controllers;
 
-import com.example.planaula.Dto.*;
+import com.example.planaula.dto.*;
 import com.example.planaula.services.*;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;

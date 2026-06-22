@@ -1,12 +1,12 @@
 package com.example.planaula.controllers;
 
-import com.example.planaula.Dto.AsignaturaDTO;
-import com.example.planaula.Dto.AulaDTO;
-import com.example.planaula.Dto.CursoDTO;
-import com.example.planaula.Dto.DiaDTO;
-import com.example.planaula.Dto.HoraDTO;
-import com.example.planaula.Dto.HorarioDTO;
-import com.example.planaula.Dto.ProfesorDTO;
+import com.example.planaula.dto.AsignaturaDTO;
+import com.example.planaula.dto.AulaDTO;
+import com.example.planaula.dto.CursoDTO;
+import com.example.planaula.dto.DiaDTO;
+import com.example.planaula.dto.HoraDTO;
+import com.example.planaula.dto.HorarioDTO;
+import com.example.planaula.dto.ProfesorDTO;
 import com.example.planaula.services.AsignaturasService;
 import com.example.planaula.services.AulasService;
 import com.example.planaula.services.CursosService;

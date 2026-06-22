@@ -1,6 +1,6 @@
 package com.example.planaula.controllers;
 
-import com.example.planaula.Dto.*;
+import com.example.planaula.dto.*;
 import com.example.planaula.services.*;
 import jakarta.transaction.TransactionalException;
 import org.springframework.data.domain.Page;
