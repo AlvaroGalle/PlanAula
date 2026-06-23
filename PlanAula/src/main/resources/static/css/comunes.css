@@ -7,27 +7,27 @@
 }
 
 .theme-asignaturas {
-    background-color: #a7d156;
+    background-color: #a7d156 !important;
 }
 
 .theme-profesores {
-    background-color: #6ab0d6;
+    background-color: #6ab0d6 !important;;
 }
 
 .theme-tutores {
-    background-color: #9370db;
+    background-color: #9370db !important;;
 }
 
 .theme-espacios {
-    background-color: #90be6d;
+    background-color: #90be6d !important;;
 }
 
 .theme-guardias {
-    background-color: #b35968;
+    background-color: #b35968 !important;;
 }
 
 .theme-horarios {
-    background-color: #6cc6db;
+    background-color: #6cc6db !important;;
 }
 
 #video_background {

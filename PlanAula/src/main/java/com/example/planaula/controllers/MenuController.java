@@ -81,7 +81,7 @@ public class MenuController {
         int anio = fechaActual.getYear();
         String fechaFormateada = String.format("%s, %d de %s de %d",
                 diaSemana, dia, mes, anio);
-
+        model.addAttribute("anio", anio);
 
         model.addAttribute("menuItems", new String[]{"Asignaturas", "Profesores", "Tutores", "Espacios", "Guardias", "Horarios"});
         model.addAttribute("fecha", fechaFormateada);
