@@ -5,9 +5,7 @@
 </head>
 <div th:replace="~{fragments/links.html}"></div>
 <script>
-    function accionProfesores(accion, boton) {
-        let td = boton.closest("td");
-        let id = td.dataset.id;
+    function accionProfesores(accion, id) {
         $('#id_profesor').val(id);
         $('#accion_profesor').val(accion);
         let url = "/profesores/" + id;
@@ -33,19 +31,115 @@
         });
     }
 </script>
-<style>
-    .btn-outline-primary:hover {
-        img{
-            filter: invert(100%);
-        }
-    }
-</style>
 <body>
 	<div th:replace="~{fragments/preloader.html}"></div>
 	<div th:replace="~{fragments/video_background.html}"></div>
-	
-	<div class="container min-vh-100 d-flex align-items-center justify-content-center">
-    <div class="card shadow-sm w-100">
+
+    <div class="container min-vh-100 py-4">
+
+        <div class="row mt-3 mb-3">
+            <div class="col-12">
+                <div class="card border-0 shadow-sm w-100">
+                    <div class="card-body filter-section">
+                        <div class="row align-items-center gy-3">
+                            <div class="col-9">
+                                <div th:replace="~{fragments/sideBar.html}"></div>
+                            </div>
+                            <div class="col-3 d-flex justify-content-end ml-3">
+                                <div class="row">
+                            <div class="col-auto">
+                            <div class="dropdown">
+                                <a class="btn btn-secondary dropdown-toggle"
+                                        role="button"
+                                        id="dropdownAcciones"
+                                        data-bs-toggle="dropdown"
+                                        aria-expanded="false"
+                                >
+                                    Acciones
+                                </a>
+
+                                <div class="dropdown-menu" aria-labelledby="dropdownAcciones">
+
+                                    <a class="dropdown-item"
+                                       href="/profesores/suplencias"
+                                       data-bs-toggle="tooltip"
+                                       data-bs-placement="top"
+                                       title="Gestionar sustituciones">
+                                        <img src="/images/suplencias.png" alt="Generar suplencias" style="max-width: 30px">
+                                        Sustituciones
+                                    </a>
+
+                                    <button
+                                            type="button"
+                                            class="dropdown-item"
+                                            onclick="$('#nuevoProfesor-modal').modal('show')"
+                                            data-bs-toggle="tooltip"
+                                            data-bs-placement="top"
+                                            title="Añadir docente"
+                                    >
+                                        <i class="bi bi-plus"></i>
+                                        Añadir profesor
+                                    </button>
+
+                                </div>
+                            </div>
+                            </div>
+
+                            <div class="col-auto">
+                                <form id="filtrosForm" method="get" th:action="@{'/profesores'}">
+                                    <div class="form-group row justify-content-end mb-0">
+                                        <div th:replace="~{fragments/filtros/filterPage.html}"></div>
+                                    </div>
+                                </form>
+                            </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row g-3">
+            <div th:each="profesor : ${page}" th:id="'card_' + ${profesor.id}" class="col-12 col-md-6 col-sm-3">
+                <div class="card border-0 shadow-sm">
+                    <div class="card-body">
+
+                        <h5 class="card-title mb-1" th:text="${profesor.nombre}"></h5>
+
+                        <p class="text-muted small mb-3">
+                            Cursos que puede dar · Horarios
+                        </p>
+
+                        <div class="d-flex gap-2 flex-wrap">
+                            <!--<a href="profesor-cursos.html" class="btn btn-sm btn-outline-primary">
+                                Cursos
+                            </a>
+
+                            <a href="profesor-horarios.html" class="btn btn-sm btn-outline-success">
+                                Horarios
+                            </a>-->
+
+                            <a class="btn btn-sm btn-outline-success" th:data-id="${profesor.id}" onclick="accionProfesores('M', this.dataset.id)">
+                                Editar
+                            </a>
+                            <a class="btn btn-sm btn-outline-danger" th:data-id="${profesor.id}" onclick="accionProfesores('E', this.dataset.id)">
+                                Eliminar
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row g-3">
+                <div class="col-12">
+                    <div class="card border-0 shadow-sm">
+                        <div class="card-body">
+                    <div th:replace="~{fragments/pagination.html}"></div>
+                </div>
+            </div>
+        </div>
+        </div>
+    <!--<div class="card shadow-sm w-100">
         <div class="card-header theme-profesores text-white">
 			<div class="row">
 			<div class="col-1 text-center">
@@ -60,39 +154,7 @@
 											
 			
         </div>
-		<div class="card-body filter-section">
-		  <div class="row align-items-center gy-3">
-	
-			<div class="col-auto text-center">
-			  <a class="btn btn-outline-primary"
-			     href="/profesores/suplencias"
-			     data-toggle="tooltip"
-			     data-placement="top"
-			     title="Gestionar sustituciones">
-			    <img src="/images/impresora.png" alt="Generar suplencias" style="max-width: 25px">
-			  </a>
-			</div>
 
-			<div class="col-auto">
-			  <button type="button" class="btn btn-primary"
-			          onclick="$('#nuevoProfesor-modal').modal('show')">
-			    Añadir docente
-			  </button>
-			</div>
-
-			<div class="col"></div>
-
-			<div class="col-auto">
-			  <form id="filtrosForm" method="get" th:action="@{'/profesores'}">
-			    <div class="form-group row justify-content-end mb-0">
-			      <div th:replace="~{fragments/filtros/filterPage.html}"></div>
-			    </div>
-			  </form>
-			</div>
-
-		    
-		  </div>
-		</div>
 
         <div class="card-body bg-light">
 			<div class="table-responsive">
@@ -131,13 +193,12 @@
                 </tr>
                 </tbody>
             </table>
-            <div th:replace="~{fragments/pagination.html}"></div>
 			</div>
         </div>
         <div class="card-footer text-muted bg-white d-flex justify-content-end">
             <button type="button" class="btn btn-dark" onclick="location.href='/menu'">Volver</button>
         </div>
-    </div>
+    </div>-->
 </div>
 
 <form action="/profesores" method="post" id="accionesProfesorForm" th:object="${profesorForm}">
@@ -191,6 +252,7 @@
                 <button onclick="$('#accionesProfesorForm').submit()" class="btn btn-primary">Modificar</button>
             </div>
         </div>
+    </div>
     </div>
 </div>
 

@@ -16,10 +16,10 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Controller
-@RequestMapping("/guardias")
+@RequestMapping("/turnos")
 public class GuardiasController {
 
-    private final String RUTATEMPLATE = "guardias/";
+    private final String RUTATEMPLATE = "turnos/";
 
     private final GuardiasService guardiasService;
     private final HorasService horasService;
@@ -89,7 +89,7 @@ public class GuardiasController {
     public String addEspacio(@ModelAttribute TurnoDTO turnoDTO,
                              @RequestParam(name="params", required= false) String params) {
         guardiasService.anadirTurno(turnoDTO);
-        return "redirect:/guardias?" + params;
+        return "redirect:/turnos?" + params;
     }
 
     @GetMapping("accion")
@@ -99,7 +99,7 @@ public class GuardiasController {
                                    @RequestParam(name="id") Integer id) {
         try {
             guardiasService.accionGuardias(accion, turno, profesor, id);
-            return "redirect:/guardias?id=" + id;
+            return "redirect:/turnos?id=" + id;
         } catch (Exception e) {
             return e.getMessage();
         }

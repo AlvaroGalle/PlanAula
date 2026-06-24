@@ -22,7 +22,7 @@
     background-color: #90be6d !important;;
 }
 
-.theme-guardias {
+.theme-turnos {
     background-color: #b35968 !important;;
 }
 
@@ -39,3 +39,17 @@
       z-index: -1;
       pointer-events: none;
   }
+
+.year-big {
+    font-size: 8vw;
+    font-weight: 900;
+    line-height: 0.85;
+    text-shadow: 0 8px 24px rgba(0, 0, 0, 0.18);
+    letter-spacing: -0.03em;
+    user-select: none;
+}
+
+.year-big .digit {
+    display: block;
+    color: white;
+}

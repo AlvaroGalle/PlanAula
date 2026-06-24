@@ -14,7 +14,7 @@
 
 	   
     function zoomCards(id){
-        let url = "/guardias/" + id;
+        let url = "/turnos/" + id;
         $.ajax({
             url: url,
             type: "GET",
@@ -46,7 +46,7 @@
 			</div>
 		</div>
         <div class="card-body filter-section">
-            <form id="filtrosForm" method="get" th:action="@{'/guardias'}">
+            <form id="filtrosForm" method="get" th:action="@{'/turnos'}">
                 <div class="accordion mb-3" id="acordeonFiltros">
                     <div class="accordion-item">
                         <h2 class="accordion-header">
@@ -146,7 +146,7 @@
      style="display: none">
     <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
-            <form action="/guardias/anadir" method="post" id="nuevoTurnoForm" th:object="${turnoForm}">
+            <form action="/turnos/anadir" method="post" id="nuevoTurnoForm" th:object="${turnoForm}">
                 <div class="modal-header theme-guardias text-white">
                     <h5 class="modal-title mb-0">
                         <span>Nuevo turno</span>

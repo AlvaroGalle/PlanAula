@@ -5,9 +5,7 @@
 </head>
 <div th:replace="~{fragments/links.html}"></div>
 <script>
-    function accionAsignatura(accion, boton) {
-        let td = boton.closest("td");
-        let id = td.dataset.id;
+    function accionAsignatura(accion, id) {
         $('#id_asignatura').val(id);
         $('#accion_asignatura').val(accion);
         let url = "/asignaturas/" + id;
@@ -37,18 +35,162 @@
 	<div th:replace="~{fragments/preloader.html}"></div>
 	<div th:replace="~{fragments/video_background.html}"></div>
 
-	<div class="container min-vh-100 d-flex align-items-center justify-content-center">
-	    <div class="card shadow-sm w-100">
-        <div class="card-header theme-asignaturas text-white">
-            <div class="row">
-				<div class="col-1 text-center">
-					<a href="/menu">
-						<img src="/images/casa.png" alt="home" width="50%" style="filter:invert(100%)"/>
-					</a>
-				</div>
-                <div class="col-11"><h5 class="card-title text-start">Asignaturas</h5></div>
+    <div class="container min-vh-100 py-4">
+        <div class="row mt-3 mb-3">
+            <div class="col-12">
+                <div class="card border-0 shadow-sm w-100">
+                    <div class="card-body filter-section">
+                        <div class="row align-items-center gy-3">
+                            <div class="col-9">
+                                <div th:replace="~{fragments/sideBar.html}"></div>
+                            </div>
+                            <div class="col-3 d-flex justify-content-end ml-3">
+                                <div class="row">
+                                    <div class="col-auto">
+                                        <div class="dropdown">
+                                            <a class="btn btn-secondary dropdown-toggle"
+                                               role="button"
+                                               id="dropdownAcciones"
+                                               data-bs-toggle="dropdown"
+                                               aria-expanded="false"
+                                            >
+                                                Acciones
+                                            </a>
+
+                                            <div class="dropdown-menu" aria-labelledby="dropdownAcciones">
+                                                <button
+                                                        type="button"
+                                                        class="dropdown-item"
+                                                        data-bs-target="#newAsignatura-modal"
+                                                        data-bs-toggle="modal"
+                                                        title="Añadir docente"
+                                                >
+                                                    <i class="bi bi-plus"></i>
+                                                    Añadir asignatura
+                                                </button>
+
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-auto">
+                                        <form id="filtrosForm" method="get" th:action="@{'/profesores'}">
+                                            <div class="form-group row justify-content-end mb-0">
+                                                <div th:replace="~{fragments/filtros/filterPage.html}"></div>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
+
+        <div class="row g-3">
+            <div th:each="asignatura : ${page}" th:id="'card_' + ${asignatura.id}" class="col-12 col-md-6 col-sm-3">
+                <div class="card border-0 shadow-sm">
+                    <div class="card-body">
+                        <h5 class="card-title mb-1" th:text="${asignatura.nombre}"></h5>
+                        <p class="text-muted small mb-3">
+                            XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+                        </p>
+
+                        <div class="d-flex gap-2 flex-wrap">
+                            <a class="btn btn-sm btn-outline-success" th:data-id="${asignatura.id}" onclick="accionAsignatura('M', this.dataset.id)">
+                                Editar
+                            </a>
+                            <a class="btn btn-sm btn-outline-danger" th:data-id="${asignatura.id}" onclick="accionAsignatura('E', this.dataset.id)">
+                                Eliminar
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row g-3">
+                <div class="col-12">
+                    <div class="card border-0 shadow-sm">
+                        <div class="card-body">
+                            <div th:replace="~{fragments/pagination.html}"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!--<div class="card shadow-sm w-100">
+                <div class="card-header theme-profesores text-white">
+                    <div class="row">
+                    <div class="col-1 text-center">
+                                                            <a href="/menu">
+                                                                <img src="/images/casa.png" alt="home" width="50%" style="filter:invert(100%)"/>
+                                                            </a>
+                                                        </div>
+                                                        <div class="col-11">
+                    <h5 class="card-title mb-0">Profesores</h5>
+                                                        </div>
+                                                        </div>
+
+
+                </div>
+
+
+                <div class="card-body bg-light">
+                    <div class="table-responsive">
+                    <table class="table table-bordered table-striped table-sm table-hover">
+                        <thead>
+                        <tr>
+                            <th scope="col">#ID</th>
+                            <th scope="col">Nombre</th>
+                            <th scope="col">Acciones</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr th:each="profesor : ${page}" th:id="'tr_' + ${profesor.id}">
+                            <th scope="row" th:text="${profesor.id}"></th>
+                            <td th:text="${profesor.nombre}"></td>
+                            <td th:data-id="${profesor.id}">
+                                <ul class="list-inline hstack mb-0">
+                                    <li class="list-inline-item">
+                                        <a class="text-info" role="button" onclick="accionProfesores('M', this)">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                                                 class="bi bi-pencil" viewBox="0 0 16 16">
+                                                <path d="M12.146.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1 0 .708l-10 10a.5.5 0 0 1-.168.11l-5 2a.5.5 0 0 1-.65-.65l2-5a.5.5 0 0 1 .11-.168zM11.207 2.5 13.5 4.793 14.793 3.5 12.5 1.207zm1.586 3L10.5 3.207 4 9.707V10h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.293zm-9.761 5.175-.106.106-1.528 3.821 3.821-1.528.106-.106A.5.5 0 0 1 5 12.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.468-.325"/>
+                                            </svg>
+                                        </a>
+                                    </li>
+                                    <li class="list-inline-item">
+                                        <a class="text-danger" role="button" onclick="accionProfesores('E', this)">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                                                 class="bi bi-trash3" viewBox="0 0 16 16">
+                                                <path d="M6.5 1h3a.5.5 0 0 1 .5.5v1H6v-1a.5.5 0 0 1 .5-.5M11 2.5v-1A1.5 1.5 0 0 0 9.5 0h-3A1.5 1.5 0 0 0 5 1.5v1H1.5a.5.5 0 0 0 0 1h.538l.853 10.66A2 2 0 0 0 4.885 16h6.23a2 2 0 0 0 1.994-1.84l.853-10.66h.538a.5.5 0 0 0 0-1zm1.958 1-.846 10.58a1 1 0 0 1-.997.92h-6.23a1 1 0 0 1-.997-.92L3.042 3.5zm-7.487 1a.5.5 0 0 1 .528.47l.5 8.5a.5.5 0 0 1-.998.06L5 5.03a.5.5 0 0 1 .47-.53Zm5.058 0a.5.5 0 0 1 .47.53l-.5 8.5a.5.5 0 1 1-.998-.06l.5-8.5a.5.5 0 0 1 .528-.47M8 4.5a.5.5 0 0 1 .5.5v8.5a.5.5 0 0 1-1 0V5a.5.5 0 0 1 .5-.5"/>
+                                            </svg>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                    </div>
+                </div>
+                <div class="card-footer text-muted bg-white d-flex justify-content-end">
+                    <button type="button" class="btn btn-dark" onclick="location.href='/menu'">Volver</button>
+                </div>
+            </div>-->
+        </div>
+
+
+        <!--<div class="card shadow-sm w-100">
+      <div class="card-header theme-asignaturas text-white">
+           <div class="row">
+               <div class="col-1 text-center">
+                   <a href="/menu">
+                       <img src="/images/casa.png" alt="home" width="50%" style="filter:invert(100%)"/>
+                   </a>
+               </div>
+               <div class="col-11"><h5 class="card-title text-start">Asignaturas</h5></div>
+           </div>
+       </div>
         <div class="card-body filter-section">
             <div class="row align-items-center">
                 <div class="col-9">
@@ -109,7 +251,7 @@
         <div class="card-footer text-muted bg-white d-flex justify-content-end">
             <button type="button" class="btn btn-dark" onclick="location.href='/menu'">Volver</button>
         </div>
-    </div>
+    </div>-->
 </div>
 
     <form action="/asignaturas" method="post" id="accionesAsignaturaForm" th:object="${asignaturaForm}">
