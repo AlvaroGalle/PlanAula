@@ -5,7 +5,7 @@
       </a>
   </div>
   <div class="col-auto">
-    <h5 class="card-title mb-1">XXXXXXXXXX</h5>
+    <h5 class="card-title mb-1" th:each="item : ${menuItems}" th:if="${#strings.containsIgnoreCase(currentUrl, item)}"><b th:text="${item}"></b></h5>
   </div>
 </div>
 
@@ -13,7 +13,7 @@
   <div class="offcanvas-header">
     <h5 class="offcanvas-title mb-0">
       <a href="/menu" class="text-decoration-none d-inline-flex align-items-center gap-2">
-        <span class="year-big digit">PlanAula</span>
+        <span class="year-big">PlanAula</span>
         <!--<span class="year-big digit" th:text="${anio}"></span>-->
       </a>
     </h5>
@@ -21,9 +21,9 @@
   </div>
   <div class="offcanvas-body">
     <ul class="nav flex-column gap-2">
-      <li class="nav-item" th:each="item : ${menuItems}">
+      <li class="nav-item border-bottom py-2" th:each="item : ${menuItems}">
         <a th:data-url="'/' + ${item.toLowerCase()}"  onclick="location.href=this.dataset.url"
-           class="nav-link d-flex align-items-center rounded px-3 py-2"
+           class="nav-link d-flex align-items-center rounded px-3 py-2 max-w-100"
            href="#"
            th:classappend="${#strings.containsIgnoreCase(currentUrl, item)}
             ? 'theme-' + ${item} : ' text-dark'">

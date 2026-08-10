@@ -59,93 +59,91 @@
 <div th:replace="~{fragments/preloader.html}"></div>
 <div th:replace="~{fragments/video_background.html}"></div>
 
-<div class="container min-vh-100 d-flex align-items-center justify-content-center">
-    <div class="card shadow-sm w-100">
-        <div class="card-header theme-profesores text-white">
-            <div class="row">
-                <div class="col-1 text-center">
-                    <a href="/menu">
-                        <img src="/images/casa.png" alt="home" width="50%" style="filter:invert(100%)"/>
-                    </a>
-                </div>
-                <div class="col-11">
-                    <h5 class="card-title mb-0">Suplencias profesor</h5>
-                </div>
-            </div>
+<div class="container min-vh-100 py-4">
 
-        </div>
-        <div class="card-body filter-section">
-            <form action="/profesores/suplencias" method="get" id="filtrosForm">
-                <div class="row align-items-center">
-
-                    <div class="col-md-6 mb-3">
-                        <label for="fechaSuplencia" class="form-label">Fecha de la suplencia:</label>
-                        <input type="date" id="fechaSuplencia" name="fecha" class="form-control"
-                               onchange="$('#filtrosForm').submit()" th:value="${fechaFiltro}">
-                    </div>
-                    <div class="col-md-6 mb-3">
-                        <div th:replace="~{fragments/filtros/filterProfesores.html}"></div>
+    <div class="row mt-3 mb-3">
+        <div class="col-12">
+            <div class="card border-0 shadow-sm w-100">
+                <div class="card-body filter-section">
+                    <div class="row align-items-center gy-3">
+                        <div class="col-9">
+                            <div th:replace="~{fragments/sideBar.html}"></div>
+                        </div>
                     </div>
                 </div>
-            </form>
-        </div>
+                <div class="card-body filter-section">
+                    <form action="/profesores/suplencias" method="get" id="filtrosForm">
+                        <div class="row align-items-center">
 
-        <div class="card-body bg-light">
-            <div id="suplencias">
-                <b th:text="${dia}"></b>
-                <div class="table-responsive">
-                    <table class="table table-bordered table-striped table-sm table-hover">
-                        <thead>
-                        <tr>
-                            <th scope="col">Hora</th>
-                            <th scope="col">Curso</th>
-                            <th scope="col">Asignatura</th>
-                            <th scope="col">Sustituto</th>
-                            <th scope="col">Espacio</th>
-                            <th scope="col">Observaciones</th>
-                        </tr>
-                        </thead>
-                        <tbody id="tbody_horarios">
-                        <tr th:each="horario : ${horarios}" th:id="'h_' + ${horario.id}"
-                            th:if="${horario.tipo == 'Clase'}"
-                            class="align-middle">
-                            <th class="w-auto" scope="row" th:text="${horario.hora}"></th>
-                            <td class="w-auto" th:text="${horario.curso}"></td>
-                            <td th:text="${horario.asignatura}"></td>
-                            <td>
-                                <select class="form-select w-auto" name="profesor">
-                                    <option value="0"></option>
-                                    <option th:each="profesor : ${profesores}"
-                                            th:value="${profesor.id}"
-                                            th:text="${profesor.nombre}"
-                                            th:selected="${turnoMap[horario.hora + '_' + profesor.nombre] eq 'text-danger'}"
-                                            th:classappend="${turnoMap[horario.hora + '_' + profesor.nombre]}">
-                                    </option>
-                                </select>
-                            </td>
-                            <td th:text="${horario.espacio}"></td>
-                            <td>
-                                <textarea class="form-control" rows="1"></textarea>
-                            </td>
-                        </tr>
-                        </tbody>
-                    </table>
-                </div>
-                <div th:if="${horarios != null && #lists.size(horarios) == 0}" class="alert alert-danger" role="alert">
-                    No existen resultados para los filtros ingresados
+                            <div class="col-md-6 mb-3">
+                                <label for="fechaSuplencia" class="form-label">Fecha de la suplencia:</label>
+                                <input type="date" id="fechaSuplencia" name="fecha" class="form-control"
+                                       onchange="$('#filtrosForm').submit()" th:value="${fechaFiltro}">
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <div th:replace="~{fragments/filtros/filterProfesores.html}"></div>
+                            </div>
+                        </div>
+                    </form>
                 </div>
             </div>
-            <div class="row d-flex justify-content-end">
-                <div>
-                    <button type="button" class="btn btn-outline-danger" onclick="capturar()">Capturar suplencias
-                    </button>
-                </div>
-            </div>
-        </div>
-        <div class="card-footer text-muted bg-white d-flex justify-content-end">
-            <button type="button" class="btn btn-dark" onclick="location.href='/profesores'">Volver</button>
         </div>
     </div>
+
+    <div class="row d-flex justify-content-end">
+        <div>
+            <button type="button" class="btn btn-danger" onclick="capturar()">
+                <i class="bi bi-camera"></i>
+                Capturar suplencias
+            </button>
+        </div>
+    </div>
+    <br>
+    <div id="suplencias">
+        <b th:text="${dia}" class="text-white"></b>
+        <div class="table-responsive">
+            <table class="table table-bordered table-striped table-sm table-hover">
+                <thead>
+                <tr>
+                    <th scope="col">Hora</th>
+                    <th scope="col">Curso</th>
+                    <th scope="col">Asignatura</th>
+                    <th scope="col">Sustituto</th>
+                    <th scope="col">Espacio</th>
+                    <th scope="col">Observaciones</th>
+                </tr>
+                </thead>
+                <tbody id="tbody_horarios">
+                <tr th:each="horario : ${horarios}" th:id="'h_' + ${horario.id}"
+                    th:if="${horario.tipo == 'Clase'}"
+                    class="align-middle">
+                    <th class="w-auto" scope="row" th:text="${horario.hora}"></th>
+                    <td class="w-auto" th:text="${horario.curso}"></td>
+                    <td th:text="${horario.asignatura}"></td>
+                    <td>
+                        <select class="form-select w-auto" name="profesor">
+                            <option value="0"></option>
+                            <option th:each="profesor : ${profesores}"
+                                    th:value="${profesor.id}"
+                                    th:text="${profesor.nombre}"
+                                    th:selected="${turnoMap[horario.hora + '_' + profesor.nombre] eq 'text-danger'}"
+                                    th:classappend="${turnoMap[horario.hora + '_' + profesor.nombre]}">
+                            </option>
+                        </select>
+                    </td>
+                    <td th:text="${horario.espacio}"></td>
+                    <td>
+                        <textarea class="form-control" rows="1"></textarea>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+        <div th:if="${horarios != null && #lists.size(horarios) == 0}" class="alert alert-danger" role="alert">
+            No existen resultados para los filtros ingresados
+        </div>
+    </div>
+
 </div>
 </body>
 </html>
