@@ -1,5 +1,6 @@
 # Etapa 1: Build con Gradle
 FROM gradle:8.7.0-jdk17 AS build
+
 WORKDIR /app
 
 # Copia los archivos necesarios desde la subcarpeta PlanAula
@@ -11,12 +12,15 @@ COPY PlanAula/src ./src
 
 RUN ./gradlew clean build -x test
 
-# Etapa 2: Imagen final con Java
-FROM openjdk:19-jdk
+
+# Etapa 2: Imagen final con Java 17
+FROM eclipse-temurin:17-jre
+
 WORKDIR /app
 
 # Copia el JAR generado desde la etapa de build
 COPY --from=build /app/build/libs/*.jar app.jar
 
 EXPOSE 8080
+
 ENTRYPOINT ["java", "-jar", "/app/app.jar"]
